@@ -1,0 +1,3 @@
+0.0.1 (first release):
+	-Added a tech tree system
+	-Added several early game techs

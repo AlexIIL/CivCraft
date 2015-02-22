@@ -1,0 +1,50 @@
+item.civcraft_sciencePack0.name=Research Notes
+item.civcraft_sciencePack1.name=Science Pack 1
+item.civcraft_sciencePack2.name=Science Pack 2
+item.civcraft_sciencePack3.name=Science Pack 3
+item.civcraft_sciencePack4.name=Science Pack 4
+item.civcraft_technology.name=Technology
+item.civcraft_techBag.name=Technology Bag
+
+civcraft.tech.agriculture=Agriculture
+
+civcraft.tech.sailing=Sailing
+civcraft.tech.animal_husbandry=Animal Husbandry
+civcraft.tech.archery=Archery
+civcraft.tech.mining=Mining
+
+civcraft.tech.smelting=Smelting
+civcraft.tech.masonry=Masonry
+civcraft.tech.the_wheel=The Wheel
+civcraft.tech.trapping=Trapping
+
+civcraft.tech.pottery=Pottery
+civcraft.tech.iron_working=Iron Working
+civcraft.tech.construction=Construction
+civcraft.tech.maths=Mathematics
+civcraft.tech.horseback_riding=Horseback Riding
+
+civcraft.tech.gold_working=Gold Working
+civcraft.tech.writing=Writing
+civcraft.tech.calendar=Calendar
+civcraft.tech.optics=Optics
+civcraft.tech.engineering=Engineering
+civcraft.tech.currency=Currency
+
+civcraft.tech.diamond_working=Diamond Working
+
+civcraft.chat.earnBeaker=You just earned a beaker for 
+civcraft.chat.earnBeaker.craft=crafting
+civcraft.chat.earnBeaker.block.break=breaking
+civcraft.chat.earnBeaker.block.harvest=harvesting
+civcraft.chat.earnBeaker.entity.kill=killing
+
+craft.item=Items
+craft.block=Blocks
+craft.tile=Blocks
+entity.kill.tile=Mobs
+
+civcraft.unlock.itemcraft.pre=Craft the
+civcraft.unlock.itemcraft.masonary=Smelt Stone and Craft Stone Bricks
+civcraft.unlock.itemcraft.masonary_construction=Craft Stone Slabs and Stairs
+civcraft.unlock.itemcraft.construction=Craft Wooden Slabs and Stairs

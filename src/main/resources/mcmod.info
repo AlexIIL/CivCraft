@@ -1,0 +1,16 @@
+[
+{
+  "modid": "civcraft",
+  "name": "Civilisation in Minecraft",
+  "description": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["AlexIIL"],
+  "credits": "All of the people who wrote forge, mcp, and buildcraft for code examples (too many people to list)",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": ["required-after:alexiil.utils"]
+}
+]
