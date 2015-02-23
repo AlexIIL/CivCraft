@@ -9,7 +9,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
-import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.gui.GuiTechTree;
 import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.item.ItemTechBag;
@@ -28,7 +27,6 @@ public class MessageResearchTech extends MessageBase<MessageResearchTech> {
     
     public MessageResearchTech(Tech tech) {
         this.tech = tech;
-        CivLog.temp(tech == null ? "null Tech" : tech.name);
     }
     
     @Override public void fromBytes(ByteBuf buf) {

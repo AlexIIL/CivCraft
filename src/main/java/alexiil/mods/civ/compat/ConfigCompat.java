@@ -20,7 +20,6 @@ public class ConfigCompat extends ModCompat {
             // Almost directly copied from TechTree.Tech.<init>
             Tech techAdded = tree.addTech((String) key);
             NBTTagList nbtparents = tech.getTagList("parents", Lib.NBT.STRING);
-            Tech[] parents = new Tech[nbtparents.tagCount()];
             for (int idx = 0; idx < nbtparents.tagCount(); idx++) {
                 String parentName = nbtparents.getStringTagAt(idx);
                 Tech parent = tree.getTech(parentName);

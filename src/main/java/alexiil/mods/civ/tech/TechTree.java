@@ -251,7 +251,8 @@ public final class TechTree {
             return s + "]";
         }
         
-        private String techsToString() {
+        // method used for debugging
+        @SuppressWarnings("unused") private String techsToString() {
             String s = "[";
             int l = children.size();
             for (WeakReference<Tech> t : children) {

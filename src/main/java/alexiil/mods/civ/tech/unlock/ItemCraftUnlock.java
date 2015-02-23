@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.tech.TechTree.Tech;
@@ -99,9 +98,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         return false;
     }
     
-    @Override public void unlock(EntityPlayer player) {
-        NBTTagCompound p = player.getEntityData();
-    }
+    @Override public void unlock(EntityPlayer player) {}
     
     @Override public String getUnlocalisedName() {
         return "civcraft.unlock.itemcraft." + getName();
