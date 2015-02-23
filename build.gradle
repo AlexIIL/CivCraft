@@ -16,10 +16,10 @@ buildscript {
 }
 
 repositories {
-  maven {
-    name = "chickenbones"
-    url = "http://chickenbones.net/maven"
-  }
+    maven {
+        name = "chickenbones"
+        url = "http://chickenbones.net/maven"
+    }
 }
 
 apply plugin: 'forge'
