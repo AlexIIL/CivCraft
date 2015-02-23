@@ -10,9 +10,7 @@ import alexiil.mods.civ.tech.TechTreeEvent.AddTechs;
 import alexiil.mods.civ.tech.TechTreeEvent.AddUnlockables;
 
 public class ConfigCompat extends ModCompat {
-    @Override public void addTechs(AddTechs t) {}
-    
-    @Override public void addUnlockables(AddUnlockables t) {
+    @Override public void addTechs(AddTechs t) {
         TechTree tree = t.tree;
         NBTTagCompound n = t.treeNBTCompound;
         NBTTagCompound techs = n.getCompoundTag("techs");
@@ -37,7 +35,11 @@ public class ConfigCompat extends ModCompat {
             if (tech.getBoolean("leaf"))
                 techAdded.setLeafTech();
         }
-        
+    }
+    
+    @Override public void addUnlockables(AddUnlockables t) {
+        TechTree tree = t.tree;
+        NBTTagCompound n = t.treeNBTCompound;
         NBTTagCompound unlock = n.getCompoundTag("unlockables");
         // TODO: loading unlockable's
     }
