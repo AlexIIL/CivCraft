@@ -34,7 +34,7 @@ configFile.withReader {
     prop.load(it)
     project.ext.config = new ConfigSlurper().parse prop
 }
-version = "${project.config.mod_version}." + ${System.getenv("BUILD_NUMBER") ?  : "1"}
+version = "${project.config.mod_version}." + ${System.getenv("BUILD_NUMBER") ?: "1"}
 
 println config.mc_version + "-" + config.forge_version
 
