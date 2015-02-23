@@ -2,6 +2,7 @@ package alexiil.mods.civ;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -96,11 +97,13 @@ public class EventListner {
             List<String> names = new ArrayList<String>();
             for (Object o : nbtProgress.getKeySet())
                 names.add((String) o);
-            names.sort(new Comparator<String>() {
+            
+            Collections.sort(names, new Comparator<String>() {
                 @Override public int compare(String o1, String o2) {
                     return o1.compareTo(o2);
                 }
             });
+            
             // ScaledResolution res = new ScaledResolution(mc, mc.displayWidth,
             // mc.displayHeight);
             // int width = res.getScaledWidth();

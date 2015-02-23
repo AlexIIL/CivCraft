@@ -581,7 +581,9 @@ public final class TechTree {
     }
     
     public Unlockable getUnlockable(String name) {
-        return unlockables.getOrDefault(name, null);
+        if (unlockables.containsKey(name))
+                return unlockables.get(name);
+        return null;
     }
     
     public Map<String, Unlockable> getUnlockables() {

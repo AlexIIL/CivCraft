@@ -59,7 +59,9 @@ public class CraftUtils {
     }
     
     public static List<PlayerTechData> getPlayers(World world, ChunkCoordIntPair ccip) {
-        return chunkPlayers.getOrDefault(ccip, Collections.<PlayerTechData> emptyList());
+        if (chunkPlayers.containsKey(ccip))
+            return chunkPlayers.get(ccip);
+        return Collections.<PlayerTechData> emptyList();
     }
     
     public static List<Tech> getTechs(World world, BlockPos pos) {

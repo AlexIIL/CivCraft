@@ -2,6 +2,7 @@ package alexiil.mods.civ.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -254,7 +255,7 @@ public class GuiTechTree extends GuiScreen {
         // Order all of the lists into an order for nicer displaying
         // Firstly, in alphabetical order, to try and get a general trend
         for (List<Tech> lst : techList)
-            lst.sort(new Comparator<Tech>() {
+            Collections.sort(lst, new Comparator<Tech>() {
                 @Override public int compare(Tech t1, Tech t2) {
                     return t1.name.compareTo(t2.name);
                 }
