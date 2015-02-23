@@ -55,13 +55,15 @@ dependencies {
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
     //compile "some.group:artifact:version"
-      
+    
     // real examples
     //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-   compile "codechicken:CodeChickenLib:${config.mc_version}-${config.ccl_version}:dev"
-   compile "codechicken:CodeChickenCore:${config.mc_version}-${config.ccc_version}:dev"
-   compile "codechicken:NotEnoughItems:${config.mc_version}-${config.nei_version}:dev"
+    
+    compile "codechicken:CodeChickenLib:${config.mc_version}-${config.ccl_version}:dev"
+    compile "codechicken:CodeChickenCore:${config.mc_version}-${config.ccc_version}:dev"
+    compile "codechicken:NotEnoughItems:${config.mc_version}-${config.nei_version}:dev"
+   
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
