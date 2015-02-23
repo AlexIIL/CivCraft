@@ -29,9 +29,9 @@ import alexiil.mods.lib.coremod.VanillaMethods;
     public static void loadConfigs() {
         Configuration cfg = new Configuration(new File("./config/" + MODID + ".cfg"));
         cfg.load();
-        betterPotions = cfg.get("general", "betterPotions", true);
-        timeText = cfg.get("general", "textTime", true);
-        roamingIP = cfg.get("general", "roamingIP", true);
+        betterPotions = cfg.get("general", "betterPotions", false);
+        timeText = cfg.get("general", "textTime", false);
+        roamingIP = cfg.get("general", "roamingIP", false);
     }
     
     @EventHandler public void preInit(FMLPreInitializationEvent event) {
