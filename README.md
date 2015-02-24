@@ -8,7 +8,7 @@ Essentially, a mod that adds a tech tree to minecraft. At the moment (more is pl
 ## To compile from scratch
 * Run "git clone https://github.com/AlexIIL/CivCraft.git" in a terminal
 * then "cd CivCraft"
-* then "./gradlew setupCIWorkspace"
+* then "./gradlew setupCIWorkspace" *(this assumes you are using linux, for Windows use "gradlew.bat" and I don't know what to use on Mac OSX)* 
 * then "./gradlew build"
 * and the jar's should be in the /build/libs/ folder
 
