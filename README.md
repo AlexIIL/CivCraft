@@ -15,7 +15,7 @@ Essentially, a mod that adds a tech tree to minecraft. At the moment (more is pl
 
 ## To contribute
 * Fork this repository with your own github account
-* This assumesyou have git, but if you don't, you can download it from the [Git website](http://git-scm.com/)
+* This assumes you have git, but if you don't, you can download it from the [Git website](http://git-scm.com/)
 * Run "git clone https://github.com/YOUR_NAME/CivCraft.git" in a terminal
 * Run "cd CivCraft"
 * Run "./gradlew setupDecompWorkpspace"
