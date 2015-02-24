@@ -77,7 +77,7 @@ dependencies {
 // add a source jar
 task sourceJar(type: Jar) {
     from sourceSets.main.allSource
-    classifier = 'sources'
+    classifier = 'src'
 }
 
 // because the normal output has been made to be obfuscated
