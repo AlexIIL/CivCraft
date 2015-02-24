@@ -11,7 +11,7 @@ import alexiil.mods.lib.net.MessageUpdate;
 public abstract class TileEntityUpdated<M extends MessageUpdate<?, ?>> extends TileEntityBasic implements INetworkTile<M> {
     private int updated;
     public final AlexIILMod mod;
-    private TargetPoint point == null;
+    private TargetPoint point = null;
     
     public TileEntityUpdated(AlexIILMod mod) {
         this.mod = mod;
