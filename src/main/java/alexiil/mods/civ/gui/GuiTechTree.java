@@ -2,11 +2,13 @@ package alexiil.mods.civ.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -17,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Keyboard;
 
+import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.item.ItemTechBag;
@@ -203,7 +206,7 @@ public class GuiTechTree extends GuiScreen {
     }
     
     public void calculateTechs() {
-        needsRecalculating = 10;
+        needsRecalculating = 1;
     }
     
     private void recalculateTechs() {
@@ -222,8 +225,13 @@ public class GuiTechTree extends GuiScreen {
             techList.get(0).add(t);
             tempMap.put(t, 0);
         }
+        populateTechMap(techList, tempMap);
+        orderTechs(techList);
+        populateDrawPositions(techList, tempMap);
+    }
+    
+    private void populateTechMap(List<List<Tech>> techList, Map<Tech, Integer> tempMap) {
         boolean isDirty = true;
-        
         int ttl = 1000;
         while (isDirty && ttl > 0) {
             isDirty = false;
@@ -251,7 +259,9 @@ public class GuiTechTree extends GuiScreen {
             }
             ttl--;
         }
-        
+    }
+    
+    private void orderTechs(List<List<Tech>> techList) {
         // Order all of the lists into an order for nicer displaying
         // Firstly, in alphabetical order, to try and get a general trend
         for (List<Tech> lst : techList)
@@ -261,7 +271,7 @@ public class GuiTechTree extends GuiScreen {
                 }
             });
         
-        // Next, try and group tech parents and children, only moving the children around
+        // Next, try and group tech parents and children
         List<Tech> lastList;
         List<Tech> nextList;
         for (int idx = 1; idx < techList.size(); idx++) {
@@ -270,11 +280,97 @@ public class GuiTechTree extends GuiScreen {
                 nextList = techList.get(idx + 1);
             else
                 nextList = null;
+            List<Tech> currentList = techList.get(idx);
             
+            // Basically, add a relationship between each tech and each other tech in this list.
+            Map<Tech, Map<Tech, Integer>> relationship = new HashMap<Tech, Map<Tech, Integer>>();
+            for (int j = 0; j < currentList.size(); j++) {
+                Tech t0 = currentList.get(j);
+                Map<Tech, Integer> mp = new HashMap<Tech, Integer>();
+                relationship.put(t0, mp);
+                for (int k = 0; k < currentList.size(); k++) {
+                    Tech t1 = currentList.get(k);
+                    if (t1 == t0)
+                        continue;
+                    int shared = 0;
+                    
+                    if (nextList != null) {
+                        List<Tech> t1Children = Arrays.asList(t1.getChildTechs());
+                        for (int l = 0; l < nextList.size(); l++) {
+                            Tech t = nextList.get(l);
+                            for (Tech t00 : t0.getChildTechs())
+                                if (t1Children.contains(t00))
+                                    shared++;
+                        }
+                    }
+                    
+                    List<Tech> t1Parents = Arrays.asList(t1.getParentTechs());
+                    for (int l = 0; l < lastList.size(); l++) {
+                        Tech t = lastList.get(l);
+                        for (Tech t00 : t0.getParentTechs())
+                            if (t1Parents.contains(t00))
+                                shared++;
+                    }
+                    
+                    mp.put(t1, shared);
+                }
+            }
+            
+            for (int j = 0; j < currentList.size(); j++) {
+                List<Tech> newList = new ArrayList<Tech>();
+                newList.add(currentList.remove(0));
+                while (currentList.size() > 0) {
+                    Tech t = currentList.remove(0);
+                    int currentMatch = -1;
+                    Tech tM = null;
+                    for (int i = 0; i < newList.size(); i++) {
+                        Tech tN = newList.get(i);
+                        if (tN == t)
+                            continue;
+                        CivLog.info(t.toString());
+                        Map<Tech, Integer> mp2 = relationship.get(t);
+                        CivLog.info(mp2.toString());
+                        int rel = mp2.get(tN);
+                        if (rel > currentMatch) {
+                            currentMatch = rel;
+                            tM = tN;
+                        }
+                    }
+                    int tMi = newList.indexOf(tM);
+                    
+                    int nextBest = tMi;
+                    Tech tNB = newList.get(tMi);
+                    if (tNB == tM)
+                        continue;
+                    if (relationship.get(t).get(tNB) > currentMatch)
+                        newList.add(tMi, t);
+                    else
+                        newList.add(tMi + 1, t);
+                }
+                techList.set(idx, newList);
+            }
+            
+            StringBuilder builder = new StringBuilder();
+            for (Entry<Tech, Map<Tech, Integer>> mts : relationship.entrySet()) {
+                builder.append("\n");
+                builder.append(mts.getKey().getLocalizedName());
+                builder.append(" {\n");
+                for (Entry<Tech, Integer> mtsInt : mts.getValue().entrySet()) {
+                    builder.append("\t");
+                    builder.append(mtsInt.getKey().getLocalizedName());
+                    builder.append(" = ");
+                    builder.append(mtsInt.getValue().toString());
+                    builder.append("\n");
+                }
+                builder.append("}");
+            }
+            
+            CivLog.info(builder.toString());
             // TODO: stuffs here
         }
-        
-        // Lastly, calculate the positions of all the techs, so that we don't have to every rendering tick
+    }
+    
+    private void populateDrawPositions(List<List<Tech>> techList, Map<Tech, Integer> tempMap) {
         Map<DrawTechInfo, Tech> tempDrawMap = new HashMap<DrawTechInfo, Tech>();
         Map<Tech, DrawTechInfo> tempDrawMapOther = new HashMap<Tech, DrawTechInfo>();
         ItemTechnology techItem = CivItems.technology;

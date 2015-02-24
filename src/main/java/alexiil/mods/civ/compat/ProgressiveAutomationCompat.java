@@ -12,6 +12,7 @@ import com.vanhal.progressiveautomation.blocks.BlockGenerator;
 import com.vanhal.progressiveautomation.blocks.BlockMiner;
 import com.vanhal.progressiveautomation.blocks.BlockPlanter;
 import com.vanhal.progressiveautomation.blocks.PABlocks;
+import com.vanhal.progressiveautomation.items.PAItems;
 
 public class ProgressiveAutomationCompat extends ModCompat {
     private Tech techLogging, techPower, techRF;
@@ -36,7 +37,7 @@ public class ProgressiveAutomationCompat extends ModCompat {
         tree.addUnlockable(new ItemCraftUnlock("planting", tree.getTech("agriculture"), automation).addUnlocked(PABlocks.planter
                 .toArray(new BlockPlanter[0])));
         
-        tree.addUnlockable(new ItemCraftUnlock("redstone_flux", techRF));
+        tree.addUnlockable(new ItemCraftUnlock("redstone_flux", techRF).addUnlocked(PAItems.rfEngine));
     }
     
     @Override public String getModID() {

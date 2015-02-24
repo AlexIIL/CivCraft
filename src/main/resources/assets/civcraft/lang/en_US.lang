@@ -17,12 +17,15 @@ civcraft.tech.smelting=Smelting
 civcraft.tech.masonry=Masonry
 civcraft.tech.the_wheel=The Wheel
 civcraft.tech.trapping=Trapping
+civcraft.tech.automation=Automation
+civcraft.tech.logging=Logging
 
 civcraft.tech.pottery=Pottery
 civcraft.tech.iron_working=Iron Working
 civcraft.tech.construction=Construction
 civcraft.tech.maths=Mathematics
 civcraft.tech.horseback_riding=Horseback Riding
+civcraft.tech.power=Power Systems
 
 civcraft.tech.gold_working=Gold Working
 civcraft.tech.writing=Writing
@@ -30,6 +33,7 @@ civcraft.tech.calendar=Calendar
 civcraft.tech.optics=Optics
 civcraft.tech.engineering=Engineering
 civcraft.tech.currency=Currency
+civcraft.tech.redstone_flux=Redstone Flux
 
 civcraft.tech.diamond_working=Diamond Working
 
