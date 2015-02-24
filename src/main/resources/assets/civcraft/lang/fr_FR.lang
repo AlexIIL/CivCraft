@@ -1,0 +1,50 @@
+item.civcraft_sciencePack0.name=Notes de recherche
+item.civcraft_sciencePack1.name=Paquet de science 1
+item.civcraft_sciencePack2.name=Paquet de science 2
+item.civcraft_sciencePack3.name=Paquet de science 3
+item.civcraft_sciencePack4.name=Paquet de science 4
+item.civcraft_technology.name=Technologie
+item.civcraft_techBag.name=Sac de technologie
+
+civcraft.tech.agriculture=Agriculture
+
+civcraft.tech.sailing=Navigation
+civcraft.tech.animal_husbandry=Élevage d'animaux
+civcraft.tech.archery=Tir à l'arc
+civcraft.tech.mining=Minage
+
+civcraft.tech.smelting=Fonte
+civcraft.tech.masonry=Maconnerie
+civcraft.tech.the_wheel=La roue
+civcraft.tech.trapping=Chasse
+
+civcraft.tech.pottery=Potterie
+civcraft.tech.iron_working=Travail du fer
+civcraft.tech.construction=Construction
+civcraft.tech.maths=Mathematiques
+civcraft.tech.horseback_riding=Équitation
+
+civcraft.tech.gold_working=Travail de l'or
+civcraft.tech.writing=Écriture
+civcraft.tech.calendar=Calendrier
+civcraft.tech.optics=Optique
+civcraft.tech.engineering=Ingénierie
+civcraft.tech.currency=Monaie
+
+civcraft.tech.diamond_working=travail du diamant
+
+civcraft.chat.earnBeaker=Vous avez juste gagné un bécher pour 
+civcraft.chat.earnBeaker.craft=construire
+civcraft.chat.earnBeaker.block.break=casser
+civcraft.chat.earnBeaker.block.harvest=cultiver
+civcraft.chat.earnBeaker.entity.kill=tuer
+
+craft.item=Éléments
+craft.block=Blocs
+craft.tile=Blocs
+entity.kill.tile=Créatures
+
+civcraft.unlock.itemcraft.pre=Construisez 
+civcraft.unlock.itemcraft.masonary=la fonte de la pierre et la création de briques en pierre
+civcraft.unlock.itemcraft.masonary_construction=la création de dalles et d'écaliers en pierre
+civcraft.unlock.itemcraft.construction=la création de dalles et d'écaliers en bois
