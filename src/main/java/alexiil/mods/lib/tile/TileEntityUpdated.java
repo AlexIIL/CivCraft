@@ -11,6 +11,7 @@ import alexiil.mods.lib.net.MessageUpdate;
 public abstract class TileEntityUpdated<M extends MessageUpdate<?, ?>> extends TileEntityBasic implements INetworkTile<M> {
     private int updated;
     public final AlexIILMod mod;
+    private TargetPoint point == null;
     
     public TileEntityUpdated(AlexIILMod mod) {
         this.mod = mod;
@@ -24,8 +25,17 @@ public abstract class TileEntityUpdated<M extends MessageUpdate<?, ?>> extends T
         }
     }
     
+    private void resetTargetPoint() {
+        point = null;
+    }
+    
+    private TargetPoint targetPoint() {
+        if (point == null)
+            point = new TargetPoint(worldObj.provider.getDimensionId(), pos.getX(), pos.getY(), pos.getZ(), AlexIILLib.netDistance.getInt());
+        return point;
+    }
+    
     public void sendUpdatePacket() {
-        mod.provider.get().sendToAllAround(getCustomUpdateMessage(),
-                new TargetPoint(worldObj.provider.getDimensionId(), pos.getX(), pos.getY(), pos.getZ(), AlexIILLib.netDistance.getInt()));
+        mod.provider.get().sendToAllAround(getCustomUpdateMessage(), targetPoint());
     }
 }
