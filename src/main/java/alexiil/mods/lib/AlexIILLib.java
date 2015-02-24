@@ -14,7 +14,7 @@ import alexiil.mods.lib.coremod.ChatTextTime;
 import alexiil.mods.lib.coremod.RoamingIPAddress;
 import alexiil.mods.lib.coremod.VanillaMethods;
 
-@Mod(modid = AlexIILLib.MODID, version = "INVALID! BUILD ERROR!", useMetadata = true) public class AlexIILLib extends AlexIILMod {
+@Mod(modid = AlexIILLib.MODID, version = "0.1", useMetadata = true) public class AlexIILLib extends AlexIILMod {
     public static final String MODID = "AlexIILLib";
     public static final DecimalFormat df = new DecimalFormat();
     
@@ -39,9 +39,9 @@ import alexiil.mods.lib.coremod.VanillaMethods;
         
         log.info("This is AlexIIL Lib, version " + meta.version);
         
-        betterPotions = cfg.getProp("betterPotions", "true");
-        timeText = cfg.getProp("textTime", "true");
-        roamingIP = cfg.getProp("roamingIP", "true");
+        betterPotions = cfg.getProp("betterPotions", "false");
+        timeText = cfg.getProp("textTime", "false");
+        roamingIP = cfg.getProp("roamingIP", "false");
         
         cfg.saveAll();
         
@@ -52,7 +52,5 @@ import alexiil.mods.lib.coremod.VanillaMethods;
         RoamingIPAddress.init();
     }
     
-    @EventHandler public void init(FMLInitializationEvent event) {
-        
-    }
+    @EventHandler public void init(FMLInitializationEvent event) {}
 }
