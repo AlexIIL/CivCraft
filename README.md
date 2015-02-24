@@ -3,7 +3,7 @@
 
 A mod for minecraft, based off of Civ V and Civ Beyond Earth and Factorio.
 
-Essentially, a mod that adds a tech tree to minecraft. At the moment (more is planned, check the [issues](https://github.com/AlexIIL/CivCraft/issues) page for the current plans)
+Essentially, a mod that adds a tech tree to minecraft. At the moment (more is planned, check the [issues](https://github.com/AlexIIL/CivCraft/issues?q=is%3Aopen+label%3Aenhancement+author%3AAlexIIL) page for the current plans)
 
 ## To compile from scratch
 * Run "git clone https://github.com/AlexIIL/CivCraft.git" in a terminal
