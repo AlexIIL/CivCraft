@@ -21,7 +21,7 @@ import alexiil.mods.civ.item.ItemTechBag.TechProgress;
 import alexiil.mods.civ.tech.TechResearchedEvent.ItemTechResearchedEvent;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
-import alexiil.mods.civ.tech.TechTree.Unlockable;
+import alexiil.mods.civ.tech.Unlockable;
 import alexiil.mods.civ.utils.TechUtils;
 import alexiil.mods.lib.EChatColours;
 import alexiil.mods.lib.item.IChangingItemString;

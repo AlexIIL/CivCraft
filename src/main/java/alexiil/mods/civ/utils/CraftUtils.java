@@ -20,7 +20,7 @@ import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
-import alexiil.mods.civ.tech.TechTree.Unlockable;
+import alexiil.mods.civ.tech.Unlockable;
 import alexiil.mods.civ.tech.unlock.IItemBlocker;
 
 public class CraftUtils {

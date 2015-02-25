@@ -1,7 +1,6 @@
 package alexiil.mods.civ.tech;
 
 import net.minecraft.nbt.NBTTagCompound;
-import alexiil.mods.civ.tech.TechTree.Unlockable;
 
 /** Fired at intervals throughout the tech tree creation process. All of the events have (at least) two fields: the tree
  * that is being created, and the NBTTagCompound that is saved to the world folder that describes the tree.

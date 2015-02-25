@@ -8,8 +8,9 @@ import net.minecraft.nbt.NBTTagString;
 import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
+import alexiil.mods.civ.tech.Unlockable;
 
-public abstract class TechUnlockable extends TechTree.Unlockable {
+public abstract class TechUnlockable extends Unlockable {
     private final TechTree.Tech[] requiredTechs;
     private final boolean shouldShow;
     
