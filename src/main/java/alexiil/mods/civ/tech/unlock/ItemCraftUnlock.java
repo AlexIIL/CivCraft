@@ -18,7 +18,7 @@ import alexiil.mods.lib.item.IChangingItemString;
 public class ItemCraftUnlock extends TechUnlockable implements IChangingItemString, IItemBlocker {
     private final List<IItemComparator> items;
     private ItemStack singleItem = null;
-    private boolean singleItemFlag = true;
+    private boolean singleItemFlag = false;
     
     public ItemCraftUnlock(String name, Tech... techs) {
         super(name, techs, true);
@@ -36,13 +36,15 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
     public ItemCraftUnlock addUnlocked(final Item item) {
         if (item == null)
             return this;
-        if (singleItemFlag) {
+        if (items.size() == 0 || singleItemFlag) {
             if (singleItem != null) {
                 singleItem = null;
                 singleItemFlag = false;
             }
-            else
+            else {
                 singleItem = new ItemStack(item);
+                singleItemFlag = true;
+            }
         }
         items.add(new IItemComparator() {
             @Override public boolean isConsideredEqual(ItemStack toCompare) {
@@ -87,6 +89,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
     
     public ItemCraftUnlock addUnlocked(IItemComparator compare) {
         singleItemFlag = false;
+        singleItem = null;
         items.add(compare);
         return this;
     }

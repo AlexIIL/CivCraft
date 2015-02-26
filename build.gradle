@@ -64,8 +64,6 @@ dependencies {
     compile "codechicken:CodeChickenLib:${config.mc_version}-${config.ccl_version}:dev"
     compile "codechicken:CodeChickenCore:${config.mc_version}-${config.ccc_version}:dev"
     compile "codechicken:NotEnoughItems:${config.mc_version}-${config.nei_version}:dev"
-    // TODO: add progressive automation to the required libs, not quite sure how I am going to do this though.
-    // Maybe by downloading the file if it doesnt exist? Unless it exists in an easy-to-access place...
    
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html

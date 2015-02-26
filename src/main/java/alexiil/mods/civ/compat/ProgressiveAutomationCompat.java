@@ -1,18 +1,17 @@
 package alexiil.mods.civ.compat;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.civ.tech.TechTreeEvent.AddTechs;
 import alexiil.mods.civ.tech.TechTreeEvent.AddUnlockables;
 import alexiil.mods.civ.tech.unlock.ItemCraftUnlock;
-
-import com.vanhal.progressiveautomation.blocks.BlockChopper;
-import com.vanhal.progressiveautomation.blocks.BlockCrafter;
-import com.vanhal.progressiveautomation.blocks.BlockGenerator;
-import com.vanhal.progressiveautomation.blocks.BlockMiner;
-import com.vanhal.progressiveautomation.blocks.BlockPlanter;
-import com.vanhal.progressiveautomation.blocks.PABlocks;
-import com.vanhal.progressiveautomation.items.PAItems;
+import alexiil.mods.lib.ErrorHandling;
 
 public class ProgressiveAutomationCompat extends ModCompat {
     private Tech techLogging, techPower, techRF;
@@ -29,18 +28,49 @@ public class ProgressiveAutomationCompat extends ModCompat {
         Tech automation = tree.getTech("automation");
         Tech mining = tree.getTech("mining");
         
-        tree.addUnlockable(new ItemCraftUnlock("logging", techLogging, automation).addUnlocked(PABlocks.chopper.toArray(new BlockChopper[0])));
-        tree.addUnlockable(new ItemCraftUnlock("mining", mining, automation).addUnlocked(PABlocks.miner.toArray(new BlockMiner[0])));
-        tree.addUnlockable(new ItemCraftUnlock("crafting", automation, tree.getTech("construction")).addUnlocked(PABlocks.crafter
-                .toArray(new BlockCrafter[0])));
-        tree.addUnlockable(new ItemCraftUnlock("generating", tree.getTech("smelting")).addUnlocked(PABlocks.generator.toArray(new BlockGenerator[0])));
-        tree.addUnlockable(new ItemCraftUnlock("planting", tree.getTech("agriculture"), automation).addUnlocked(PABlocks.planter
-                .toArray(new BlockPlanter[0])));
+        tree.addUnlockable(new ItemCraftUnlock("logging", techLogging, automation).addUnlocked(getBlocks("chopper")));
+        tree.addUnlockable(new ItemCraftUnlock("mining", mining, automation).addUnlocked(getBlocks("miner")));
+        tree.addUnlockable(new ItemCraftUnlock("crafting", automation, tree.getTech("construction")).addUnlocked(getBlocks("crafter")));
+        tree.addUnlockable(new ItemCraftUnlock("generating", tree.getTech("smelting")).addUnlocked(getBlocks("generator")));
+        tree.addUnlockable(new ItemCraftUnlock("planting", tree.getTech("agriculture"), automation).addUnlocked(getBlocks("planter")));
         
-        tree.addUnlockable(new ItemCraftUnlock("redstone_flux", techRF).addUnlocked(PAItems.rfEngine));
+        tree.addUnlockable(new ItemCraftUnlock("redstone_flux", techRF).addUnlocked(getItem("rfEngine")));
     }
     
     @Override public String getModID() {
         return "progressiveautomation";
+    }
+    
+    private Block[] getBlocks(String name) {
+        String clsName = "com.vanhal.progressiveautomation.blocks.PABlocks";
+        try {
+            Class<?> cls = Class.forName(clsName);
+            Field fld = cls.getField(name);
+            @SuppressWarnings("unchecked") List<Block> blocks = (List<Block>) fld.get(null);
+            return blocks.toArray(new Block[0]);
+            
+        }
+        catch (Throwable e) {
+            CivLog.warn("An error was thrown while trying to get a Progressive Automation Block list");
+            ErrorHandling.printClassInfo(clsName);
+            e.printStackTrace();
+        }
+        
+        return new Block[0];
+    }
+    
+    private Item getItem(String name) {
+        String clsName = "com.vanhal.progressiveautomation.items.PAItems";
+        try {
+            Class<?> cls = Class.forName(clsName);
+            Field fld = cls.getField(name);
+            return (Item) fld.get(null);
+        }
+        catch (Throwable e) {
+            ErrorHandling.printClassInfo(clsName);
+            e.printStackTrace();
+        }
+        
+        return null;
     }
 }
