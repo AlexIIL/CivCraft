@@ -34,7 +34,9 @@ configFile.withReader {
     prop.load(it)
     project.ext.config = new ConfigSlurper().parse prop
 }
-version = "${project.config.mod_version}." + System.getenv("DRONE_BUILD_NUMBER") ?: "1"
+def buildNumber = System.getenv("DRONE_BUILD_NUMBER") ?: config.fallback_build_number
+
+version = "${project.config.mod_version}." + buildNumber
 
 minecraft {
     version = config.mc_version + "-" + config.forge_version
@@ -48,7 +50,7 @@ minecraft {
     mappings = "snapshot_nodoc_20141130"
 
     replaceIn "alexiil/mods/civ/CivCraft.java"
-    replace "@VERSION@", "${project.config.mod_version}." + System.getenv("DRONE_BUILD_NUMBER") ?: "1"
+    replace "@VERSION@", "${project.config.mod_version}." + buildNumber
 }
 
 dependencies {
