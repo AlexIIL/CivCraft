@@ -22,6 +22,6 @@ Essentially, a mod that adds a tech tree to minecraft. At the moment (more is pl
 * Run "./gradlew eclipse"
 * Run, when you have finished your changes "git push"
 * Submit a pull request with the changes.
-Please either leave info on what you did, unless it is a simple bug-fix.
+Please leave info on what you did and why you want it, unless it is a simple bug-fix.
 
 Latest build at [drone.io](https://drone.io/github.com/AlexIIL/CivCraft/files).
