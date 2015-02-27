@@ -1,5 +1,7 @@
 package alexiil.mods.civ;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -24,6 +26,8 @@ import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.net.MessageHandler;
 import alexiil.mods.civ.tech.BeakerEarningListener;
 import alexiil.mods.lib.AlexIILMod;
+import alexiil.mods.lib.GitContributorRequestor;
+import alexiil.mods.lib.GitContributorRequestor.Contributor;
 
 @Mod(modid = Lib.Mod.ID, version = "@VERSION@") public class CivCraft extends AlexIILMod {
     public static ModMetadata modMeta;
@@ -37,6 +41,8 @@ import alexiil.mods.lib.AlexIILMod;
     /** Debug holder of the players NBT compound (so, only works when the server is in the same minecraft instance as the
      * client) */
     public static NBTTagCompound playerNBTData = new NBTTagCompound();
+    
+    private static List<Contributor> contributors;
     
     @EventHandler public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
@@ -73,5 +79,21 @@ import alexiil.mods.lib.AlexIILMod;
         CivTechs.loadTree();
         proxy.initRenderers();
         cfg.saveAll();
+        
+        new Thread("alexiil-CivCraft-contributor") {
+            @Override public void run() {
+                contributors = Collections.unmodifiableList(GitContributorRequestor.getContributors("AlexIIL", "CivCraft"));
+                if (contributors.size() == 0)
+                    modMeta.authorList.add("Could not connect to GitHub to fetch the rest...");
+                for (Contributor c : contributors)
+                    if (!"AlexIIL".equals(c.name))
+                        modMeta.authorList.add(c.name);
+            }
+        }.start();
+    }
+    
+    /** NOTE: this returns an immutable list of contributors */
+    public List<Contributor> getContributors() {
+        return contributors;
     }
 }
