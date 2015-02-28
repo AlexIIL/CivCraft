@@ -29,7 +29,7 @@ import alexiil.mods.lib.AlexIILMod;
 import alexiil.mods.lib.GitContributorRequestor;
 import alexiil.mods.lib.GitContributorRequestor.GitHubUser;
 
-@Mod(modid = Lib.Mod.ID, version = "@VERSION@") public class CivCraft extends AlexIILMod {
+@Mod(modid = Lib.Mod.ID, version = Lib.Mod.VERSION) public class CivCraft extends AlexIILMod {
     public static ModMetadata modMeta;
     public static Logger log;
     // MOD STUFF
@@ -48,7 +48,8 @@ import alexiil.mods.lib.GitContributorRequestor.GitHubUser;
         super.preInit(event);
         modMeta = super.meta;
         log = super.log;
-        log.info("This is " + Lib.Mod.NAME + ", version " + modMeta.version);
+        log.info("This is " + Lib.Mod.NAME + ", version " + modMeta.version + ", build type = " + Lib.Mod.buildType() + ", commit hash = "
+                + Lib.Mod.COMMIT_HASH);
         
         MinecraftForge.EVENT_BUS.register(EventListner.instance);
         MinecraftForge.EVENT_BUS.register(BeakerEarningListener.instance);
