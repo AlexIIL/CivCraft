@@ -27,7 +27,7 @@ import alexiil.mods.civ.net.MessageHandler;
 import alexiil.mods.civ.tech.BeakerEarningListener;
 import alexiil.mods.lib.AlexIILMod;
 import alexiil.mods.lib.GitContributorRequestor;
-import alexiil.mods.lib.GitContributorRequestor.Contributor;
+import alexiil.mods.lib.GitContributorRequestor.GitHubUser;
 
 @Mod(modid = Lib.Mod.ID, version = "@VERSION@") public class CivCraft extends AlexIILMod {
     public static ModMetadata modMeta;
@@ -42,7 +42,7 @@ import alexiil.mods.lib.GitContributorRequestor.Contributor;
      * client) */
     public static NBTTagCompound playerNBTData = new NBTTagCompound();
     
-    private static List<Contributor> contributors;
+    private static List<GitHubUser> contributors;
     
     @EventHandler public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
@@ -80,20 +80,22 @@ import alexiil.mods.lib.GitContributorRequestor.Contributor;
         proxy.initRenderers();
         cfg.saveAll();
         
-        new Thread("alexiil-CivCraft-contributor") {
+        new Thread("CivCraft-contributor") {
             @Override public void run() {
                 contributors = Collections.unmodifiableList(GitContributorRequestor.getContributors("AlexIIL", "CivCraft"));
                 if (contributors.size() == 0)
                     modMeta.authorList.add("Could not connect to GitHub to fetch the rest...");
-                for (Contributor c : contributors)
-                    if (!"AlexIIL".equals(c.name))
-                        modMeta.authorList.add(c.name);
+                for (GitHubUser c : contributors) {
+                    if ("AlexIIL".equals(c.name))
+                        modMeta.authorList.remove("AlexIIL");
+                    modMeta.authorList.add(c.name + " (" + c.commits + ")");
+                }
             }
         }.start();
     }
     
     /** NOTE: this returns an immutable list of contributors */
-    public List<Contributor> getContributors() {
+    public List<GitHubUser> getContributors() {
         return contributors;
     }
 }
