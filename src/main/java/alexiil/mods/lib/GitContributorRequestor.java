@@ -13,12 +13,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import alexiil.mods.civ.CivLog;
+
 public class GitContributorRequestor {
     public static class GitHubUser {
         public final String name;
-        public final int commits;
-        public final String avatarUrl;
-        public final String githubUrl;
+        public final int commits;// May use this, not sure
+        public final String avatarUrl;// Might use this in a new Gui
+        public final String githubUrl;// Useful if anyone wants to get more info on a person
         
         public GitHubUser(String name, String avatarUrl, String githubUrl, int commits) {
             this.name = name;
@@ -28,13 +30,28 @@ public class GitContributorRequestor {
         }
     }
     
-    private static final String LOGIN = "\"login\":\"";
-    private static final String AVATAR = "\"avatar_url\":\"";
-    private static final String COMMITS = "\"contributions\":";
-    private static final String URL = "\"url\":\"";
+    public static class Commit {
+        public final String message;
+        public final String id;
+        public final String url;
+        public final int additions, deletions;
+        
+        public Commit(String url, String message, String id, int additions, int deletions) {
+            this.message = message;
+            this.id = id;
+            this.url = url;
+            this.additions = additions;
+            this.deletions = deletions;
+        }
+    }
+    
+    private static final String LOGIN = "\"login\":\"";// "login":"
+    private static final String AVATAR = "\"avatar_url\":\"";// "avatar_url":"
+    private static final String COMMITS = "\"contributions\":";// "contributions":
+    private static final String URL = "\"url\":\"";// "url":"
     
     public static List<GitHubUser> getContributors(String user, String repo) {
-        String response = getResponse("https://api.github.com/repos/" + user + "/" + repo + "/contributors");
+        String response = getResponse("repos/" + user + "/" + repo + "/contributors");
         if (response == null)
             return Collections.emptyList();
         List<GitHubUser> users = parseContributors(response);
@@ -76,10 +93,24 @@ public class GitContributorRequestor {
         return lst;
     }
     
-    private static String getResponse(String site) {
+    /** Get a GitHub API response, without using an access token */
+    public static String getResponse(String site) {
+        return getResponse(site, null);
+    }
+    
+    /** This appends the site to "https://api.github.com" so you don't need to (also, so you cannot use this method for
+     * non-GitHub sites)<br>
+     * The accessToken parameter is for if you have an access token, and you don't have any parameters in the site (so,
+     * if your site is <code>"repo/AlexIIL/CivCraft/issues"</code> then you can use an access token, but if your site is
+     * <code>"repo/AlexIIL/CivCraft/issues?label:enhancement"</code> you cannot. If any error occurs, then the returned
+     * string is <code>null</code>, and an error is printed out to console */
+    public static String getResponse(String site, String accessToken) {
         try {
-            URLConnection url = new URL(site).openConnection();
+            if (accessToken != null)
+                site = site + "?access_token=" + accessToken;
+            URLConnection url = new URL("https://api.github.com/" + site).openConnection();
             InputStream response = url.getInputStream();
+            CivLog.info(url.getHeaderField("X-RateLimit-Remaining") + " requests left from GitHub in this hour");
             BufferedReader br = new BufferedReader(new InputStreamReader(response, Charset.forName("UTF-8")));
             return br.readLine();
         }
