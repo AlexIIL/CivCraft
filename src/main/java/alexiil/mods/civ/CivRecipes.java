@@ -8,11 +8,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.RecipeSorter;
 import alexiil.mods.civ.crafting.RecipeTech;
 import alexiil.mods.civ.item.CivItems;
 
 public class CivRecipes {
     public static void init() {
+        RecipeSorter.register("civcraft:tech", RecipeTech.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+        
         GameRegistry.addRecipe(RecipeTech.instance);
         GameRegistry.addRecipe(CivItems.technology.getStartingTech(), new Object[] { "SSS", "PBP", "SSS", 'S', Items.stick, 'P', Blocks.planks, 'B',
                 CivItems.sciencePacks[0] });
