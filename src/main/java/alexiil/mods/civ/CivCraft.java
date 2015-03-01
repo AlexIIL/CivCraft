@@ -26,10 +26,11 @@ import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.net.MessageHandler;
 import alexiil.mods.civ.tech.BeakerEarningListener;
 import alexiil.mods.lib.AlexIILMod;
-import alexiil.mods.lib.GitContributorRequestor;
-import alexiil.mods.lib.GitContributorRequestor.GitHubUser;
+import alexiil.mods.lib.git.Commit;
+import alexiil.mods.lib.git.GitHubRequester;
+import alexiil.mods.lib.git.GitHubUser;
 
-@Mod(modid = Lib.Mod.ID, version = Lib.Mod.VERSION) public class CivCraft extends AlexIILMod {
+@Mod(modid = Lib.Mod.ID, version = Lib.Mod.VERSION, guiFactory = "alexiil.mods.civ.gui.ConfigGuiFactory") public class CivCraft extends AlexIILMod {
     public static ModMetadata modMeta;
     public static Logger log;
     // MOD STUFF
@@ -43,6 +44,8 @@ import alexiil.mods.lib.GitContributorRequestor.GitHubUser;
     public static NBTTagCompound playerNBTData = new NBTTagCompound();
     
     private static List<GitHubUser> contributors;
+    private static List<Commit> commits;
+    private static Commit thisCommit;
     
     @EventHandler public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
@@ -81,16 +84,44 @@ import alexiil.mods.lib.GitContributorRequestor.GitHubUser;
         proxy.initRenderers();
         cfg.saveAll();
         
-        new Thread("CivCraft-contributor") {
+        initGithubRemote();
+    }
+    
+    private void initGithubRemote() {
+        new Thread("CivCraft-github") {
             @Override public void run() {
-                contributors = Collections.unmodifiableList(GitContributorRequestor.getContributors("AlexIIL", "CivCraft"));
+                contributors = Collections.unmodifiableList(GitHubRequester.getContributors("AlexIIL", "CivCraft"));
                 if (contributors.size() == 0)
                     modMeta.authorList.add("Could not connect to GitHub to fetch the rest...");
                 for (GitHubUser c : contributors) {
-                    if ("AlexIIL".equals(c.name))
+                    if ("AlexIIL".equals(c.login))
                         modMeta.authorList.remove("AlexIIL");
-                    modMeta.authorList.add(c.name + " (" + c.commits + ")");
+                    modMeta.authorList.add(c.login + " (" + c.commits + ")");
                 }
+                
+                commits = Collections.unmodifiableList(GitHubRequester.getCommits("AlexIIL", "CivCraft"));
+                for (Commit c : commits)
+                    if (Lib.Mod.COMMIT_HASH.equals(c.sha))
+                        thisCommit = c;
+                if (thisCommit == null && commits.size() > 0 && Lib.Mod.buildType() == 2)
+                    thisCommit = GitHubRequester.getCommit("AlexIIL", "CivCraft", Lib.Mod.COMMIT_HASH);
+                for (Commit c : commits) {
+                    if (c == null)
+                        continue;
+                    String s = " ";
+                    if (thisCommit == c)
+                        s += "-> ";
+                    else
+                        s += "   ";
+                    s += c.author.login + ": " + c.commit.message;
+                    while (s.contains("\n\n"))
+                        s = s.replace("\n\n", "\n");
+                    s = s.replace("\n", "\n     ");
+                    for (String sInternal : s.split("\n"))
+                        CivLog.info(sInternal);
+                    
+                }
+                
             }
         }.start();
     }
@@ -98,5 +129,13 @@ import alexiil.mods.lib.GitContributorRequestor.GitHubUser;
     /** NOTE: this returns an immutable list of contributors */
     public List<GitHubUser> getContributors() {
         return contributors;
+    }
+    
+    public List<Commit> getCommits() {
+        return commits;
+    }
+    
+    public Commit getCurrentCommit() {
+        return thisCommit;
     }
 }

@@ -1,4 +1,4 @@
-package alexiil.mods.lib;
+package alexiil.mods.lib.git;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,46 +9,27 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import alexiil.mods.civ.CivLog;
 
-public class GitContributorRequestor {
-    public static class GitHubUser {
-        public final String name;
-        public final int commits;// May use this, not sure
-        public final String avatarUrl;// Might use this in a new Gui
-        public final String githubUrl;// Useful if anyone wants to get more info on a person
-        
-        public GitHubUser(String name, String avatarUrl, String githubUrl, int commits) {
-            this.name = name;
-            this.avatarUrl = avatarUrl;
-            this.githubUrl = githubUrl;
-            this.commits = commits;
-        }
-    }
-    
-    public static class Commit {
-        public final String message;
-        public final String id;
-        public final String url;
-        public final int additions, deletions;
-        
-        public Commit(String url, String message, String id, int additions, int deletions) {
-            this.message = message;
-            this.id = id;
-            this.url = url;
-            this.additions = additions;
-            this.deletions = deletions;
-        }
-    }
-    
+import com.google.gson.GsonBuilder;
+
+public class GitHubRequester {
     private static final String LOGIN = "\"login\":\"";// "login":"
     private static final String AVATAR = "\"avatar_url\":\"";// "avatar_url":"
     private static final String COMMITS = "\"contributions\":";// "contributions":
     private static final String URL = "\"url\":\"";// "url":"
+    public static String accessToken = null;
+    
+    private static final Map<String, GitHubUser> usersCache = new HashMap<String, GitHubUser>();
+    
+    // private static final Map<String, Commit> commitCache = new HashMap<String, Commit>();
     
     public static List<GitHubUser> getContributors(String user, String repo) {
         String response = getResponse("repos/" + user + "/" + repo + "/contributors");
@@ -60,7 +41,44 @@ public class GitContributorRequestor {
                 return o2.commits - o1.commits;
             }
         });
+        for (GitHubUser usr : users)
+            usersCache.put(usr.login, usr);
         return users;
+    }
+    
+    public static List<Commit> getCommits(String user, String repo) {
+        String response = getResponse("repos/" + user + "/" + repo + "/commits");
+        if (response == null)
+            return Collections.emptyList();
+        Commit[] commits = new GsonBuilder().create().fromJson(response, Commit[].class);
+        for (int i = 0; i < commits.length; i++) {
+            commits[i] = populateUser(commits[i]);
+        }
+        return Arrays.asList(commits);
+    }
+    
+    public static Commit getCommit(String user, String repo, String hash) {
+        String response = getResponse("repos/" + user + "/" + repo + "/commits/" + hash);
+        if (response == null)
+            return null;
+        Commit c = parseCommit(response.substring(2, response.length() - 2));
+        if (!usersCache.containsKey(c.author.login))
+            return c;
+        return populateUser(c);
+    }
+    
+    private static Commit populateUser(Commit c) {
+        if (!usersCache.containsKey(c.author.login))
+            return c;
+        CommitInfo ci = c.commit;
+        String sha = c.sha;
+        String url = c.url;
+        String author = c.author.login;
+        return new Commit(url, ci, sha, usersCache.get(author));
+    }
+    
+    private static Commit parseCommit(String commit) {
+        return new GsonBuilder().create().fromJson(commit, Commit.class);
     }
     
     private static List<GitHubUser> parseContributors(String s) {
@@ -95,7 +113,9 @@ public class GitContributorRequestor {
     
     /** Get a GitHub API response, without using an access token */
     public static String getResponse(String site) {
-        return getResponse(site, null);
+        if (site.contains("?"))
+            return getResponse(site + "access_token=" + accessToken, null);
+        return getResponse(site, accessToken);
     }
     
     /** This appends the site to "https://api.github.com" so you don't need to (also, so you cannot use this method for
