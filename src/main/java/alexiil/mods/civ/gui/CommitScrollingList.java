@@ -1,12 +1,12 @@
 package alexiil.mods.civ.gui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.fml.client.GuiScrollingList;
-import scala.actors.threadpool.Arrays;
 import alexiil.mods.civ.CivCraft;
 import alexiil.mods.lib.git.Commit;
 
@@ -53,7 +53,7 @@ public class CommitScrollingList extends GuiScrollingList {
                 s = s.substring(0, s.length() - 1);
             }
             if (nextLine.length() > 0) {
-                strings = (String[]) Arrays.copyOf(strings, strings.length + 1, String[].class);
+                strings = Arrays.copyOf(strings, strings.length + 1);
                 strings[i] = s;
                 strings[i + 1] = nextLine;
             }
