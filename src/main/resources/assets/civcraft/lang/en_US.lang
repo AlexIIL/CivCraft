@@ -6,6 +6,11 @@ item.civcraft_sciencePack4.name=Science Pack 4
 item.civcraft_technology.name=Technology
 item.civcraft_techBag.name=Technology Bag
 
+civcraft.config.title=Main Configuration File
+civcraft.config.button=Edit the main configuration
+civcraft.config.tech.title=Technology tree
+civcraft.config.tech.button=Edit the technology tree
+
 civcraft.tech.agriculture=Agriculture
 
 civcraft.tech.sailing=Sailing
