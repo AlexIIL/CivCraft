@@ -38,8 +38,10 @@ public class CommitScrollingList extends GuiScrollingList {
     @Override protected void drawSlot(int index, int var2, int var3, int var4, Tessellator var5) {
         Commit c = commitList.get(index);
         boolean thisOne = c == CivCraft.getCurrentCommit();
-        int colour = thisOne ? 0xFFDD49 : 0xFFFFFF;
-        parent.getFontRenderer().drawString(c.author.login + " " + c.commit.committer.date.split("T")[0], left + 3, var3, colour);
+        String date = c.commit.committer.date.split("T")[0];
+        String[] dates = date.split("-");
+        date = dates[2] + "/" + dates[1] + "/" + dates[0];
+        parent.getFontRenderer().drawString(c.author.login + " " + date, left + 3, var3, thisOne ? 0xBFB23A : 0x00CAFF);
         int offset = parent.getFontRenderer().FONT_HEIGHT;
         String message = commitList.get(index).commit.message;
         String[] strings = message.split("\n");
@@ -59,7 +61,7 @@ public class CommitScrollingList extends GuiScrollingList {
             }
         }
         for (String s : strings) {
-            parent.getFontRenderer().drawString("  " + s, left + 3, var3 + offset, colour);
+            parent.getFontRenderer().drawString("  " + s, left + 3, var3 + offset, thisOne ? 0xFFDD49 : 0xFFFFFF);
             offset += parent.getFontRenderer().FONT_HEIGHT;
         }
     }
