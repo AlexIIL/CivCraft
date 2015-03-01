@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ConfigAccess {
-    private static final String CATEGORY = "general";	// Configuration.CATAGORY_GENERAL
+    private static final String CATEGORY = Configuration.CATEGORY_GENERAL;
     
     // TODO: Change to minecraft forge's Configuration class
     public final Configuration cfg;

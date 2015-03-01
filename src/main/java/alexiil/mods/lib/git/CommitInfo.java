@@ -22,14 +22,14 @@ public class CommitInfo {
     
     public final String message, url;
     public final int comment_count;
-    public final Commiter commiter, author;
+    public final Commiter committer, author;
     public final Tree tree;
     
     public CommitInfo(String message, String url, int comment_count, Commiter commiter, Commiter author, Tree tree) {
         this.message = message;
         this.url = url;
         this.comment_count = comment_count;
-        this.commiter = commiter;
+        this.committer = commiter;
         this.author = author;
         this.tree = tree;
     }

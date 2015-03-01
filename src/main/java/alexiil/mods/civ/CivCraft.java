@@ -109,16 +109,15 @@ import alexiil.mods.lib.git.GitHubUser;
         }.start();
     }
     
-    /** NOTE: this returns an immutable list of contributors */
-    public List<GitHubUser> getContributors() {
+    public static List<GitHubUser> getContributors() {
         return contributors;
     }
     
-    public List<Commit> getCommits() {
+    public static List<Commit> getCommits() {
         return commits;
     }
     
-    public Commit getCurrentCommit() {
+    public static Commit getCurrentCommit() {
         return thisCommit;
     }
 }
