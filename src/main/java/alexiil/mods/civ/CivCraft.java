@@ -105,23 +105,6 @@ import alexiil.mods.lib.git.GitHubUser;
                         thisCommit = c;
                 if (thisCommit == null && commits.size() > 0 && Lib.Mod.buildType() == 2)
                     thisCommit = GitHubRequester.getCommit("AlexIIL", "CivCraft", Lib.Mod.COMMIT_HASH);
-                for (Commit c : commits) {
-                    if (c == null)
-                        continue;
-                    String s = " ";
-                    if (thisCommit == c)
-                        s += "-> ";
-                    else
-                        s += "   ";
-                    s += c.author.login + ": " + c.commit.message;
-                    while (s.contains("\n\n"))
-                        s = s.replace("\n\n", "\n");
-                    s = s.replace("\n", "\n     ");
-                    for (String sInternal : s.split("\n"))
-                        CivLog.info(sInternal);
-                    
-                }
-                
             }
         }.start();
     }
