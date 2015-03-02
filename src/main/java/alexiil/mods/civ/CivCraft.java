@@ -29,6 +29,7 @@ import alexiil.mods.lib.AlexIILMod;
 import alexiil.mods.lib.git.Commit;
 import alexiil.mods.lib.git.GitHubRequester;
 import alexiil.mods.lib.git.GitHubUser;
+import alexiil.mods.lib.git.Release;
 
 @Mod(modid = Lib.Mod.ID, version = Lib.Mod.VERSION, guiFactory = "alexiil.mods.civ.gui.ConfigGuiFactory") public class CivCraft extends AlexIILMod {
     public static ModMetadata modMeta;
@@ -45,6 +46,7 @@ import alexiil.mods.lib.git.GitHubUser;
     
     private static List<GitHubUser> contributors;
     private static List<Commit> commits;
+    private static List<Release> releases;
     private static Commit thisCommit;
     
     @EventHandler public void preInit(FMLPreInitializationEvent event) {
@@ -105,6 +107,8 @@ import alexiil.mods.lib.git.GitHubUser;
                         thisCommit = c;
                 if (thisCommit == null && commits.size() > 0 && Lib.Mod.buildType() == 2)
                     thisCommit = GitHubRequester.getCommit("AlexIIL", "CivCraft", Lib.Mod.COMMIT_HASH);
+                
+                releases = Collections.unmodifiableList(GitHubRequester.getReleases("AlexIIL", "CivCraft"));
             }
         }.start();
     }
@@ -119,5 +123,9 @@ import alexiil.mods.lib.git.GitHubUser;
     
     public static Commit getCurrentCommit() {
         return thisCommit;
+    }
+    
+    public static List<Release> getReleases() {
+        return releases;
     }
 }

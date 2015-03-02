@@ -67,6 +67,14 @@ public class GitHubRequester {
         return populateUser(c);
     }
     
+    public static List<Release> getReleases(String user, String repo) {
+        String response = getResponse("repos/" + user + "/" + repo + "/tags");
+        if (response == null)
+            return Collections.emptyList();
+        Release[] releases = new GsonBuilder().create().fromJson(response, Release[].class);
+        return Arrays.asList(releases);
+    }
+    
     private static Commit populateUser(Commit c) {
         if (!usersCache.containsKey(c.author.login))
             return c;
@@ -114,7 +122,7 @@ public class GitHubRequester {
     /** Get a GitHub API response, without using an access token */
     public static String getResponse(String site) {
         if (site.contains("?"))
-            return getResponse(site + "access_token=" + accessToken, null);
+            return getResponse(site + ",access_token=" + accessToken, null);
         return getResponse(site, accessToken);
     }
     
