@@ -63,36 +63,4 @@ public class CommitScrollingList extends TextGuiScrollingList {
             addLine(new LineInfo(""));
         }
     }
-    
-    protected void dontdrawslot(int index, int var2, int var3, int var4, Tessellator var5) {
-        Commit c = commitList.get(index);
-        boolean thisOne = c == CivCraft.getCurrentCommit();
-        String date = c.commit.committer.date.split("T")[0];
-        String[] dates = date.split("-");
-        date = dates[2] + "/" + dates[1] + "/" + dates[0];
-        parent.getFontRenderer().drawString(c.author.login + " " + date, left + 3, var3, thisOne ? 0xBFB23A : 0x00CAFF);
-        
-        int offset = parent.getFontRenderer().FONT_HEIGHT;
-        String message = commitList.get(index).commit.message;
-        String[] strings = message.split("\n");
-        for (int i = 0; i < strings.length; i++) {
-            String s = strings[i];
-            String nextLine = "";
-            while (parent.getFontRenderer().getStringWidth(s) > this.listWidth - 20) {
-                if (s.length() <= 10)
-                    break;
-                nextLine = s.substring(s.length() - 1) + nextLine;
-                s = s.substring(0, s.length() - 1);
-            }
-            if (nextLine.length() > 0) {
-                strings = Arrays.copyOf(strings, strings.length + 1);
-                strings[i] = s;
-                strings[i + 1] = nextLine;
-            }
-        }
-        for (String s : strings) {
-            parent.getFontRenderer().drawString("  " + s, left + 3, var3 + offset, thisOne ? 0xFFDD49 : 0xFFFFFF);
-            offset += parent.getFontRenderer().FONT_HEIGHT;
-        }
-    }
 }
