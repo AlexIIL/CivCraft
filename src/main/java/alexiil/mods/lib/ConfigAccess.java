@@ -1,7 +1,6 @@
 package alexiil.mods.lib;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -12,21 +11,18 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class ConfigAccess {
     private static final String CATEGORY = Configuration.CATEGORY_GENERAL;
     
-    // TODO: Change to minecraft forge's Configuration class
     public final Configuration cfg;
-    // public final Config cfg;
-    public final WeakReference<AlexIILMod> mod;
+    public final AlexIILMod mod;
     
     public ConfigAccess(File file, AlexIILMod mod) {
-        // cfg = new Config(file, mod);
         cfg = new Configuration(file);
         cfg.load();
-        this.mod = new WeakReference<AlexIILMod>(mod);
+        this.mod = mod;
         FMLCommonHandler.instance().bus().register(this);
     }
     
     @SubscribeEvent public void onConfig(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (mod.get().meta.modId.equals(event.modID))
+        if (mod.meta.modId.equals(event.modID))
             saveAll();
     }
     

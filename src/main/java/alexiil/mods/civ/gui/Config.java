@@ -3,12 +3,14 @@ package alexiil.mods.civ.gui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import alexiil.mods.civ.CivConfig;
 import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.gui.ConfigGuiFactory.ActualConfig;
 import alexiil.mods.lib.LangUtils;
@@ -51,17 +53,18 @@ public class Config extends GuiScreen {
         
         commits = new CommitScrollingList(this, this.width - width - 80, this.height, 40, this.height - 40, width + 60);
         
-        helpText = new ArrayList<List<String>>();
         int index = 0;
         int maxXPos = Math.min(this.width - xPosHelp, 400);
+        
+        helpText = new ArrayList<List<String>>();
         while (true) {
             String preTranslation = "civcraft.gui.config.help." + index;
             String text = LangUtils.format(preTranslation);
             if (preTranslation.equals(text))
                 break;
-            String[] strings = text.split("\n");
-            for (int i = 0; i < strings.length; i++) {
-                String s = strings[i];
+            String[] strings1 = text.split("\n");
+            for (int i = 0; i < strings1.length; i++) {
+                String s = strings1[i];
                 String nextLine = "";
                 while (fontRendererObj.getStringWidth(s) > maxXPos && s != null) {
                     if (s.length() <= 10)
@@ -70,11 +73,12 @@ public class Config extends GuiScreen {
                     s = s.substring(0, s.length() - 1);
                 }
                 if (nextLine.length() > 0) {
-                    strings = Arrays.copyOf(strings, strings.length + 1);
-                    strings[i] = s;
-                    strings[i + 1] = nextLine;
+                    strings1 = Arrays.copyOf(strings1, strings1.length + 1);
+                    strings1[i] = s;
+                    strings1[i + 1] = nextLine;
                 }
             }
+            String[] strings = strings1;
             helpText.add(Arrays.asList(strings));
             index++;
         }
@@ -108,11 +112,20 @@ public class Config extends GuiScreen {
     
     @Override public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawBackground(0);
-        commits.drawScreen(mouseX, mouseY, partialTicks);
-        contributors.drawScreen(mouseX, mouseY, partialTicks);
-        drawString(fontRendererObj, LangUtils.format("civcraft.gui.contributors"), 8, 30, 0xFFFFFF);
-        String text = LangUtils.format("civcraft.gui.commits");
-        drawString(fontRendererObj, text, this.width - fontRendererObj.getStringWidth(text) - 10, 30, 0xFFFFFF);
+        
+        if (CivConfig.connectExternally.getBoolean()) {
+            
+            commits.drawScreen(mouseX, mouseY, partialTicks);
+            contributors.drawScreen(mouseX, mouseY, partialTicks);
+            drawString(fontRendererObj, LangUtils.format("civcraft.gui.contributors"), 8, 30, 0xFFFFFF);
+            String text = LangUtils.format("civcraft.gui.commits");
+            drawString(fontRendererObj, text, this.width - fontRendererObj.getStringWidth(text) - 10, 30, 0xFFFFFF);
+        }
+        else {
+            String text = LangUtils.format("civcraft.gui.connectExternallyDisabled");
+            int textWidth = fontRendererObj.getStringWidth(text);
+            drawHoveringText(Collections.singletonList(text), (this.width - textWidth) / 2, this.height / 2);
+        }
         
         super.drawScreen(mouseX, mouseY, partialTicks);
         

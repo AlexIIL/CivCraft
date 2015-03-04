@@ -5,7 +5,8 @@ import alexiil.mods.civ.tech.BeakerEarningListener;
 import alexiil.mods.lib.ConfigAccess;
 
 public class CivConfig {
-    public static Property debugMode, cooldownMultiplier, cooldownAddition, cooldownDivision, cooldownTimeDivision, progressRequired;
+    public static Property debugMode, cooldownMultiplier, cooldownAddition, cooldownDivision, cooldownTimeDivision, progressRequired,
+            connectExternally;
     
     public static void init() {
         ConfigAccess cfg = CivCraft.instance.cfg;
@@ -29,9 +30,11 @@ public class CivConfig {
         progressRequired.comment = "How much progress is required to get a new set of research notes";
         BeakerEarningListener.PROGRESS_REQUIRED = progressRequired.getDouble();
         
-        debugMode = cfg.getProp("debug.enabled", false);
+        debugMode = cfg.getProp("debug", false);
         debugMode.comment = "Enables debug mode. Will be annoying if you do not want to debug!";
         
+        connectExternally = cfg.getProp("connectExternally", true);
+        connectExternally.comment = "Allows this mod to connect to github to fetch a list of contributors, commits and releases for this mod.";
         if (debugMode.getBoolean()) {}
     }
 }

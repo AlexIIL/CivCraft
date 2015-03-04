@@ -44,9 +44,9 @@ import alexiil.mods.lib.git.Release;
      * client) */
     public static NBTTagCompound playerNBTData = new NBTTagCompound();
     
-    private static List<GitHubUser> contributors;
-    private static List<Commit> commits;
-    private static List<Release> releases;
+    private static List<GitHubUser> contributors = Collections.emptyList();
+    private static List<Commit> commits = Collections.emptyList();
+    private static List<Release> releases = Collections.emptyList();
     private static Commit thisCommit;
     
     @EventHandler public void preInit(FMLPreInitializationEvent event) {
@@ -90,6 +90,8 @@ import alexiil.mods.lib.git.Release;
     }
     
     private void initGithubRemote() {
+        if (!CivConfig.connectExternally.getBoolean())
+            return;
         new Thread("CivCraft-github") {
             @Override public void run() {
                 contributors = Collections.unmodifiableList(GitHubRequester.getContributors("AlexIIL", "CivCraft"));
@@ -97,8 +99,8 @@ import alexiil.mods.lib.git.Release;
                     modMeta.authorList.add("Could not connect to GitHub to fetch the rest...");
                 for (GitHubUser c : contributors) {
                     if ("AlexIIL".equals(c.login))
-                        modMeta.authorList.remove("AlexIIL");
-                    modMeta.authorList.add(c.login + " (" + c.commits + ")");
+                        continue;
+                    modMeta.authorList.add(c.login);
                 }
                 
                 commits = Collections.unmodifiableList(GitHubRequester.getCommits("AlexIIL", "CivCraft"));
