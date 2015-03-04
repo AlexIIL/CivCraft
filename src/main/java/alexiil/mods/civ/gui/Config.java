@@ -114,7 +114,6 @@ public class Config extends GuiScreen {
         drawBackground(0);
         
         if (CivConfig.connectExternally.getBoolean()) {
-            
             commits.drawScreen(mouseX, mouseY, partialTicks);
             contributors.drawScreen(mouseX, mouseY, partialTicks);
             drawString(fontRendererObj, LangUtils.format("civcraft.gui.contributors"), 8, 30, 0xFFFFFF);
@@ -130,7 +129,6 @@ public class Config extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
         
         if (help) {
-            // TODO: draw the hovering tooltips :P
             int yHeight = 0;
             for (List<String> ss : helpText)
                 yHeight += fontRendererObj.FONT_HEIGHT * (ss.size() + 1);
