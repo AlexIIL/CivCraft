@@ -12,5 +12,19 @@
   "logoFile": "",
   "screenshots": [],
   "dependencies": ["required-after:alexiil.utils"]
+},
+{
+  "modid": "alexiil.utils",
+  "name": "AlexIILLib",
+  "description": "A collection of classes used by my mods. Currently, only CivCraft, so this is bundled with it",
+  "version": "0.1",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["AlexIIL"],
+  "credits": "All of the people who wrote forge, mcp, and buildcraft for code examples (too many people to list)",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
 }
 ]
