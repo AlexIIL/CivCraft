@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import alexiil.mods.civ.CivCraft;
+import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.civ.tech.Unlockable;
@@ -84,6 +85,24 @@ public abstract class TechUnlockable extends Unlockable {
         requiredTechs = techs;
     }
     
+    public TechUnlockable(NBTTagCompound nbt) {
+        super(nbt);
+        shouldShow = nbt.getBoolean("shouldShow");
+        NBTTagList list = nbt.getTagList("requiredTechs", Lib.NBT.STRING);
+        requiredTechs = new TechTree.Tech[list.tagCount()];
+        for (int i = 0; i < list.tagCount(); i++)
+            requiredTechs[i] = TechTree.currentTree.getTech(list.getStringTagAt(i));
+    }
+    
+    @Override public void save(NBTTagCompound nbt) {
+        super.save(nbt);
+        nbt.setBoolean("shouldShow", shouldShow);
+        NBTTagList list = new NBTTagList();
+        for (Tech t : requiredTechs)
+            list.appendTag(new NBTTagString(t.name));
+        nbt.setTag("techRequired", list);
+    }
+    
     @Override public TechTree.Tech[] requiredTechs() {
         if (requiredTechs == null)
             return new TechTree.Tech[0];
@@ -100,16 +119,5 @@ public abstract class TechUnlockable extends Unlockable {
     
     @Override public boolean shouldShow() {
         return shouldShow;
-    }
-    
-    @Override public void save(NBTTagCompound nbt) {
-        super.save(nbt);
-        for (int i = 0; i < requiredTechs.length; i++)
-            nbt.setString("techRequired" + i, requiredTechs[i].name);
-        nbt.setBoolean("shouldShow", shouldShow);
-        NBTTagList list = new NBTTagList();
-        for (Tech t : requiredTechs)
-            list.appendTag(new NBTTagString(t.name));
-        nbt.setTag("techRequired", list);
     }
 }

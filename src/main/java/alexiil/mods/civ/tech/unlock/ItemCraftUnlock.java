@@ -8,9 +8,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 import alexiil.mods.civ.CivCraft;
+import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.tech.TechTree.Tech;
+import alexiil.mods.civ.tech.Unlockable;
 import alexiil.mods.civ.utils.TechUtils;
 import alexiil.mods.lib.EChatColours;
 import alexiil.mods.lib.item.IChangingItemString;
@@ -22,6 +25,11 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
     
     public ItemCraftUnlock(String name, Tech... techs) {
         super(name, techs, true);
+        items = new ArrayList<IItemComparator>();
+    }
+    
+    public ItemCraftUnlock(NBTTagCompound nbt) {
+        super(nbt);
         items = new ArrayList<IItemComparator>();
     }
     
@@ -129,16 +137,19 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         return new String[0];
     }
     
-    /* civcraft.unlock.itemcraft.agriculture_wood=Craft a Wooden Hoe civcraft.unlock.itemcraft.agriculture_stone=Craft a
-     * Stone Hoe civcraft.unlock.itemcraft.agriculture_iron=Craft an Iron Hoe
-     * civcraft.unlock.itemcraft.agriculture_gold=Craft a Golden Hoe civcraft.unlock.itemcraft.agriculture_diamond=Craft
-     * a Diamond Hoe civcraft.unlock.itemcraft.sailing=Craft a Boat civcraft.unlock.itemcraft.animal_husbandry=Craft
-     * Saddles and Leashes civcraft.unlock.itemcraft.archery_wood=Craft a Bow
-     * civcraft.unlock.itemcraft.mining_wood=Craft a Wooden Pickaxe civcraft.unlock.itemcraft.mining_stone=Craft a Stone
-     * Pickaxe civcraft.unlock.itemcraft.mining_iron=Craft an Iron Pickaxe civcraft.unlock.itemcraft.mining_gold=Craft a
-     * Golden Pickaxe civcraft.unlock.itemcraft.mining_diamond=Craft a Diamond Pickaxe */
-    
     @Override public boolean doesBlockItem(ItemStack item) {
         return itemMatches(item);
+    }
+    
+    @Override public void save(NBTTagCompound nbt) {
+        super.save(nbt);
+    }
+    
+    @Override public String getType() {
+        return Lib.Mod.ID + ":ItemCraftUnlock";
+    }
+    
+    @Override public Unlockable createNew(NBTTagCompound nbt) {
+        return new ItemCraftUnlock(nbt);
     }
 }

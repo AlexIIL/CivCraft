@@ -23,12 +23,17 @@ public abstract class Unlockable {
     private String name;
     
     public static Unlockable loadUnlockable(NBTTagCompound nbt) {
+        String name = nbt.getString("");
         return null;
     }
     
     public Unlockable(String name) {
         ModCompat compat = TechTree.currentTree.currentCompat;
         this.name = compat == null ? "unknown:" + name : compat.getUnlockableName(name);
+    }
+    
+    protected Unlockable(NBTTagCompound nbt) {
+        
     }
     
     public final String getName() {
@@ -73,7 +78,8 @@ public abstract class Unlockable {
     
     /** If you need to save any information about this requirement, then this is the NBTTagCompound that you do it in */
     public void save(NBTTagCompound nbt) {
-        // TODO: add nbt.save("type", AND THE TYPE);
+        nbt.setString("type", getType());
+        nbt.setString("name", name);
     }
     
     public boolean isUnlocked(EntityPlayer player) {
@@ -92,4 +98,11 @@ public abstract class Unlockable {
         }
         return true;
     }
+    
+    /** This should return a string that identifies this type uniquely. It is recommended that you use "modid:name", so
+     * ItemCraftUnlock is "CivCraft:ItemCraftUnlock" */
+    public abstract String getType();
+    
+    /** This should return a new instance of the type, and load it from the NBTTagCompound */
+    public abstract Unlockable createNew(NBTTagCompound nbt);
 }
