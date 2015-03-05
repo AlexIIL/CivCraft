@@ -7,7 +7,8 @@ import net.minecraft.nbt.NBTTagCompound;
  * 
  * @author AlexIIL */
 public abstract class TechTreeEvent {
-    /** Fired before you are allowed to add to the tech tree, so before any techs have been registered */
+    /** Fired before you are allowed to add to the tech tree, so before any techs have been registered. Use this to
+     * register Unlockable types */
     public static class Pre extends TechTreeEvent {
         public Pre(TechTree tree, NBTTagCompound nbt) {
             super(tree, nbt);

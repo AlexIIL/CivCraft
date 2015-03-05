@@ -13,7 +13,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.tech.TechTree.Tech;
-import alexiil.mods.civ.tech.Unlockable;
 import alexiil.mods.civ.utils.TechUtils;
 import alexiil.mods.lib.EChatColours;
 import alexiil.mods.lib.item.IChangingItemString;
@@ -147,9 +146,5 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
     
     @Override public String getType() {
         return Lib.Mod.ID + ":ItemCraftUnlock";
-    }
-    
-    @Override public Unlockable createNew(NBTTagCompound nbt) {
-        return new ItemCraftUnlock(nbt);
     }
 }

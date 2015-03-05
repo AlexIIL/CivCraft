@@ -19,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import alexiil.mods.civ.CivCraft;
+import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.compat.ModCompat;
 import alexiil.mods.civ.xp.PromotionManager;
@@ -320,9 +321,10 @@ public final class TechTree {
         }
     }
     
-    private EState state = EState.PRE;
+    private EState state = EState.CONSTRUCTING;
     private Map<String, Tech> techs = new HashMap<String, Tech>();
     private Map<String, Unlockable> unlockables = new HashMap<String, Unlockable>();
+    private Map<String, IUnlockableConstructor> unlockableTypes = new HashMap<String, IUnlockableConstructor>();
     private boolean inMethod = false;
     public static TechTree currentTree = new TechTree();
     public static Logger log = LogManager.getLogger(CivCraft.modMeta.modId + ".techtree");
@@ -375,6 +377,7 @@ public final class TechTree {
         
         state = EState.PRE;
         ModCompat.sendPreEvent(new TechTreeEvent.Pre(this, nbt));
+        unlockableTypes = Collections.unmodifiableMap(unlockableTypes);
         log.info("Pre-init of the tech tree done");
         
         state = EState.ADD_TECHS;
@@ -437,6 +440,9 @@ public final class TechTree {
                     + ")").printStackTrace();
             return null;
         }
+        if (!unlockableTypes.containsKey(unlock.getType()))
+            CivLog.warn("Adding an unlockable (type == " + unlock.getType()
+                    + ") that is not contained in the type map! This means that this unlockable will NOT persist through saves or in the config");
         TechTreeEvent.RegisterUnlockable e = new TechTreeEvent.RegisterUnlockable(this, unlock, treeData);
         ModCompat.sendRegisterUnlockableEvent(e);
         for (Tech t : unlock.requiredTechs())
@@ -534,5 +540,19 @@ public final class TechTree {
     
     public void setModCompat(ModCompat compat) {
         currentCompat = compat;
+    }
+    
+    /** Register unlockable types here. When java 8 is used in forge, calls to this will look a whole lot nicer. */
+    public void registerUnlockable(String type, IUnlockableConstructor unlockable) {
+        if (state != EState.PRE) {
+            CivLog.warn("Tried to register an unlockable outside of PRE-INIT. This is not meant to happen, change ths code please!");
+            return;
+        }
+        unlockableTypes.put(type, unlockable);
+        CivLog.info("Registered \"" + type + "\" as an unlockable");
+    }
+    
+    public Map<String, IUnlockableConstructor> getUnlockableTypes() {
+        return unlockableTypes;
     }
 }

@@ -3,6 +3,7 @@ package alexiil.mods.civ.tech;
 import ibxm.Player;
 
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,8 +24,9 @@ public abstract class Unlockable {
     private String name;
     
     public static Unlockable loadUnlockable(NBTTagCompound nbt) {
-        String name = nbt.getString("");
-        return null;
+        String type = nbt.getString("type");
+        Map<String, IUnlockableConstructor> map = TechTree.currentTree.getUnlockableTypes();
+        return map.get(type).createUnlockable(nbt);
     }
     
     public Unlockable(String name) {
@@ -33,7 +35,7 @@ public abstract class Unlockable {
     }
     
     protected Unlockable(NBTTagCompound nbt) {
-        
+        name = nbt.getString("");
     }
     
     public final String getName() {
@@ -100,9 +102,7 @@ public abstract class Unlockable {
     }
     
     /** This should return a string that identifies this type uniquely. It is recommended that you use "modid:name", so
-     * ItemCraftUnlock is "CivCraft:ItemCraftUnlock" */
+     * ItemCraftUnlock is "CivCraft:ItemCraftUnlock". This needs to be the same as what you have registered in the
+     * TechTree */
     public abstract String getType();
-    
-    /** This should return a new instance of the type, and load it from the NBTTagCompound */
-    public abstract Unlockable createNew(NBTTagCompound nbt);
 }
