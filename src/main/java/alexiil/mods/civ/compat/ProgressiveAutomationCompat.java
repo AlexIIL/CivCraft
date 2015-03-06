@@ -41,6 +41,10 @@ public class ProgressiveAutomationCompat extends ModCompat {
         return "progressiveautomation";
     }
     
+    @Override public String getShortModName() {
+        return "PA";
+    }
+    
     private Block[] getBlocks(String name) {
         String clsName = "com.vanhal.progressiveautomation.blocks.PABlocks";
         try {

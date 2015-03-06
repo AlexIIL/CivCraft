@@ -46,4 +46,8 @@ public class ConfigCompat extends ModCompat {
     @Override public String getModID() {
         return "config";
     }
+    
+    @Override public String getShortModName() {
+        return "Config";
+    }
 }

@@ -14,10 +14,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
@@ -91,7 +87,7 @@ public final class TechTree {
         
         public ILocalizable addRequirement(Tech required) {
             if (required == null) {
-                log.warn("Tried to add a null tech to \"" + name + "\"");
+                CivLog.warn("Tried to add a null tech to \"" + name + "\"");
                 return this;
             }
             if (Arrays.asList(parents).contains(required))
@@ -100,7 +96,7 @@ public final class TechTree {
             String s = parentsToString();
             parents = Arrays.copyOf(parents, 1 + parents.length);
             parents[start] = required;
-            log.info("Added a requirement to \"" + name + "\", the list went from " + s + " to " + parentsToString());
+            CivLog.info("Added a requirement to \"" + name + "\", the list went from " + s + " to " + parentsToString());
             if (isLeafTech())
                 setLeafTech();
             return this;
@@ -114,7 +110,7 @@ public final class TechTree {
         
         public ILocalizable removeRequirement(Tech required) {
             if (required == null) {
-                log.warn("Tried and failed to remove a requirement from " + name + " because the argument was null!");
+                CivLog.warn("Tried and failed to remove a requirement from " + name + " because the argument was null!");
                 return this;
             }
             String parentsString = parentsToString();
@@ -125,7 +121,7 @@ public final class TechTree {
                     break;
             }
             if (!flag) {
-                log.warn("Tried and failed to remove \"" + required.name + "\" from " + name + ", as it did not exist in the current list "
+                CivLog.warn("Tried and failed to remove \"" + required.name + "\" from " + name + ", as it did not exist in the current list "
                         + parentsString);
                 return this;
             }
@@ -137,7 +133,7 @@ public final class TechTree {
                     i++;
                 }
             parents = newParents;
-            log.info("Sucsessfully removed \"" + required.name + "\" from " + name + ", the parents list went from " + parentsString + " to "
+            CivLog.info("Sucsessfully removed \"" + required.name + "\" from " + name + ", the parents list went from " + parentsString + " to "
                     + parentsToString());
             return this;
         }
@@ -225,11 +221,6 @@ public final class TechTree {
         
         @Override public String toString() {
             return getLocalizedName();
-            /* StringBuilder builder = new StringBuilder(); builder.append("Tech [beakers="); builder.append(beakers);
-             * builder.append(", beakerTier="); builder.append(beakerTier); builder.append(", name=");
-             * builder.append(name); builder.append(", parents="); builder.append(parentsToString());
-             * builder.append(", children="); builder.append(techsToString()); builder.append(", requirements=");
-             * builder.append(unlockables); builder.append("]"); return builder.toString(); */
         }
         
         private String parentsToString() {
@@ -327,7 +318,6 @@ public final class TechTree {
     private Map<String, IUnlockableConstructor> unlockableTypes = new HashMap<String, IUnlockableConstructor>();
     private boolean inMethod = false;
     public static TechTree currentTree = new TechTree();
-    public static Logger log = LogManager.getLogger(CivCraft.modMeta.modId + ".techtree");
     private NBTTagCompound treeData;
     /** Used to add a compat-specific prefix to the unlockable name */
     ModCompat currentCompat = null;
@@ -371,30 +361,30 @@ public final class TechTree {
         techs.clear();
         unlockables.clear();
         
-        log.info("Initializing the tech tree");
+        CivLog.info("Initializing the tech tree");
         inMethod = true;
         this.treeData = nbt;
         
         state = EState.PRE;
         ModCompat.sendPreEvent(new TechTreeEvent.Pre(this, nbt));
         unlockableTypes = Collections.unmodifiableMap(unlockableTypes);
-        log.info("Pre-init of the tech tree done");
+        CivLog.info("Pre-init of the tech tree done");
         
         state = EState.ADD_TECHS;
         addTech("agriculture");
         ModCompat.sendAddTechsEvent(new TechTreeEvent.AddTechs(this, nbt));
-        log.info("Added all techs");
+        CivLog.info("Added all techs");
         
         state = EState.SET_REQUIREMENTS;
         ModCompat.sendAddUnlockableEvent(new TechTreeEvent.AddUnlockables(this, nbt));
-        log.info("Added all unlockables");
+        CivLog.info("Added all unlockables");
         
         state = EState.POST;
         setChildren();
         techs = Collections.unmodifiableMap(techs);
         unlockables = Collections.unmodifiableMap(unlockables);
         ModCompat.sendPostEvent(new TechTreeEvent.Post(this, nbt));
-        log.info("Post-init of the tech tree done");
+        CivLog.info("Post-init of the tech tree done");
         
         state = EState.FINALISED;
         this.treeData = null;
@@ -448,7 +438,7 @@ public final class TechTree {
         for (Tech t : unlock.requiredTechs())
             t.addUnlockable(unlock);
         unlockables.put(unlock.getName(), unlock);
-        log.info("Added the unlockable \"" + unlock.getName() + "\"");
+        CivLog.info("Added the unlockable \"" + unlock.getName() + "\"");
         return unlock;
     }
     
@@ -477,7 +467,7 @@ public final class TechTree {
         TechTreeEvent.RegisterTech e = new TechTreeEvent.RegisterTech(this, t, treeData);
         ModCompat.sendRegisterTechEvent(e);
         techs.put(name, t);
-        log.info("Added the tech \"" + t.name + "\"");
+        CivLog.info("Added the tech \"" + t.name + "\"");
         return t;
     }
     
@@ -548,8 +538,27 @@ public final class TechTree {
             CivLog.warn("Tried to register an unlockable outside of PRE-INIT. This is not meant to happen, change ths code please!");
             return;
         }
+        if (unlockableTypes.containsKey(type))
+            CivLog.info("\"" + type + "\" is already registered! Replacing it with the new one...");
         unlockableTypes.put(type, unlockable);
         CivLog.info("Registered \"" + type + "\" as an unlockable");
+    }
+    
+    /** Register an unlockable type, specifying a class to load from. Unlike the other method, this class MUST have a
+     * constructor with a single NBTTagCompound argument. Use the other register method if you want more control over
+     * which class is returned. */
+    public void registerUnlockable(String type, final Class<? extends Unlockable> unlockableClass) {
+        registerUnlockable(type, new IUnlockableConstructor() {
+            @Override public Unlockable createUnlockable(NBTTagCompound nbt) {
+                try {
+                    return unlockableClass.getConstructor(NBTTagCompound.class).newInstance(nbt);
+                }
+                catch (Throwable t) {
+                    t.printStackTrace();
+                }
+                return null;
+            }
+        });
     }
     
     public Map<String, IUnlockableConstructor> getUnlockableTypes() {

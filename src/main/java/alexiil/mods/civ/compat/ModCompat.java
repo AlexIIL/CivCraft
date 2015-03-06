@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.compat.vanilla.VanillaCompat;
 import alexiil.mods.civ.tech.TechTreeEvent;
 
@@ -42,36 +43,53 @@ public abstract class ModCompat {
     }
     
     public static void sendAddTechsEvent(TechTreeEvent.AddTechs t) {
-        for (ModCompat c : compats)
+        for (ModCompat c : compats) {
+            CivLog.pushStack(c.getShortModName());
             c.addTechs(t);
+            CivLog.popStack();
+        }
     }
     
     public static void sendAddUnlockableEvent(TechTreeEvent.AddUnlockables t) {
         for (ModCompat c : compats) {
+            CivLog.pushStack(c.getShortModName());
             t.tree.setModCompat(c);
             c.addUnlockables(t);
+            CivLog.popStack();
         }
         t.tree.setModCompat(null);
     }
     
     public static void sendRegisterTechEvent(TechTreeEvent.RegisterTech t) {
-        for (ModCompat c : compats)
+        for (ModCompat c : compats) {
+            CivLog.pushStack(c.getShortModName());
             c.registerTech(t);
+            CivLog.popStack();
+        }
     }
     
     public static void sendRegisterUnlockableEvent(TechTreeEvent.RegisterUnlockable t) {
-        for (ModCompat c : compats)
+        for (ModCompat c : compats) {
+            CivLog.pushStack(c.getShortModName());
             c.registerUnlockable(t);
+            CivLog.popStack();
+        }
     }
     
     public static void sendPreEvent(TechTreeEvent.Pre t) {
-        for (ModCompat c : compats)
+        for (ModCompat c : compats) {
+            CivLog.pushStack(c.getShortModName());
             c.preInit(t);
+            CivLog.popStack();
+        }
     }
     
     public static void sendPostEvent(TechTreeEvent.Post t) {
-        for (ModCompat c : compats)
+        for (ModCompat c : compats) {
+            CivLog.pushStack(c.getShortModName());
             c.postInit(t);
+            CivLog.popStack();
+        }
     }
     
     /** @see {@link TechTreeEvent.AddTechs} */
@@ -93,6 +111,11 @@ public abstract class ModCompat {
     public void postInit(TechTreeEvent.Post t) {}
     
     public abstract String getModID();
+    
+    /** Used by the logger to determine what should prefix the log info, while the tech tree is being built */
+    public String getShortModName() {
+        return getModID();
+    }
     
     public String getUnlockableName(String name) {
         return getModID() + ":" + name;

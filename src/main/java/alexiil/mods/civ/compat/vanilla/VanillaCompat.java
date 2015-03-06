@@ -2,16 +2,13 @@ package alexiil.mods.civ.compat.vanilla;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.nbt.NBTTagCompound;
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.compat.ModCompat;
-import alexiil.mods.civ.tech.IUnlockableConstructor;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.civ.tech.TechTreeEvent;
 import alexiil.mods.civ.tech.TechTreeEvent.AddTechs;
 import alexiil.mods.civ.tech.TechTreeEvent.AddUnlockables;
-import alexiil.mods.civ.tech.Unlockable;
 import alexiil.mods.civ.tech.unlock.ItemCraftUnlock;
 
 /** Okay, technically this isn't a mod compatibility (vanilla minecraft is a hard dependency of this mod, how strange),
@@ -34,11 +31,7 @@ public class VanillaCompat extends ModCompat {
     
     @Override public void preInit(TechTreeEvent.Pre t) {
         String start = Lib.Mod.ID + ":";
-        t.tree.registerUnlockable(start + "ItemCraftUnlock", new IUnlockableConstructor() {
-            @Override public Unlockable createUnlockable(NBTTagCompound nbt) {
-                return new ItemCraftUnlock(nbt);
-            }
-        });
+        t.tree.registerUnlockable(start + "ItemCraftUnlock", ItemCraftUnlock.class);
     }
     
     @Override public void addTechs(AddTechs event) {
@@ -138,5 +131,9 @@ public class VanillaCompat extends ModCompat {
     
     @Override public String getModID() {
         return Lib.Mod.ID;
+    }
+    
+    @Override public String getShortModName() {
+        return "CivCraft";
     }
 }
