@@ -8,7 +8,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -19,7 +18,6 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Keyboard;
 
-import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.item.ItemTechBag;
@@ -273,13 +271,8 @@ public class GuiTechTree extends GuiScreen {
         
         // Next, try and group tech parents and children
         List<Tech> lastList;
-        List<Tech> nextList;
         for (int idx = 1; idx < techList.size(); idx++) {
             lastList = techList.get(idx - 1);
-            if (techList.size() > idx + 1)
-                nextList = techList.get(idx + 1);
-            else
-                nextList = null;
             List<Tech> currentList = techList.get(idx);
             // Sort the techs according to where its parents are
             Map<Double, List<Tech>> newBests = new HashMap<Double, List<Tech>>();
@@ -293,12 +286,10 @@ public class GuiTechTree extends GuiScreen {
                 newBests.put(bestPos, techs);
             }
             
-            int size = currentList.size();
             currentList.clear();
             List<Double> keys = Arrays.asList(newBests.keySet().toArray(new Double[0]));
             Collections.sort(keys);
             for (double key : keys) {
-                int pos = (int) key * size;
                 for (Tech t : newBests.get(key))
                     currentList.add(t);
             }
