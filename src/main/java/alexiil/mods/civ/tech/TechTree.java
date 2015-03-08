@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import alexiil.mods.civ.CivConfig;
 import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
@@ -23,7 +24,7 @@ import alexiil.mods.lib.item.IChangingItemString;
 
 public final class TechTree {
     public enum EState {
-        CONSTRUCTING, PRE, ADD_TECHS, SET_REQUIREMENTS, POST, FINALISED;
+        CONSTRUCTING, PRE, ADD_TECHS, SET_REQUIREMENTS, POST, FINALISED, SAVING;
     }
     
     public class Tech implements ILocalizable {
@@ -32,6 +33,8 @@ public final class TechTree {
         public static final String SCIENCE_PACKS = "packs";
         /** The number of beaker items that are required to unlock this tech */
         private int[] sciencePacks = new int[0];
+        /** The science packs, after the config multiplier has been applied */
+        private int[] adjustedSciencePacks = new int[0];
         /** The nme of this tech. This is stored to the config and items, so it should be both unlocalized and static
          * (use a good name that might be used by others, for example use "smelting" as a tech that allows for smelting
          * (as that is the action used when you put something into a vanilla furnace). If a simailarly named tech exists
@@ -85,7 +88,11 @@ public final class TechTree {
             nbt.setBoolean("leaf", leafTech);
         }
         
-        public ILocalizable addRequirement(Tech required) {
+        public Tech addRequirement(Tech required) {
+            if (state == EState.FINALISED || state == EState.POST) {
+                CivLog.warn("Tried to add a requirement to " + name + " too late!");
+                return this;
+            }
             if (required == null) {
                 CivLog.warn("Tried to add a null tech to \"" + name + "\"");
                 return this;
@@ -102,13 +109,17 @@ public final class TechTree {
             return this;
         }
         
-        public ILocalizable addRequirements(Tech... required) {
+        public Tech addRequirements(Tech... required) {
             for (Tech t : required)
                 addRequirement(t);
             return this;
         }
         
-        public ILocalizable removeRequirement(Tech required) {
+        public Tech removeRequirement(Tech required) {
+            if (state == EState.FINALISED || state == EState.POST) {
+                CivLog.warn("Tried to remove a requirement from " + name + " too late!");
+                return this;
+            }
             if (required == null) {
                 CivLog.warn("Tried and failed to remove a requirement from " + name + " because the argument was null!");
                 return this;
@@ -138,7 +149,7 @@ public final class TechTree {
             return this;
         }
         
-        public ILocalizable removeRequirement(Tech... required) {
+        public Tech removeRequirement(Tech... required) {
             for (Tech t : required)
                 removeRequirement(t);
             return this;
@@ -154,12 +165,16 @@ public final class TechTree {
         }
         
         public int[] getSciencePacksNeeded() {
+            if (state == EState.FINALISED || state == EState.POST)
+                return adjustedSciencePacks;
             return sciencePacks;
         }
         
         /** This will not set the science pack array if the argument is null, or has a length of zero (but an array of
          * {0} would be permitted) */
         public Tech setSciencePacksNeeded(int[] sciencePacks) {
+            if (state == EState.FINALISED || state == EState.POST)
+                return this;
             if (sciencePacks == null || sciencePacks.length == 0)
                 return this;
             this.sciencePacks = sciencePacks;
@@ -379,6 +394,14 @@ public final class TechTree {
         ModCompat.sendAddUnlockableEvent(new TechTreeEvent.AddUnlockables(this, nbt));
         CivLog.info("Added all unlockables");
         
+        for (Tech t : techs.values()) {
+            int[] req = t.getSciencePacksNeeded();
+            for (int idx = 1; idx < req.length; idx++) {
+                req[idx] *= CivConfig.sciencePacksRequired.getDouble();
+            }
+            t.adjustedSciencePacks = req;
+        }
+        
         state = EState.POST;
         setChildren();
         techs = Collections.unmodifiableMap(techs);
@@ -401,6 +424,10 @@ public final class TechTree {
     }
     
     public void save(NBTTagCompound nbt) {
+        EState oldState = state;
+        // This is set, so that the ACTUAL value for how many science packs is used, not the adjusted one
+        state = EState.SAVING;
+        
         NBTTagCompound techsNBT = new NBTTagCompound();
         for (String s : techs.keySet()) {
             NBTTagCompound techNBT = new NBTTagCompound();
@@ -417,6 +444,8 @@ public final class TechTree {
         nbt.setTag("unlockables", reqsNBT);
         
         nbt.setTag("promotions", promotions.saveToNBT());
+        
+        state = oldState;
     }
     
     /** @param unlock

@@ -6,7 +6,7 @@ import alexiil.mods.lib.ConfigAccess;
 
 public class CivConfig {
     public static Property debugMode, cooldownMultiplier, cooldownAddition, cooldownDivision, cooldownTimeDivision, progressRequired,
-            connectExternally;
+            connectExternally, sciencePacksRequired;
     
     public static void init() {
         ConfigAccess cfg = CivCraft.instance.cfg;
@@ -27,7 +27,8 @@ public class CivConfig {
         BeakerEarningListener.COOLDOWN_TIME_DIVISON = cooldownTimeDivision.getDouble();
         
         progressRequired = cfg.getProp("progressRequired", BeakerEarningListener.PROGRESS_REQUIRED);
-        progressRequired.comment = "How much progress is required to get a new set of research notes";
+        progressRequired.comment =
+                "How much progress is required to get a new set of research notes. Setting this number lower means quicker progression, higher values mean slower progression";
         BeakerEarningListener.PROGRESS_REQUIRED = progressRequired.getDouble();
         
         debugMode = cfg.getProp("debug", false);
@@ -35,6 +36,11 @@ public class CivConfig {
         
         connectExternally = cfg.getProp("connectExternally", true);
         connectExternally.comment = "Allows this mod to connect to github to fetch a list of contributors, commits and releases for this mod.";
+        
+        sciencePacksRequired = cfg.getProp("sciencePacksRequired", 1);
+        sciencePacksRequired.comment =
+                "A multiplier for the number of science packs required for a tech. Note that this only affects the crafted science packs, not the research notes";
+        
         if (debugMode.getBoolean()) {}
     }
 }

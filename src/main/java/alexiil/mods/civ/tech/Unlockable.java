@@ -1,7 +1,5 @@
 package alexiil.mods.civ.tech;
 
-import ibxm.Player;
-
 import java.util.List;
 import java.util.Map;
 
@@ -15,9 +13,9 @@ import alexiil.mods.civ.utils.TechUtils;
 
 /** An Unlockable is something that is unlocked whenever all the required tech's have been researched. More specifically,
  * whenever a player unlocks a tech that is required by this unlockable, assuming ALL other tech's required by this are
- * also all unlocked, the {@link #Unlockable.unlock(Player)} method is called. This method will only ever be called once
- * per save-game, per player, assuming that no {@link #TechResearchedEvent} is fired if a player has already unlocked
- * that tech.
+ * also all unlocked, the {@link #Unlockable.unlock(EntityPlayer)} method is called. This method will only ever be
+ * called once per save-game, per player, assuming that no {@link #TechResearchedEvent} is fired if a player has already
+ * unlocked that tech.
  * 
  * @author AlexIIL */
 public abstract class Unlockable {
@@ -35,7 +33,7 @@ public abstract class Unlockable {
     }
     
     protected Unlockable(NBTTagCompound nbt) {
-        name = nbt.getString("");
+        name = nbt.getString("name");
     }
     
     public final String getName() {

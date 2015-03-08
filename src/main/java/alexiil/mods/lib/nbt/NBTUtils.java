@@ -219,7 +219,15 @@ public class NBTUtils {
                     break;
                 }
                 case 10: {// NBTTagCompound
-                    ConfigCategory cat2 = new ConfigCategory(name, cat);
+                    ConfigCategory cat2 = null;
+                    for (ConfigCategory child : cat.getChildren()) {
+                        if (child.getName().equals(name)) {
+                            cat2 = child;
+                        }
+                        
+                    }
+                    if (cat2 == null)
+                        cat2 = new ConfigCategory(name, cat);
                     convertToConfigCategory(cat2, (NBTTagCompound) tag);
                 }
                 case 11: // Int Array
