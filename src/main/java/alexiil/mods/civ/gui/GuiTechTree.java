@@ -52,7 +52,8 @@ public class GuiTechTree extends GuiScreen {
             return new DrawTechInfo(selectedState, leaf, posX, posY, name, item);
         }
         
-        @SuppressWarnings("unchecked") public void draw() {
+        @SuppressWarnings("unchecked")
+        public void draw() {
             int texX = (state % techsPerRow) * gapX;
             int texY = (state / techsPerRow) * gapY + (leaf > 0 ? techTexSizeY : 0);
             int posY = this.posY;
@@ -198,7 +199,8 @@ public class GuiTechTree extends GuiScreen {
         recalculateTechs();
     }
     
-    @Override public void setWorldAndResolution(Minecraft mc, int width, int height) {
+    @Override
+    public void setWorldAndResolution(Minecraft mc, int width, int height) {
         super.setWorldAndResolution(mc, width, height);
         calculateTechs();
     }
@@ -264,7 +266,8 @@ public class GuiTechTree extends GuiScreen {
         // Firstly, in alphabetical order, to try and get a general trend
         for (List<Tech> lst : techList)
             Collections.sort(lst, new Comparator<Tech>() {
-                @Override public int compare(Tech t1, Tech t2) {
+                @Override
+                public int compare(Tech t1, Tech t2) {
                     return t1.name.compareTo(t2.name);
                 }
             });
@@ -382,7 +385,8 @@ public class GuiTechTree extends GuiScreen {
         return null;
     }
     
-    @Override public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         if (needsRecalculating > 0)
             recalculateTechs();
         toolTip = null;
@@ -434,7 +438,8 @@ public class GuiTechTree extends GuiScreen {
         drawHoveringText(help, 10, 20);
     }
     
-    @Override protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         mouseX -= startX;
         mouseY -= startY;
         
@@ -462,7 +467,8 @@ public class GuiTechTree extends GuiScreen {
         mouseY += startY;
     }
     
-    @Override protected void keyTyped(char typedChar, int keyCode) throws IOException {
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
         super.keyTyped(typedChar, keyCode);
         int kDiff = 4;
         if (keyCode == Keyboard.KEY_W || keyCode == Keyboard.KEY_UP)

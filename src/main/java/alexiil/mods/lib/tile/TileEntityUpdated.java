@@ -17,7 +17,8 @@ public abstract class TileEntityUpdated<M extends MessageUpdate<?, ?>> extends T
         this.mod = mod;
     }
     
-    @Override public void onTick() {
+    @Override
+    public void onTick() {
         updated++;
         if (updated >= AlexIILLib.netRate.getInt()) {
             updated = 0;

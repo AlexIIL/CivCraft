@@ -89,7 +89,8 @@ public class ItemBase extends Item {
         return this;
     }
     
-    @SideOnly(Side.CLIENT) public boolean hasEffect(ItemStack par1ItemStack, int pass) {
+    @SideOnly(Side.CLIENT)
+    public boolean hasEffect(ItemStack par1ItemStack, int pass) {
         return hasEffect && pass == 0;
     }
     
@@ -111,8 +112,9 @@ public class ItemBase extends Item {
         return new String[] { o.toString() };
     }
     
-    @SuppressWarnings({ "rawtypes", "unchecked" }) @Override public void addInformation(ItemStack itemStack, EntityPlayer player, List list,
-            boolean flag) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean flag) {
         if (isShiftKeyPressed() && (hasShift))
             for (Object line : this.shiftLines) {
                 String[] ls = getString(line, itemStack, player);

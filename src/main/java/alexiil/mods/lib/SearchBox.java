@@ -6,8 +6,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
-/** Currently unused, this class allowed for searching a give volume, incrementing the position at any time. This also allows
- * for adding coordinates to search at any time.*/
+/** Currently unused, this class allowed for searching a give volume, incrementing the position at any time. This also
+ * allows for adding coordinates to search at any time. */
 public class SearchBox {
     public Coordinate min, max, cur;
     /** This determines whether to increment or decrement the value. */
@@ -171,7 +171,8 @@ public class SearchBox {
         return toSearch.pop();
     }
     
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return progress + "/" + size;
     }
     

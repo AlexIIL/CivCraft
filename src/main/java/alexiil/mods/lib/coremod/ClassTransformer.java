@@ -25,7 +25,8 @@ import alexiil.mods.lib.AlexIILLib;
 public class ClassTransformer implements IClassTransformer {
     public static Logger log = LogManager.getLogger(AlexIILLib.MODID + ".classTransformer");
     
-    @Override public byte[] transform(String name, String transformedName, byte[] basicClass) {
+    @Override
+    public byte[] transform(String name, String transformedName, byte[] basicClass) {
         try {
             if (transformedName.equals("net.minecraft.client.gui.GuiMultiplayer") && AlexIILLib.roamingIP.getBoolean())
                 return transformGuiMultiplayer(basicClass, !transformedName.equals(name));
@@ -280,7 +281,8 @@ public class ClassTransformer implements IClassTransformer {
         return out;
     }
     
-    @SuppressWarnings("unused") private void showMethodDiff(ClassNode node1, ClassNode node2, String methodName) {
+    @SuppressWarnings("unused")
+    private void showMethodDiff(ClassNode node1, ClassNode node2, String methodName) {
         log.warn("---------------------------------------------------------------------------------------------------");
         log.warn("Showing Method Diffs of " + methodName + "----------------------------------------------------------------------------------");
         log.warn("---------------------------------------------------------------------------------------------------");
@@ -316,7 +318,8 @@ public class ClassTransformer implements IClassTransformer {
         return (ins.getOpcode() + ":" + ins.getClass().getSimpleName());
     }
     
-    @SuppressWarnings("unused") private void showMethod(ClassNode classNode, String methodName) {
+    @SuppressWarnings("unused")
+    private void showMethod(ClassNode classNode, String methodName) {
         log.warn("---------------------------------------------------------------------------------------------------");
         log.warn("Showing Method " + methodName + "----------------------------------------------------------------------------------");
         log.warn("---------------------------------------------------------------------------------------------------");

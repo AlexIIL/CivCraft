@@ -11,7 +11,8 @@ import net.minecraftforge.fml.common.eventhandler.Event;
  * set of items going in and out. If this event is cancelled, then the craft will not be shown as a possibility.
  * 
  * @author AlexIIL */
-@Cancelable public class FindMatchingRecipeEvent extends Event {
+@Cancelable
+public class FindMatchingRecipeEvent extends Event {
     /** This shows the type of crafting that is ocouring. It is recommended that if you have a category that doesn't fit
      * into these that you use {@link #OTHER}. */
     /* OR maybe that this is just a String with constants expressed here? that would allow for many more possibilities,

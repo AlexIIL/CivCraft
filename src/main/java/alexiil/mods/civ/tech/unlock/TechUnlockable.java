@@ -94,7 +94,8 @@ public abstract class TechUnlockable extends Unlockable {
             requiredTechs[i] = TechTree.currentTree.getTech(list.getStringTagAt(i));
     }
     
-    @Override public void save(NBTTagCompound nbt) {
+    @Override
+    public void save(NBTTagCompound nbt) {
         super.save(nbt);
         nbt.setBoolean("shouldShow", shouldShow);
         NBTTagList list = new NBTTagList();
@@ -103,21 +104,25 @@ public abstract class TechUnlockable extends Unlockable {
         nbt.setTag("techRequired", list);
     }
     
-    @Override public TechTree.Tech[] requiredTechs() {
+    @Override
+    public TechTree.Tech[] requiredTechs() {
         if (requiredTechs == null)
             return new TechTree.Tech[0];
         return Arrays.copyOf(requiredTechs, requiredTechs.length);
     }
     
-    @Override public String getLocalisedName() {
+    @Override
+    public String getLocalisedName() {
         return CivCraft.instance.format(getUnlocalisedName());
     }
     
-    @Override public String getDescription() {
+    @Override
+    public String getDescription() {
         return CivCraft.instance.format(getUnlocalisedName() + ".desc");
     }
     
-    @Override public boolean shouldShow() {
+    @Override
+    public boolean shouldShow() {
         return shouldShow;
     }
 }

@@ -48,7 +48,8 @@ public class ItemTechnology extends ItemBase {
     public ItemTechnology(String name) {
         super(name, CivCraft.instance);
         addInfo(new IChangingItemString() {
-            @Override public String[] getString(ItemStack i, EntityPlayer player) {
+            @Override
+            public String[] getString(ItemStack i, EntityPlayer player) {
                 Tech t = getTech(i);
                 if (t == null)
                     return new String[] { "Not a valid research item" };
@@ -61,7 +62,8 @@ public class ItemTechnology extends ItemBase {
             }
         });
         addInfo(new IChangingItemString() {
-            @Override public String[] getString(ItemStack i, EntityPlayer player) {
+            @Override
+            public String[] getString(ItemStack i, EntityPlayer player) {
                 if (getState(i) == EResearchState.RESEARCHED)
                     return new String[0];
                 Tech t = getTech(i);
@@ -87,7 +89,8 @@ public class ItemTechnology extends ItemBase {
             }
         });
         addShiftInfo(new IChangingItemString() {
-            @Override public String[] getString(ItemStack i, EntityPlayer player) {
+            @Override
+            public String[] getString(ItemStack i, EntityPlayer player) {
                 Tech t = getTech(i);
                 if (t == null) {
                     NBTTagCompound nbt = i.getTagCompound();
@@ -122,7 +125,10 @@ public class ItemTechnology extends ItemBase {
         });
     }
     
-    @SuppressWarnings({ "unchecked", "rawtypes" }) @Override @SideOnly(Side.CLIENT) public void getSubItems(Item item, CreativeTabs tab, List list) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(Item item, CreativeTabs tab, List list) {
         int[] singleInt = new int[] { 1 };
         for (String s : TechTree.currentTree.getTechs().keySet()) {
             Tech t = TechTree.currentTree.getTech(s);
@@ -134,18 +140,21 @@ public class ItemTechnology extends ItemBase {
         }
     }
     
-    @Override public String getItemStackDisplayName(ItemStack stack) {
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
         Tech t = getTech(stack);
         if (t == null)
             return "THE TECH WAS NULL! (this is a bad item!)";
         return super.getItemStackDisplayName(stack) + " " + t.getLocalizedName();
     }
     
-    @Override public ItemStack getContainerItem(ItemStack i) {
+    @Override
+    public ItemStack getContainerItem(ItemStack i) {
         return i.copy();
     }
     
-    @Override public boolean hasContainerItem(ItemStack i) {
+    @Override
+    public boolean hasContainerItem(ItemStack i) {
         return true;
     }
     
@@ -268,7 +277,8 @@ public class ItemTechnology extends ItemBase {
         return getItemForTech(TechTree.currentTree.getBaseTech(), new int[0]);
     }
     
-    @Override public void initModel() {
+    @Override
+    public void initModel() {
         String mesherName = CivCraft.instance.meta.modId + ":" + name + "_";
         String[] names = new String[] { mesherName + "none", mesherName + "some", mesherName + "all" };
         ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();

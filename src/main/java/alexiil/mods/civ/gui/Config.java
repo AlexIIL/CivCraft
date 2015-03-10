@@ -29,7 +29,8 @@ public class Config extends GuiScreen {
         setupGui();
     }
     
-    @Override public void setWorldAndResolution(Minecraft mc, int width, int height) {
+    @Override
+    public void setWorldAndResolution(Minecraft mc, int width, int height) {
         super.setWorldAndResolution(mc, width, height);
         setupGui();
     }
@@ -84,7 +85,9 @@ public class Config extends GuiScreen {
         }
     }
     
-    @SuppressWarnings("unchecked") @Override public void initGui() {
+    @SuppressWarnings("unchecked")
+    @Override
+    public void initGui() {
         String text = LangUtils.format("civcraft.config.button");
         int length = fontRendererObj.getStringWidth(text) + 20;
         int totalLength = 10;
@@ -110,7 +113,8 @@ public class Config extends GuiScreen {
         buttonList.add(helpClose);
     }
     
-    @Override public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawBackground(0);
         
         if (CivConfig.connectExternally.getBoolean()) {
@@ -141,7 +145,8 @@ public class Config extends GuiScreen {
         }
     }
     
-    @Override protected void actionPerformed(GuiButton button) throws IOException {
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
         if (button.id == 0) {
             Minecraft.getMinecraft().displayGuiScreen(new ActualConfig(this));
         }

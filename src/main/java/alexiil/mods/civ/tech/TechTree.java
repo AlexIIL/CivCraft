@@ -181,11 +181,13 @@ public final class TechTree {
             return this;
         }
         
-        @Override public String getUnlocalizedName() {
+        @Override
+        public String getUnlocalizedName() {
             return name;
         }
         
-        @Override public String getLocalizedName() {
+        @Override
+        public String getLocalizedName() {
             return CivCraft.instance.format("civcraft.tech." + getUnlocalizedName());
         }
         
@@ -234,7 +236,8 @@ public final class TechTree {
             return leafTech;
         }
         
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return getLocalizedName();
         }
         
@@ -254,7 +257,8 @@ public final class TechTree {
         }
         
         // method used for debugging
-        @SuppressWarnings("unused") private String techsToString() {
+        @SuppressWarnings("unused")
+        private String techsToString() {
             String s = "[";
             int l = children.size();
             for (WeakReference<Tech> t : children) {
@@ -271,7 +275,8 @@ public final class TechTree {
         }
         
         // Eclipse Generated
-        @Override public int hashCode() {
+        @Override
+        public int hashCode() {
             final int prime = 31;
             int result = 1;
             result = prime * result + getOuterType().hashCode();
@@ -285,7 +290,8 @@ public final class TechTree {
         }
         
         // Eclipse Generated
-        @Override public boolean equals(Object obj) {
+        @Override
+        public boolean equals(Object obj) {
             if (this == obj)
                 return true;
             if (obj == null)
@@ -542,7 +548,8 @@ public final class TechTree {
         for (Tech t : allUses) {
             if (input.size() != t.parents.length)
                 continue;
-            @SuppressWarnings("unchecked") ArrayList<Tech> input2 = (ArrayList<Tech>) input.clone();
+            @SuppressWarnings("unchecked")
+            ArrayList<Tech> input2 = (ArrayList<Tech>) input.clone();
             for (ILocalizable t1 : t.parents) {
                 if (!input2.remove(t1))
                     break;
@@ -578,7 +585,8 @@ public final class TechTree {
      * which class is returned. */
     public void registerUnlockable(String type, final Class<? extends Unlockable> unlockableClass) {
         registerUnlockable(type, new IUnlockableConstructor() {
-            @Override public Unlockable createUnlockable(NBTTagCompound nbt) {
+            @Override
+            public Unlockable createUnlockable(NBTTagCompound nbt) {
                 try {
                     return unlockableClass.getConstructor(NBTTagCompound.class).newInstance(nbt);
                 }

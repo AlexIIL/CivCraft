@@ -31,12 +31,15 @@ import alexiil.mods.lib.git.GitHubRequester;
 import alexiil.mods.lib.git.GitHubUser;
 import alexiil.mods.lib.git.Release;
 
-@Mod(modid = Lib.Mod.ID, version = Lib.Mod.VERSION, guiFactory = "alexiil.mods.civ.gui.ConfigGuiFactory") public class CivCraft extends AlexIILMod {
+@Mod(modid = Lib.Mod.ID, version = Lib.Mod.VERSION, guiFactory = "alexiil.mods.civ.gui.ConfigGuiFactory")
+public class CivCraft extends AlexIILMod {
     public static ModMetadata modMeta;
     public static Logger log;
     // MOD STUFF
-    @Instance(Lib.Mod.ID) public static CivCraft instance;
-    @SidedProxy(clientSide = "alexiil.mods.civ.ClientProxy", serverSide = "alexiil.mods.civ.CommonProxy") public static CommonProxy proxy;
+    @Instance(Lib.Mod.ID)
+    public static CivCraft instance;
+    @SidedProxy(clientSide = "alexiil.mods.civ.ClientProxy", serverSide = "alexiil.mods.civ.CommonProxy")
+    public static CommonProxy proxy;
     public static final String chatString = "\u00A7";
     public static final Random RNG = new Random();
     
@@ -49,7 +52,8 @@ import alexiil.mods.lib.git.Release;
     private static List<Release> releases = Collections.emptyList();
     private static Commit thisCommit;
     
-    @EventHandler public void preInit(FMLPreInitializationEvent event) {
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
         modMeta = super.meta;
         log = super.log;
@@ -65,7 +69,8 @@ import alexiil.mods.lib.git.Release;
         
         // Pending forge
         tab = new CreativeTabs("civCraft") {
-            @Override public Item getTabIconItem() {
+            @Override
+            public Item getTabIconItem() {
                 return CivItems.sciencePacks[0];
             }
         };
@@ -76,11 +81,13 @@ import alexiil.mods.lib.git.Release;
         ModCompat.loadCompats();
     }
     
-    @EventHandler public void init(FMLInitializationEvent event) {
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
         CivRecipes.init();
     }
     
-    @EventHandler public void postInit(FMLPostInitializationEvent event) {
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
         CivTechs.loadTree();
         proxy.initRenderers();
@@ -93,7 +100,8 @@ import alexiil.mods.lib.git.Release;
         if (!CivConfig.connectExternally.getBoolean())
             return;
         new Thread("CivCraft-github") {
-            @Override public void run() {
+            @Override
+            public void run() {
                 contributors = Collections.unmodifiableList(GitHubRequester.getContributors("AlexIIL", "CivCraft"));
                 if (contributors.size() == 0)
                     modMeta.authorList.add("Could not connect to GitHub to fetch the rest...");

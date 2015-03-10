@@ -40,11 +40,13 @@ public class Coordinate extends BlockPos {
         return new Coordinate(x, y, z);
     }
     
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "(" + getX() + "," + getY() + "," + getZ() + ")";
     }
     
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if (!(o instanceof BlockPos))
             return false;
         BlockPos c = (BlockPos) o;

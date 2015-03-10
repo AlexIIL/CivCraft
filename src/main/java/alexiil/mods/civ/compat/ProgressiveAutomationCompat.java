@@ -16,14 +16,16 @@ import alexiil.mods.lib.ErrorHandling;
 public class ProgressiveAutomationCompat extends ModCompat {
     private Tech techLogging, techPower, techRF;
     
-    @Override public void addTechs(AddTechs t) {
+    @Override
+    public void addTechs(AddTechs t) {
         TechTree tree = t.tree;
         techLogging = tree.addTech("logging", new int[] { 2 }, tree.getTech("mining"));
         techPower = tree.addTech("power", new int[] { 4 }, tree.getTech("smelting"), tree.getTech("automation"));
         techRF = tree.addTech("redstone_flux", new int[] { 2 }, techPower).setLeafTech();
     }
     
-    @Override public void addUnlockables(AddUnlockables t) {
+    @Override
+    public void addUnlockables(AddUnlockables t) {
         TechTree tree = t.tree;
         Tech automation = tree.getTech("automation");
         Tech mining = tree.getTech("mining");
@@ -37,11 +39,13 @@ public class ProgressiveAutomationCompat extends ModCompat {
         tree.addUnlockable(new ItemCraftUnlock("redstone_flux", techRF).addUnlocked(getItem("rfEngine")));
     }
     
-    @Override public String getModID() {
+    @Override
+    public String getModID() {
         return "progressiveautomation";
     }
     
-    @Override public String getShortModName() {
+    @Override
+    public String getShortModName() {
         return "PA";
     }
     
@@ -50,7 +54,8 @@ public class ProgressiveAutomationCompat extends ModCompat {
         try {
             Class<?> cls = Class.forName(clsName);
             Field fld = cls.getField(name);
-            @SuppressWarnings("unchecked") List<Block> blocks = (List<Block>) fld.get(null);
+            @SuppressWarnings("unchecked")
+            List<Block> blocks = (List<Block>) fld.get(null);
             return blocks.toArray(new Block[0]);
             
         }

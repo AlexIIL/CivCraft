@@ -29,12 +29,14 @@ public class VanillaCompat extends ModCompat {
     private Tech techGold, techWriting, techEngineering;
     private Tech techDiamond;
     
-    @Override public void preInit(TechTreeEvent.Pre t) {
+    @Override
+    public void preInit(TechTreeEvent.Pre t) {
         String start = Lib.Mod.ID + ":";
         t.tree.registerUnlockable(start + "ItemCraftUnlock", ItemCraftUnlock.class);
     }
     
-    @Override public void addTechs(AddTechs event) {
+    @Override
+    public void addTechs(AddTechs event) {
         TechTree tree = event.tree;
         // Tier 0
         techAgri = tree.addTech("agriculture", new int[] { 1 });
@@ -63,7 +65,8 @@ public class VanillaCompat extends ModCompat {
         techDiamond = tree.addTech("diamond_working", new int[] { 5, 9, 4 }, techGold, techEngineering);
     }
     
-    @Override public void addUnlockables(AddUnlockables t) {
+    @Override
+    public void addUnlockables(AddUnlockables t) {
         // Agriculture
         TechTree tree = t.tree;
         tree.addUnlockable(new ItemCraftUnlock("agriculture", techAgri).addUnlocked(Items.wooden_hoe));
@@ -129,11 +132,13 @@ public class VanillaCompat extends ModCompat {
             tree.promotions.addPromotion(moveSpeeds[i]);
     }
     
-    @Override public String getModID() {
+    @Override
+    public String getModID() {
         return Lib.Mod.ID;
     }
     
-    @Override public String getShortModName() {
+    @Override
+    public String getShortModName() {
         return "CivCraft";
     }
 }

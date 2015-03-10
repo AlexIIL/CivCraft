@@ -19,7 +19,8 @@ public class MessageHandler implements INetworkProvider {
         INSTANCE.registerMessage(MessageResearchTech.class, MessageResearchTech.class, 5, Side.SERVER);
     }
     
-    @Override public SimpleNetworkWrapper get() {
+    @Override
+    public SimpleNetworkWrapper get() {
         return INSTANCE;
     }
 }

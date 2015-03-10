@@ -30,7 +30,8 @@ public class BlockMeta {
         return new BlockMeta(block, meta);
     }
     
-    @Override public int hashCode()// eclipse generated
+    @Override
+    public int hashCode()// eclipse generated
     {
         final int prime = 31;
         int result = 1;
@@ -39,7 +40,8 @@ public class BlockMeta {
         return result;
     }
     
-    @Override public boolean equals(Object obj)// eclipse generated
+    @Override
+    public boolean equals(Object obj)// eclipse generated
     {
         if (this == obj)
             return true;
@@ -59,7 +61,8 @@ public class BlockMeta {
         return true;
     }
     
-    @Override public String toString() {
+    @Override
+    public String toString() {
         String toShow;
         try {
             toShow = block.getLocalizedName() + ":" + meta;

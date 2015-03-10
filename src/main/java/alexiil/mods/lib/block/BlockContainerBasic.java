@@ -16,7 +16,8 @@ import alexiil.mods.lib.AlexIILMod;
 import alexiil.mods.lib.item.ItemBlockMeta;
 
 public abstract class BlockContainerBasic extends BlockContainer {
-    @SideOnly(Side.CLIENT) protected TextureAtlasSprite[] icons;
+    @SideOnly(Side.CLIENT)
+    protected TextureAtlasSprite[] icons;
     public final boolean enabled;
     protected AlexIILMod mod;
     
@@ -34,7 +35,10 @@ public abstract class BlockContainerBasic extends BlockContainer {
         }
     }
     
-    @SuppressWarnings({ "unchecked", "rawtypes" }) @SideOnly(Side.CLIENT) @Override// Add blocks to the creative
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SideOnly(Side.CLIENT)
+    @Override
+    // Add blocks to the creative
             // inventory
             public
             void getSubBlocks(Item item, CreativeTabs tab, List list) {

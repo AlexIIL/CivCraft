@@ -20,14 +20,16 @@ import alexiil.mods.lib.net.MessageBase;
 public class MessageTechTreeUpdate extends MessageBase<MessageTechTreeUpdate> {
     private ByteBuf stored = null;
     
-    @Override public void fromBytes(ByteBuf buf) {
+    @Override
+    public void fromBytes(ByteBuf buf) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
             int length = buf.readInt();
             stored = buf.readBytes(length);
         }
     }
     
-    @Override public void toBytes(ByteBuf buf) {
+    @Override
+    public void toBytes(ByteBuf buf) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
             ByteBuf b = Unpooled.buffer();
             NBTTagCompound nbt = new NBTTagCompound();
@@ -44,7 +46,8 @@ public class MessageTechTreeUpdate extends MessageBase<MessageTechTreeUpdate> {
         }
     }
     
-    @Override public IMessage onMessage(MessageTechTreeUpdate message, MessageContext ctx) {
+    @Override
+    public IMessage onMessage(MessageTechTreeUpdate message, MessageContext ctx) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
             TechTree.currentTree = new TechTree();
             try {

@@ -9,7 +9,8 @@ public enum EChatColours {
         return values()[i];
     }
     
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return chatString + Integer.toHexString(ordinal());
     }
 }

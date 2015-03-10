@@ -55,7 +55,8 @@ public class CivLog {
     
     /** Use this for temporary logging, so eclipse helps see where every temporary logging statement is (so cleanup is
      * much easier) */
-    @Deprecated public static void temp(String text) {
+    @Deprecated
+    public static void temp(String text) {
         info(text);
     }
 }

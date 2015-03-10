@@ -23,7 +23,8 @@ import alexiil.mods.lib.item.ItemBase;
 
 public class ItemTechBag extends ItemBase {
     public static class TechProgress {
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "TechProgress [tech=" + tech + ", progress=" + Arrays.toString(progress) + ", state=" + state + "]";
         }
         
@@ -61,10 +62,12 @@ public class ItemTechBag extends ItemBase {
     public ItemTechBag(String name) {
         super(name, CivCraft.instance);
         addShiftInfo(new IChangingItemString() {
-            @Override public String[] getString(ItemStack i, EntityPlayer player) {
+            @Override
+            public String[] getString(ItemStack i, EntityPlayer player) {
                 TechProgress[] techs = getTechs(i);
                 Arrays.sort(techs, new Comparator<TechProgress>() {
-                    @Override public int compare(TechProgress o1, TechProgress o2) {
+                    @Override
+                    public int compare(TechProgress o1, TechProgress o2) {
                         if (o1.state != o2.state)
                             return o1.state.compareTo(o2.state);
                         return o1.tech.name.compareTo(o2.tech.name);
@@ -213,7 +216,8 @@ public class ItemTechBag extends ItemBase {
         setTechs(stack, progresses);
     }
     
-    @Override public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
+    @Override
+    public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
         if (world.isRemote) {
             if (!player.isSneaking())
                 player.openGui(CivCraft.instance, Lib.Gui.TECH_TREE, world, 0, 0, 0);

@@ -23,11 +23,13 @@ public class RecipeTech implements IRecipe {
     
     private RecipeTech() {}
     
-    @Override public boolean matches(InventoryCrafting craft, World world) {
+    @Override
+    public boolean matches(InventoryCrafting craft, World world) {
         return getOutput(null, craft, false) != null;
     }
     
-    @Override public ItemStack getCraftingResult(InventoryCrafting craft) {
+    @Override
+    public ItemStack getCraftingResult(InventoryCrafting craft) {
         return getOutput(null, craft, false);
     }
     
@@ -106,16 +108,19 @@ public class RecipeTech implements IRecipe {
         return nT;
     }
     
-    @Override public int getRecipeSize() {
+    @Override
+    public int getRecipeSize() {
         return 2;
     }
     
-    @Override public ItemStack getRecipeOutput() {
+    @Override
+    public ItemStack getRecipeOutput() {
         return null;
     }
     
     /** This just returns whatever should be in the inventory afterwards */
-    @Override public ItemStack[] getRemainingItems(InventoryCrafting craft) {
+    @Override
+    public ItemStack[] getRemainingItems(InventoryCrafting craft) {
         ItemStack stack = getOutput(null, craft, false);
         if (stack == null || stack.getItem() == null || !(stack.getItem() instanceof ItemTechnology)) {
             // If it was a normal (or other) crafting recipe

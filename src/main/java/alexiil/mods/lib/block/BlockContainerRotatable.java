@@ -23,8 +23,11 @@ public abstract class BlockContainerRotatable extends BlockContainerBasic {
         this.setDefaultState(blockState.getBaseState().withProperty(PROP_DIRECTION, EnumFacing.UP));
     }
     
-    @SuppressWarnings({ "unchecked", "rawtypes" }) @SideOnly(Side.CLIENT) @Override// Add blocks to the creative
-                                                                                   // inventory
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SideOnly(Side.CLIENT)
+    @Override
+    // Add blocks to the creative
+            // inventory
             public
             void getSubBlocks(Item item, CreativeTabs tab, List list) {
         list.add(new ItemStack(item, 1, 3));
@@ -37,8 +40,9 @@ public abstract class BlockContainerRotatable extends BlockContainerBasic {
          * meta -= 1; if (meta < 0) meta = 5; } if (flag) meta += 8; world.setBlockMetadataWithNotify(x, y, z, meta, 3); */
     }
     
-    @Override public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX,
-            float hitY, float hitZ) {
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY,
+            float hitZ) {
         if (player.getHeldItem() == null && canRotate(world, pos, state)) {
             rotate(world, pos, state, player.isSneaking());
             return true;

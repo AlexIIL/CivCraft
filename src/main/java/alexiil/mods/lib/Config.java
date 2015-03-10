@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Deprecated public class Config {
+@Deprecated
+public class Config {
     private List<Property> options = Collections.synchronizedList(new ArrayList<Property>());
     private final File confFile;
     private WeakReference<AlexIILMod> modParent;
@@ -93,7 +94,8 @@ import java.util.List;
         return null;
     }
     
-    @Deprecated public class Property implements Comparable<Property> {
+    @Deprecated
+    public class Property implements Comparable<Property> {
         public final String name, defaultP;
         private String stored;
         /** Placeholder for when forge exists */
@@ -123,7 +125,8 @@ import java.util.List;
             return Double.parseDouble(stored);
         }
         
-        @Override public int compareTo(Property o) {
+        @Override
+        public int compareTo(Property o) {
             if (name.contains(o.name))
                 return 1;
             if (o.name.contains(name))

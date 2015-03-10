@@ -25,7 +25,8 @@ public class PromotionMoveSpeed extends Promotion {
         this(nbt.getInteger("level"));
     }
     
-    @Override public List<Promotion> getRequiredPromotions() {
+    @Override
+    public List<Promotion> getRequiredPromotions() {
         List<Promotion> promotions = new ArrayList<Promotion>();
         if (level <= 0)
             return promotions;
@@ -35,7 +36,8 @@ public class PromotionMoveSpeed extends Promotion {
         return promotions;
     }
     
-    @Override public void onActivate(EntityPlayer player) {
+    @Override
+    public void onActivate(EntityPlayer player) {
         double wantedLevel = 0.25 * (level + 1);
         IAttributeInstance iai = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
         AttributeModifier oldModifier = iai.getModifier(modifierID);
@@ -46,7 +48,8 @@ public class PromotionMoveSpeed extends Promotion {
         iai.applyModifier(modifier);
     }
     
-    @Override public void onDeactivate(EntityPlayer player) {
+    @Override
+    public void onDeactivate(EntityPlayer player) {
         double wantedLevel = 0.25 * (level + 1);
         IAttributeInstance iai = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
         AttributeModifier oldModifier = iai.getModifier(modifierID);

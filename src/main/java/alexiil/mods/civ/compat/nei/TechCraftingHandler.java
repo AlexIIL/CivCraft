@@ -11,11 +11,13 @@ import alexiil.mods.civ.tech.TechTree.Tech;
 import codechicken.nei.recipe.ShapelessRecipeHandler;
 
 public class TechCraftingHandler extends ShapelessRecipeHandler {
-    @Override public String getGuiTexture() {
+    @Override
+    public String getGuiTexture() {
         return "textures/gui/container/crafting_table.png";
     }
     
-    @Override public String getOverlayIdentifier() {
+    @Override
+    public String getOverlayIdentifier() {
         return "crafting";
     }
     
@@ -27,7 +29,8 @@ public class TechCraftingHandler extends ShapelessRecipeHandler {
      * CivCraft.technology.getItemForTech(t0, 0))); } // Technology Duplication } else {
      * super.loadCraftingRecipes(outputId, results); } } */
     
-    @Override public void loadCraftingRecipes(ItemStack result) {
+    @Override
+    public void loadCraftingRecipes(ItemStack result) {
         if (result == null || result.getItem() != CivItems.technology)
             return;
         // Technology Creation + Researching
@@ -58,7 +61,8 @@ public class TechCraftingHandler extends ShapelessRecipeHandler {
         }
     }
     
-    @Override public void loadUsageRecipes(ItemStack in) {
+    @Override
+    public void loadUsageRecipes(ItemStack in) {
         if (in == null)
             return;
         if (in.getItem() == CivItems.technology) {

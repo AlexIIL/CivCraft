@@ -9,7 +9,8 @@ public class TechConfig extends GuiScreen {
         this.parent = parent;
     }
     
-    @Override public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         
     }
     

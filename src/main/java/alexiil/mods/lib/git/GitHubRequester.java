@@ -37,7 +37,8 @@ public class GitHubRequester {
             return Collections.emptyList();
         List<GitHubUser> users = parseContributors(response);
         Collections.sort(users, new Comparator<GitHubUser>() {
-            @Override public int compare(GitHubUser o1, GitHubUser o2) {
+            @Override
+            public int compare(GitHubUser o1, GitHubUser o2) {
                 return o2.commits - o1.commits;
             }
         });

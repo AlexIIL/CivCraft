@@ -21,7 +21,8 @@ public class ConfigAccess {
         FMLCommonHandler.instance().bus().register(this);
     }
     
-    @SubscribeEvent public void onConfig(ConfigChangedEvent.OnConfigChangedEvent event) {
+    @SubscribeEvent
+    public void onConfig(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (mod.meta.modId.equals(event.modID))
             saveAll();
     }

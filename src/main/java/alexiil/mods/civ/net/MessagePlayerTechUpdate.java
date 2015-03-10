@@ -27,7 +27,8 @@ public class MessagePlayerTechUpdate extends MessageBase<MessagePlayerTechUpdate
         techs = TechUtils.getTechs(player);
     }
     
-    @Override public void fromBytes(ByteBuf buf) {
+    @Override
+    public void fromBytes(ByteBuf buf) {
         int length = buf.readInt();
         for (int i = 0; i < length; i++) {
             int len = buf.readInt();
@@ -43,7 +44,8 @@ public class MessagePlayerTechUpdate extends MessageBase<MessagePlayerTechUpdate
         }
     }
     
-    @Override public void toBytes(ByteBuf buf) {
+    @Override
+    public void toBytes(ByteBuf buf) {
         buf.writeInt(techs.size());
         for (Tech t : techs) {
             byte[] bytes = t.name.getBytes();
@@ -53,7 +55,8 @@ public class MessagePlayerTechUpdate extends MessageBase<MessagePlayerTechUpdate
         }
     }
     
-    @Override public IMessage onMessage(MessagePlayerTechUpdate message, MessageContext ctx) {
+    @Override
+    public IMessage onMessage(MessagePlayerTechUpdate message, MessageContext ctx) {
         String s = "[";
         List<Tech> ts = message.techs;
         for (Tech t : ts)

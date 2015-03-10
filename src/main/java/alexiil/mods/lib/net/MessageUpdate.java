@@ -23,22 +23,26 @@ public abstract class MessageUpdate<M extends MessageUpdate<?, ?>, T extends INe
         cor = new Coordinate(tile.getCor());
     }
     
-    @Override public void fromBytes(ByteBuf buf) {
+    @Override
+    public void fromBytes(ByteBuf buf) {
         cor = new Coordinate(buf);
     }
     
-    @Override public void toBytes(ByteBuf buf) {
+    @Override
+    public void toBytes(ByteBuf buf) {
         cor.writeToByteBuf(buf);
     }
     
-    @Override public IMessage onMessage(M message, MessageContext ctx) {
+    @Override
+    public IMessage onMessage(M message, MessageContext ctx) {
         TileEntity tile = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.cor);
         
         if (tile == null) {
             AlexIILLib.instance.log.warn("A message's data could not be set because there was no tile to set it to!");
         }
         else if (tile instanceof INetworkTile) {
-            @SuppressWarnings("unchecked") INetworkTile<M> q = (INetworkTile<M>) tile;
+            @SuppressWarnings("unchecked")
+            INetworkTile<M> q = (INetworkTile<M>) tile;
             q.setTileData(message);
         }
         else {

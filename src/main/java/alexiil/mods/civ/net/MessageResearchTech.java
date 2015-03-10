@@ -29,7 +29,8 @@ public class MessageResearchTech extends MessageBase<MessageResearchTech> {
         this.tech = tech;
     }
     
-    @Override public void fromBytes(ByteBuf buf) {
+    @Override
+    public void fromBytes(ByteBuf buf) {
         int l = buf.readInt();
         byte[] bytes = new byte[l];
         buf.readBytes(bytes);
@@ -37,7 +38,8 @@ public class MessageResearchTech extends MessageBase<MessageResearchTech> {
         tech = TechTree.currentTree.getTech(name);
     }
     
-    @Override public void toBytes(ByteBuf buf) {
+    @Override
+    public void toBytes(ByteBuf buf) {
         if (tech == null) {
             buf.writeInt(0);
         }
@@ -48,7 +50,8 @@ public class MessageResearchTech extends MessageBase<MessageResearchTech> {
         }
     }
     
-    @Override public IMessage onMessage(MessageResearchTech message, MessageContext ctx) {
+    @Override
+    public IMessage onMessage(MessageResearchTech message, MessageContext ctx) {
         if (ctx.side == Side.SERVER) {
             Tech t = message.tech;
             EntityPlayer player = ctx.getServerHandler().playerEntity;

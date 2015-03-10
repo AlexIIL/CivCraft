@@ -17,23 +17,28 @@ public class GitHubUserScrollingList extends TextGuiScrollingList {
         this.parent = parent;
     }
     
-    @Override protected int getSize() {
+    @Override
+    protected int getSize() {
         return userList.size();
     }
     
-    @Override protected void elementClicked(int index, boolean doubleClick) {
+    @Override
+    protected void elementClicked(int index, boolean doubleClick) {
         
     }
     
-    @Override protected boolean isSelected(int index) {
+    @Override
+    protected boolean isSelected(int index) {
         return false;
     }
     
-    @Override protected void drawBackground() {
+    @Override
+    protected void drawBackground() {
         
     }
     
-    @Override protected void drawSlot(int index, int var2, int var3, int var4, Tessellator tess) {
+    @Override
+    protected void drawSlot(int index, int var2, int var3, int var4, Tessellator tess) {
         GitHubUser user = userList.get(index);
         String text = "civcraft.github." + user.login;
         String newText = LangUtils.format(text);

@@ -175,7 +175,8 @@ public class BeakerEarningListener {
         return in;
     }
     
-    @SubscribeEvent public void playerTick(PlayerTickEvent event) {
+    @SubscribeEvent
+    public void playerTick(PlayerTickEvent event) {
         if (event.player.worldObj.isRemote)
             return;
         if (event.phase != Phase.END)
@@ -232,7 +233,8 @@ public class BeakerEarningListener {
     
     // Beaker earning events
     
-    @SubscribeEvent public void playerBreakBlock(BreakEvent event) {
+    @SubscribeEvent
+    public void playerBreakBlock(BreakEvent event) {
         if (event.world.isRemote)
             return;
         EntityPlayer player = event.getPlayer();
@@ -263,7 +265,8 @@ public class BeakerEarningListener {
             earnBeaker(player, "block.harvest." + name);
     }
     
-    @SubscribeEvent public void playerCrafted(ItemCraftedEvent event) {
+    @SubscribeEvent
+    public void playerCrafted(ItemCraftedEvent event) {
         if (event.player.worldObj.isRemote)
             return;
         if (!isPlayerReal(event.player))
@@ -274,7 +277,8 @@ public class BeakerEarningListener {
         earnBeaker(event.player, itemName);
     }
     
-    @SubscribeEvent public void entityAttack(LivingHurtEvent event) {
+    @SubscribeEvent
+    public void entityAttack(LivingHurtEvent event) {
         if (event.isCanceled())
             return;
         if (event.entity.worldObj.isRemote)
@@ -305,7 +309,8 @@ public class BeakerEarningListener {
             earnBeaker(player, "entity.arrowHit", distance);
     }
     
-    @SubscribeEvent public void entityDeath(LivingDeathEvent event) {
+    @SubscribeEvent
+    public void entityDeath(LivingDeathEvent event) {
         if (event.isCanceled())
             return;
         if (event.entity.worldObj.isRemote)

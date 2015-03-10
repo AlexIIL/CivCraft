@@ -54,7 +54,8 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
             }
         }
         items.add(new IItemComparator() {
-            @Override public boolean isConsideredEqual(ItemStack toCompare) {
+            @Override
+            public boolean isConsideredEqual(ItemStack toCompare) {
                 if (toCompare == null && item != null)
                     return false;
                 return toCompare.getItem() == item;
@@ -87,7 +88,8 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
                 singleItem = stack;
         }
         items.add(new IItemComparator() {
-            @Override public boolean isConsideredEqual(ItemStack toCompare) {
+            @Override
+            public boolean isConsideredEqual(ItemStack toCompare) {
                 return OreDictionary.itemMatches(stack, toCompare, false);
             }
         });
@@ -108,13 +110,16 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         return false;
     }
     
-    @Override public void unlock(EntityPlayer player) {}
+    @Override
+    public void unlock(EntityPlayer player) {}
     
-    @Override public String getUnlocalisedName() {
+    @Override
+    public String getUnlocalisedName() {
         return "civcraft.unlock.itemcraft." + getName();
     }
     
-    @Override public String getLocalisedName() {
+    @Override
+    public String getLocalisedName() {
         String superL = super.getLocalisedName();
         if (superL.equals(getUnlocalisedName()) && singleItemFlag)
             return CivCraft.instance.format("civcraft.unlock.itemcraft.pre") + " "
@@ -122,7 +127,8 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         return superL;
     }
     
-    @Override public String[] getString(ItemStack i, EntityPlayer player) {
+    @Override
+    public String[] getString(ItemStack i, EntityPlayer player) {
         if (itemMatches(i)) {
             String[] strings = new String[1 + requiredTechs().length];
             strings[0] = EChatColours.GRAY + "Requires these techs to make:";
@@ -136,15 +142,18 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         return new String[0];
     }
     
-    @Override public boolean doesBlockItem(ItemStack item) {
+    @Override
+    public boolean doesBlockItem(ItemStack item) {
         return itemMatches(item);
     }
     
-    @Override public void save(NBTTagCompound nbt) {
+    @Override
+    public void save(NBTTagCompound nbt) {
         super.save(nbt);
     }
     
-    @Override public String getType() {
+    @Override
+    public String getType() {
         return Lib.Mod.ID + ":ItemCraftUnlock";
     }
 }

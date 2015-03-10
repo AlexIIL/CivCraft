@@ -13,7 +13,8 @@ import alexiil.mods.civ.tech.Unlockable;
 import alexiil.mods.lib.nbt.NBTUtils;
 
 public class ConfigCompat extends ModCompat {
-    @Override public void addTechs(AddTechs t) {
+    @Override
+    public void addTechs(AddTechs t) {
         TechTree tree = t.tree;
         NBTTagCompound n = t.treeNBTCompound;
         NBTTagCompound techs = n.getCompoundTag("techs");
@@ -39,7 +40,8 @@ public class ConfigCompat extends ModCompat {
         }
     }
     
-    @Override public void addUnlockables(AddUnlockables t) {
+    @Override
+    public void addUnlockables(AddUnlockables t) {
         TechTree tree = t.tree;
         NBTTagCompound n = t.treeNBTCompound;
         NBTTagCompound unlocks = n.getCompoundTag("unlockables");
@@ -53,11 +55,13 @@ public class ConfigCompat extends ModCompat {
         }
     }
     
-    @Override public String getModID() {
+    @Override
+    public String getModID() {
         return "config";
     }
     
-    @Override public String getShortModName() {
+    @Override
+    public String getShortModName() {
         return "Config";
     }
 }
