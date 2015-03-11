@@ -35,8 +35,12 @@ public abstract class ModCompat {
     public static void loadCompats() {
         // The first one, unless someone has added their own into it
         compats.add(new VanillaCompat());
+        
         if (Loader.isModLoaded("progressiveautomation"))
             compats.add(new ProgressiveAutomationCompat());
+        
+        // if (Loader.isModLoaded("OpenComputers"))
+        // compats.add(new OpenComputersCompat());
         
         // ALWAYS the last one
         compats.add(new ConfigCompat());

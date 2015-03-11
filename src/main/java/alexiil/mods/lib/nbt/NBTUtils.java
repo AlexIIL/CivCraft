@@ -14,6 +14,8 @@ import net.minecraftforge.common.config.Property.Type;
 import alexiil.mods.lib.AlexIILLib;
 
 public class NBTUtils {
+    public static final String NBT_STRING_BYTE = "B-";
+    
     public static String toString(NBTTagCompound nbt) {
         return toString(nbt, 0);
     }
@@ -129,8 +131,15 @@ public class NBTUtils {
                             list.appendTag(new NBTTagString(s));
                         nbt.setTag(pair.getKey(), list);
                     }
-                    else
-                        nbt.setString(pair.getKey(), prop.getString());
+                    else {
+                        String s = prop.getString();
+                        if (s.startsWith(NBT_STRING_BYTE)) {
+                            byte b = Byte.parseByte(s.substring(NBT_STRING_BYTE.length()));
+                            nbt.setByte(pair.getKey(), b);
+                        }
+                        else
+                            nbt.setString(pair.getKey(), s);
+                    }
                     break;
                 }
                 default: {
@@ -147,12 +156,10 @@ public class NBTUtils {
             String name = (String) key;
             NBTBase tag = nbt.getTag(name);
             switch (tag.getId()) {
-                case 1: { // Byte, assume that this is a boolean :P
+                case 1: {// Byte
                     byte b = ((NBTBase.NBTPrimitive) tag).getByte();
-                    if (b <= 1) {
-                        cat.put(name, new Property(name, b == 0 ? "false" : "true", Type.BOOLEAN));
-                        break;
-                    }
+                    cat.put(name, new Property(name, NBT_STRING_BYTE + b, Type.STRING));
+                    break;
                 }
                 case 2:// Short
                 case 3:// Int

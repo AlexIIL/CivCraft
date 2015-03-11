@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 import alexiil.mods.civ.CivCraft;
+import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.civ.utils.TechUtils;
@@ -18,6 +19,33 @@ import alexiil.mods.lib.EChatColours;
 import alexiil.mods.lib.item.IChangingItemString;
 
 public class ItemCraftUnlock extends TechUnlockable implements IChangingItemString, IItemBlocker {
+    private static class ItemStackComparator implements IItemComparator {
+        private final ItemStack stack;
+        
+        public static ItemStackComparator load(NBTTagCompound nbt) {
+            ItemStack stack = ItemStack.loadItemStackFromNBT(nbt);
+            if (stack == null) {
+                CivLog.warn("The item stack was null! (for NBT " + nbt.toString() + ")");
+                return null;
+            }
+            return new ItemStackComparator(stack);
+        }
+        
+        public ItemStackComparator(ItemStack stack) {
+            this.stack = stack;
+        }
+        
+        public NBTTagCompound save(NBTTagCompound nbt) {
+            return stack.writeToNBT(new NBTTagCompound());
+        }
+        
+        @Override
+        public boolean isConsideredEqual(ItemStack toCompare) {
+            return OreDictionary.itemMatches(stack, toCompare, false);
+        }
+        
+    }
+    
     private final List<IItemComparator> items;
     private ItemStack singleItem = null;
     private boolean singleItemFlag = false;
@@ -30,6 +58,12 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
     public ItemCraftUnlock(NBTTagCompound nbt) {
         super(nbt);
         items = new ArrayList<IItemComparator>();
+        NBTTagCompound itemsNBT = nbt.getCompoundTag("items");
+        for (Object key : itemsNBT.getKeySet()) {
+            String skey = (String) key;
+            NBTTagCompound item = itemsNBT.getCompoundTag(skey);
+            items.add(ItemStackComparator.load(item));
+        }
     }
     
     /** Adds all variants of these items as now craftable */
@@ -53,14 +87,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
                 singleItemFlag = true;
             }
         }
-        items.add(new IItemComparator() {
-            @Override
-            public boolean isConsideredEqual(ItemStack toCompare) {
-                if (toCompare == null && item != null)
-                    return false;
-                return toCompare.getItem() == item;
-            }
-        });
+        items.add(new ItemStackComparator(new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE)));
         return this;
     }
     
@@ -87,12 +114,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
             else
                 singleItem = stack;
         }
-        items.add(new IItemComparator() {
-            @Override
-            public boolean isConsideredEqual(ItemStack toCompare) {
-                return OreDictionary.itemMatches(stack, toCompare, false);
-            }
-        });
+        items.add(new ItemStackComparator(stack));
         return this;
     }
     
@@ -100,6 +122,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         singleItemFlag = false;
         singleItem = null;
         items.add(compare);
+        isLoadable = false;
         return this;
     }
     
@@ -150,6 +173,15 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
     @Override
     public void save(NBTTagCompound nbt) {
         super.save(nbt);
+        if (!isLoadable)
+            return;
+        NBTTagCompound items = new NBTTagCompound();
+        int index = 0;
+        for (IItemComparator c : this.items) {
+            items.setTag(Integer.toString(index), ((ItemStackComparator) c).save(new NBTTagCompound()));
+            index++;
+        }
+        nbt.setTag("items", items);
     }
     
     @Override

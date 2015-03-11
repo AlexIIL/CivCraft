@@ -210,16 +210,14 @@ public final class TechTree {
         }
         
         public Unlockable[] getShownUnlockables() {
-            Unlockable[] arr = new Unlockable[unlockables.size()];
+            List<Unlockable> arr = new ArrayList<Unlockable>();
             for (int i = 0; i < unlockables.size(); i++) {
                 if (unlockables.get(i).get() == null)
-                    i--;
+                    continue;
                 else if (unlockables.get(i).get().shouldShow())
-                    arr[i] = unlockables.get(i).get();
-                else
-                    i--;
+                    arr.add(unlockables.get(i).get());
             }
-            return arr;
+            return arr.toArray(new Unlockable[0]);
         }
         
         public Tech setLeafTech() {

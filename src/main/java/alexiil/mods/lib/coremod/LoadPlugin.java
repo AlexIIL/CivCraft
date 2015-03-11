@@ -6,7 +6,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 
 @MCVersion("1.8")
-@IFMLLoadingPlugin.TransformerExclusions({ "alexiil.mods.basicutils.coremod" })
+@IFMLLoadingPlugin.TransformerExclusions({ "alexiil.mods.lib.coremod" })
 @IFMLLoadingPlugin.SortingIndex(1001)
 public class LoadPlugin implements IFMLLoadingPlugin {
     @Override

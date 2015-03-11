@@ -101,7 +101,7 @@ public abstract class TechUnlockable extends Unlockable {
         NBTTagList list = new NBTTagList();
         for (Tech t : requiredTechs)
             list.appendTag(new NBTTagString(t.name));
-        nbt.setTag("techRequired", list);
+        nbt.setTag("requiredTechs", list);
     }
     
     @Override

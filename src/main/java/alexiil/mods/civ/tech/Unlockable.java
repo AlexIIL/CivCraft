@@ -6,6 +6,7 @@ import java.util.Map;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.compat.ModCompat;
 import alexiil.mods.civ.item.ItemTechnology;
 import alexiil.mods.civ.tech.TechTree.Tech;
@@ -20,11 +21,22 @@ import alexiil.mods.civ.utils.TechUtils;
  * @author AlexIIL */
 public abstract class Unlockable {
     private String name;
+    /** If this is false, then it wont be saved in the config. Useful if you have settings that you cannot deduced from a
+     * config, and need to be specially coded */
+    protected boolean isLoadable = true;
     
     public static Unlockable loadUnlockable(NBTTagCompound nbt) {
         String type = nbt.getString("type");
+        boolean isLoadable = nbt.getBoolean("isLoadable");
+        if (!isLoadable)
+            return null;
         Map<String, IUnlockableConstructor> map = TechTree.currentTree.getUnlockableTypes();
-        return map.get(type).createUnlockable(nbt);
+        IUnlockableConstructor cons = map.get(type);
+        if (cons == null) {
+            CivLog.warn("Tried to load an unlockable of type \"" + type + "\", but it did not exist in the map!");
+            return null;
+        }
+        return cons.createUnlockable(nbt);
     }
     
     public Unlockable(String name) {
@@ -80,6 +92,7 @@ public abstract class Unlockable {
     public void save(NBTTagCompound nbt) {
         nbt.setString("type", getType());
         nbt.setString("name", name);
+        nbt.setBoolean("isLoadable", isLoadable);
     }
     
     public boolean isUnlocked(EntityPlayer player) {

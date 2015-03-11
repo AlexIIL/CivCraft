@@ -1,6 +1,7 @@
 package alexiil.mods.civ.tech;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,7 +32,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import scala.actors.threadpool.Arrays;
 import alexiil.mods.civ.CivConfig;
 import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.CivLog;

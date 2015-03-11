@@ -118,3 +118,12 @@ processResources
         exclude 'mcmod.info'
     }
 }
+
+jar
+{
+	manifest
+	{
+		attributes 'FMLCorePluginContainsFMLMod': 'true'
+		attributes 'FMLCorePlugin': 'alexiil.mods.lib.coremod.LoadPlugin'
+	}
+}

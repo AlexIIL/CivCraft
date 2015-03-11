@@ -39,6 +39,11 @@ public class ClassTransformer implements IClassTransformer {
             
             if (transformedName.equals("net.minecraft.client.gui.GuiNewChat") && AlexIILLib.timeText.getBoolean())
                 return transformGuiNewChat(basicClass, !name.equals(transformedName));
+            
+            // CivCraft Transforming
+            if (transformedName.equals("net.minecraft.inventory.ContainerPlayer"))
+                return transformContainerPlayer(basicClass, !name.equals(transformedName));
+            
         }
         catch (Throwable t) {
             log.warn("Transforming class " + transformedName + " FAILIED! Returning the old version of the class to avoid crashes.");
@@ -278,6 +283,49 @@ public class ClassTransformer implements IClassTransformer {
         classNode.accept(cw);
         byte[] out = cw.toByteArray();
         showDiff("net.minecraft.client.gui.GuiMultiplayer", input, out);
+        return out;
+    }
+    
+    private byte[] transformContainerPlayer(byte[] input, boolean obfuscated) {
+        String targetMethodName = obfuscated ? "func_75130_a" : "onCraftMatrixChanged";
+        
+        ClassNode classNode = new ClassNode();
+        ClassReader reader = new ClassReader(input);
+        reader.accept(classNode, 0);
+        boolean found = false;
+        
+        for (MethodNode m : classNode.methods) {
+            if (m.name.equals(targetMethodName)) {
+                found = true;
+                int ins = 0;
+                for (int i = 0; i < m.instructions.size(); i++) {
+                    if (m.instructions.get(i).getOpcode() == Opcodes.INVOKESTATIC) {
+                        m.instructions.remove(m.instructions.get(i));
+                        ins = i;
+                        break;
+                    }
+                }
+                ins += 4;
+                m.instructions.remove(m.instructions.get(ins));
+                m.instructions.remove(m.instructions.get(ins));
+                m.instructions.insert(m.instructions.get(ins - 1), new MethodInsnNode(Opcodes.INVOKESTATIC,
+                        "alexiil/forgechanges/MinecraftForgeNewHooks", "canCraftPlayerEvent",
+                        "(Lnet/minecraft/inventory/InventoryCrafting;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;",
+                        false));
+            }
+        }
+        if (!found) {
+            log.warn("Didn't find the method " + targetMethodName + " in ContainerPlayer!");
+            log.info("However, these methdos exist, is it one of these?");
+            for (MethodNode m : classNode.methods) {
+                log.info("  -" + m.name + " with desc " + m.desc);
+            }
+        }
+        
+        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+        classNode.accept(cw);
+        byte[] out = cw.toByteArray();
+        showDiff("net.minecraft.inventory.ContainerPlayer", input, out);
         return out;
     }
     
