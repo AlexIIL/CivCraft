@@ -24,32 +24,32 @@ import alexiil.mods.lib.AlexIILLib;
 
 public class ClassTransformer implements IClassTransformer {
     public static Logger log = LogManager.getLogger(AlexIILLib.MODID + ".classTransformer");
-    
+
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         try {
             if (transformedName.equals("net.minecraft.client.gui.GuiMultiplayer") && AlexIILLib.roamingIP.getBoolean())
                 return transformGuiMultiplayer(basicClass, !transformedName.equals(name));
-            
+
             if (transformedName.equals("net.minecraft.client.gui.ServerListEntryNormal") && AlexIILLib.roamingIP.getBoolean())
                 return transformServerListEntryNormal(basicClass, !name.equals(transformedName));
-            
+
             if (transformedName.equals("net.minecraft.client.renderer.InventoryEffectRenderer") && AlexIILLib.betterPotions.getBoolean())
                 return transformInventoryEffectRenderer(basicClass, !name.equals(transformedName));
-            
+
             if (transformedName.equals("net.minecraft.client.gui.GuiNewChat") && AlexIILLib.timeText.getBoolean())
                 return transformGuiNewChat(basicClass, !name.equals(transformedName));
-            
+
             // CivCraft Transforming
             if (transformedName.equals("net.minecraft.inventory.ContainerPlayer"))
                 return transformContainerPlayer(basicClass, !name.equals(transformedName));
-            
+
             if (transformedName.equals("net.minecraft.inventory.ContainerWorkbench"))
                 return transformContainerWorkbench(basicClass, !name.equals(transformedName));
-            
+
             if (transformedName.equals("net.minecraft.tileentity.TileEntityFurnace"))
                 return transformTileEntityFurnace(basicClass, !name.equals(transformedName));
-            
+
         }
         catch (Throwable t) {
             log.warn("Transforming class " + transformedName + " FAILIED! Returning the old version of the class to avoid crashes.");
@@ -57,7 +57,7 @@ public class ClassTransformer implements IClassTransformer {
         }
         return basicClass;
     }
-    
+
     private void showDiff(String className, byte[] input, byte[] output) {
         log.info("Finished Transforming " + className);
         if (input == null)
@@ -68,12 +68,12 @@ public class ClassTransformer implements IClassTransformer {
             return;
         log.info(input.length + " bytes to " + output.length + " bytes.");
     }
-    
+
     private byte[] transformInventoryEffectRenderer(byte[] input, boolean obfuscated) {
         ClassNode classNode = new ClassNode();
         ClassReader reader = new ClassReader(input);
         reader.accept(classNode, 0);
-        
+
         for (MethodNode m : classNode.methods) {
             if (m.name.equals("drawActivePotionEffects") || m.equals("func_147044_g")) {
                 int astores = 0;
@@ -88,42 +88,42 @@ public class ClassTransformer implements IClassTransformer {
                         astores++;
                         AbstractInsnNode node1 = new VarInsnNode(Opcodes.ALOAD, 9);
                         m.instructions.insert(node, node1);
-                        
+
                         node = node1;
                         node1 = new VarInsnNode(Opcodes.ALOAD, 7);
                         m.instructions.insert(node, node1);
-                        
+
                         node = node1;
                         node1 =
                                 new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(VanillaMethods.class), "getEnchantmentLevel",
                                         "(Ljava/lang/String;" + Type.getDescriptor(PotionEffect.class) + ")Ljava/lang/String;", false);
                         m.instructions.insert(node, node1);
-                        
+
                         node = node1;
                         m.instructions.insert(node, new VarInsnNode(Opcodes.ASTORE, 9));
                     }
                 }
             }
         }
-        
+
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         classNode.accept(cw);
-        
+
         showDiff("InventoryEffectRenderer", input, cw.toByteArray());
         return cw.toByteArray();
     }
-    
+
     private byte[] transformGuiNewChat(byte[] input, boolean obfs) {
         log.info("Transforming class GuiNewChat");
         ClassNode classNodeorig = new ClassNode();
         ClassReader rd = new ClassReader(input);
         rd.accept(classNodeorig, 0);
         // showMethod(classNodeorig, obfs ? "func_146230_a" : "drawChat");
-        
+
         ClassNode classNode = new ClassNode();
         ClassReader reader = new ClassReader(input);
         reader.accept(classNode, 0);
-        
+
         for (MethodNode m : classNode.methods) {
             if (m.name.equals("drawChat") || m.name.equals("func_146230_a")) {
                 for (int i = 0; i < m.instructions.size(); i++) {
@@ -142,7 +142,7 @@ public class ClassTransformer implements IClassTransformer {
                 }
             }
         }
-        
+
         // VANILLA
         // 'net/minecraft/client/gui/GuiNewChat', integer, integer, integer, integer, integer, float, float, integer,
         // integer, 'net/minecraft/client/gui/ChatLine', integer, double,
@@ -151,29 +151,29 @@ public class ClassTransformer implements IClassTransformer {
         // 'net/minecraft/client/gui/GuiNewChat', integer, integer, integer, integer, integer, float, float, integer,
         // integer, integer, integer, 'net/minecraft/client/gui/ChatLine',
         // double, double_2nd, integer, integer
-        
+
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         classNode.accept(cw);
         log.info("Transformed class GuiNewChat");
-        
+
         // showMethod(classNode, obfs ? "func_146230_a" : "drawChat");
         showDiff("GuiNewChat", input, cw.toByteArray());
         // showMethodDiff(classNodeorig, classNode, obfs ? "func_146230_a" : "drawChat");
-        
+
         return cw.toByteArray();
     }
-    
+
     private byte[] transformServerListEntryNormal(byte[] input, boolean obfuscated) {
         ClassNode classNode = new ClassNode();
         ClassReader reader = new ClassReader(input);
         reader.accept(classNode, 0);
         ClassNode classNodeorig = new ClassNode();
         new ClassReader(input).accept(classNodeorig, 0);
-        
+
         String className = "net/minecraft/client/gui/ServerListEntryNormal";
-        
+
         classNode.fields.add(new FieldNode(2, "roamingServer", Type.getDescriptor(ServerData.class), null, null));
-        
+
         for (MethodNode m : classNode.methods) {
             if (m.name.equals("<init>")) {
                 // After 2 DUP
@@ -195,7 +195,7 @@ public class ClassTransformer implements IClassTransformer {
                         i++;
                         done = true;
                     }
-                    
+
                     if (dups < 2 && m.instructions.get(i).getOpcode() == Opcodes.DUP)
                         dups++;
                     else if (dups == 2) {
@@ -217,7 +217,7 @@ public class ClassTransformer implements IClassTransformer {
                     }
                     if (m.instructions.get(i).getOpcode() == Opcodes.PUTFIELD)
                         lastPutField = m.instructions.get(i);
-                    
+
                     // INVOKESTATIC alexiil/mods/basicutils/coremod/RoamingIPAddress.getModifiedRoamingServerData
                     // (Lnet/minecraft/client/multiplayer/ServerData;)Lnet/minecraft/client/multiplayer/ServerData;
                 }
@@ -252,7 +252,7 @@ public class ClassTransformer implements IClassTransformer {
                 }
             }
         }
-        
+
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         // showMethod(classNodeorig, "drawEntry");
         // showMethod(classNode, "drawEntry");
@@ -262,10 +262,10 @@ public class ClassTransformer implements IClassTransformer {
         showDiff("net.minecraft.client.gui.ServerListEntryNormal", input, out);
         return out;
     }
-    
+
     private byte[] transformGuiMultiplayer(byte[] input, boolean obfuscated) {
         String targetmethodName = obfuscated ? "func_146791_a" : "connectToServer";
-        
+
         ClassNode classNode = new ClassNode();
         ClassReader reader = new ClassReader(input);
         reader.accept(classNode, 0);
@@ -284,22 +284,22 @@ public class ClassTransformer implements IClassTransformer {
                         false));
             }
         }
-        
+
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         classNode.accept(cw);
         byte[] out = cw.toByteArray();
         showDiff("net.minecraft.client.gui.GuiMultiplayer", input, out);
         return out;
     }
-    
+
     private byte[] transformContainerPlayer(byte[] input, boolean obfuscated) {
         String targetMethodName = obfuscated ? "func_75130_a" : "onCraftMatrixChanged";
-        
+
         ClassNode classNode = new ClassNode();
         ClassReader reader = new ClassReader(input);
         reader.accept(classNode, 0);
         boolean found = false;
-        
+
         for (MethodNode m : classNode.methods) {
             if (m.name.equals(targetMethodName)) {
                 found = true;
@@ -327,22 +327,22 @@ public class ClassTransformer implements IClassTransformer {
                 log.info("  -" + m.name + " with desc " + m.desc);
             }
         }
-        
+
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         classNode.accept(cw);
         byte[] out = cw.toByteArray();
         showDiff("net.minecraft.inventory.ContainerPlayer", input, out);
         return out;
     }
-    
+
     private byte[] transformContainerWorkbench(byte[] input, boolean obfuscated) {
         String targetMethodName = obfuscated ? "func_75130_a" : "onCraftMatrixChanged";
-        
+
         ClassNode classNode = new ClassNode();
         ClassReader reader = new ClassReader(input);
         reader.accept(classNode, 0);
         boolean found = false;
-        
+
         for (MethodNode m : classNode.methods) {
             if (m.name.equals(targetMethodName)) {
                 found = true;
@@ -354,7 +354,7 @@ public class ClassTransformer implements IClassTransformer {
                         break;
                     }
                 }
-                
+
                 ins += 4;
                 m.instructions.remove(m.instructions.get(ins));
                 ins--;
@@ -363,7 +363,7 @@ public class ClassTransformer implements IClassTransformer {
                 m.instructions.insert(m.instructions.get(ins), new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/inventory/ContainerWorkbench",
                         "field_178145_h", "Lnet/minecraft/util/BlockPos;"));
                 ins++;
-                
+
                 String owner = "alexiil/forgechanges/MinecraftForgeNewHooks";
                 String desc = "(Lnet/minecraft/inventory/InventoryCrafting;Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;)";
                 String desc2 = "Lnet/minecraft/item/ItemStack;";
@@ -378,22 +378,22 @@ public class ClassTransformer implements IClassTransformer {
                 log.info("  -" + m.name + " with desc " + m.desc);
             }
         }
-        
+
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         classNode.accept(cw);
         byte[] out = cw.toByteArray();
         showDiff("net.minecraft.inventory.ContainerWorkbench", input, out);
         return out;
     }
-    
+
     private byte[] transformTileEntityFurnace(byte[] input, boolean obfuscated) {
         String targetMethodName = obfuscated ? "" : "canSmelt";
-        
+
         ClassNode classNode = new ClassNode();
         ClassReader reader = new ClassReader(input);
         reader.accept(classNode, 0);
         boolean found = false;
-        
+
         for (MethodNode m : classNode.methods) {
             if (m.name.equals(targetMethodName)) {}
         }
@@ -404,14 +404,14 @@ public class ClassTransformer implements IClassTransformer {
                 log.info("  -" + m.name + " with desc " + m.desc);
             }
         }
-        
+
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         classNode.accept(cw);
         byte[] out = cw.toByteArray();
         showDiff("net.minecraft.inventory.ContainerWorkbench", input, out);
         return out;
     }
-    
+
     @SuppressWarnings("unused")
     private void showMethod(MethodNode m) {
         log.info("Showing Method...");
@@ -419,7 +419,7 @@ public class ClassTransformer implements IClassTransformer {
             log.info("  -" + getInsn(m.instructions.get(i)));
         }
     }
-    
+
     @SuppressWarnings("unused")
     private void showMethodDiff(ClassNode node1, ClassNode node2, String methodName) {
         log.warn("---------------------------------------------------------------------------------------------------");
@@ -427,20 +427,20 @@ public class ClassTransformer implements IClassTransformer {
         log.warn("---------------------------------------------------------------------------------------------------");
         MethodNode meth1 = getMethod(node1, methodName);
         MethodNode meth2 = getMethod(node2, methodName);
-        
+
         for (int i = 0; i < meth1.instructions.size(); i++) {
             if (!getInsn(meth1.instructions.get(i)).equals(getInsn(meth2.instructions.get(i))))
                 log.warn("Line " + i + ":" + getInsn(meth1.instructions.get(i)) + " -> " + getInsn(meth2.instructions.get(i)));
         }
     }
-    
+
     private MethodNode getMethod(ClassNode node, String name) {
         for (MethodNode m : node.methods)
             if (m.name.equals(name))
                 return m;
         return null;
     }
-    
+
     private String getInsn(AbstractInsnNode ins) {
         if (ins instanceof MethodInsnNode) {
             MethodInsnNode n = (MethodInsnNode) ins;
@@ -456,7 +456,7 @@ public class ClassTransformer implements IClassTransformer {
         }
         return (ins.getOpcode() + ":" + ins.getClass().getSimpleName());
     }
-    
+
     @SuppressWarnings("unused")
     private void showMethod(ClassNode classNode, String methodName) {
         log.warn("---------------------------------------------------------------------------------------------------");

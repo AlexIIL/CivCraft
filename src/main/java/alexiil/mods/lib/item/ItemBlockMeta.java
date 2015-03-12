@@ -8,7 +8,7 @@ public class ItemBlockMeta extends ItemBlock {
         super(block);
         this.setHasSubtypes(true);
     }
-    
+
     @Override
     public int getMetadata(int par1) {
         return par1;

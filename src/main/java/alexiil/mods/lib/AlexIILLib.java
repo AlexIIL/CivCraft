@@ -18,16 +18,16 @@ import alexiil.mods.lib.coremod.VanillaMethods;
 public class AlexIILLib extends AlexIILMod {
     public static final String MODID = "alexiil.utils";
     public static final DecimalFormat df = new DecimalFormat();
-    
+
     @Instance(MODID)
     public static AlexIILLib instance;
-    
+
     public static Property betterPotions, timeText, roamingIP;
-    
+
     static {
         loadConfigs();
     }
-    
+
     public static void loadConfigs() {
         Configuration cfg = new Configuration(new File("./config/" + MODID + ".cfg"));
         cfg.load();
@@ -35,26 +35,26 @@ public class AlexIILLib extends AlexIILMod {
         timeText = cfg.get("general", "textTime", false);
         roamingIP = cfg.get("general", "roamingIP", false);
     }
-    
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
-        
+
         log.info("This is AlexIIL Lib, version " + meta.version);
-        
+
         betterPotions = cfg.getProp("betterPotions", "false");
         timeText = cfg.getProp("textTime", "false");
         roamingIP = cfg.getProp("roamingIP", "false");
-        
+
         cfg.saveAll();
-        
+
         event.getModConfigurationDirectory().mkdirs();
-        
+
         VanillaMethods.init();
         ChatTextTime.init();
         RoamingIPAddress.init();
     }
-    
+
     @EventHandler
     public void init(FMLInitializationEvent event) {}
 }

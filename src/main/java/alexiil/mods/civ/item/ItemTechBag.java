@@ -27,24 +27,24 @@ public class ItemTechBag extends ItemBase {
         public String toString() {
             return "TechProgress [tech=" + tech + ", progress=" + Arrays.toString(progress) + ", state=" + state + "]";
         }
-        
+
         public final Tech tech;
         public final int[] progress;
         public final EResearchState state;
-        
+
         public TechProgress(Tech t, int[] pro) {
             tech = t;
             progress = pro;
             state = EResearchState.values()[CivItems.technology.getItemDamageForScience(t, pro)];
         }
-        
+
         public TechProgress add(int[] toAdd) {
             TechProgress p = this;
             for (int index = 0; index < toAdd.length; index++)
                 p = p.add(index, toAdd[index]);
             return p;
         }
-        
+
         public TechProgress add(int index, int toAdd) {
             int[] nProgress = new int[Math.max(progress.length, index + 1)];
             for (int i = 0; i < nProgress.length; i++) {
@@ -58,7 +58,7 @@ public class ItemTechBag extends ItemBase {
             return new TechProgress(tech, nProgress);
         }
     }
-    
+
     public ItemTechBag(String name) {
         super(name, CivCraft.instance);
         addShiftInfo(new IChangingItemString() {
@@ -108,7 +108,7 @@ public class ItemTechBag extends ItemBase {
             }
         });
     }
-    
+
     public ItemStack[] getItems(ItemStack item) {
         if (!item.hasTagCompound())
             item.setTagCompound(new NBTTagCompound());
@@ -118,7 +118,7 @@ public class ItemTechBag extends ItemBase {
             stack[i] = ItemStack.loadItemStackFromNBT(items.getCompoundTagAt(i));
         return stack;
     }
-    
+
     public void setItems(ItemStack item, ItemStack[] items) {
         NBTTagList nbtItems = new NBTTagList();
         for (ItemStack i : items)
@@ -127,7 +127,7 @@ public class ItemTechBag extends ItemBase {
             item.setTagCompound(new NBTTagCompound());
         item.getTagCompound().setTag("item", nbtItems);
     }
-    
+
     public void setTechs(ItemStack item, TechProgress[] progress) {
         ItemStack[] stacks = new ItemStack[progress.length];
         for (int i = 0; i < stacks.length; i++)
@@ -135,7 +135,7 @@ public class ItemTechBag extends ItemBase {
         setItems(item, stacks);
         updateTechs(item);
     }
-    
+
     public TechProgress[] getTechs(ItemStack item) {
         ItemStack[] items = getItems(item);
         List<ItemStack> techs = new ArrayList<ItemStack>();
@@ -154,7 +154,7 @@ public class ItemTechBag extends ItemBase {
         }
         return techProg.toArray(new TechProgress[0]);
     }
-    
+
     private void updateTechs(ItemStack stack) {
         ItemStack[] techs = getItems(stack);
         TechProgress[] prog = getTechs(stack);
@@ -190,7 +190,7 @@ public class ItemTechBag extends ItemBase {
         }
         setItems(stack, techs);
     }
-    
+
     private void updateTechs(ItemStack stack, EntityPlayer player) {
         TechProgress[] progresses = this.getTechs(stack);
         for (Tech t : TechUtils.getTechs(player)) {
@@ -215,7 +215,7 @@ public class ItemTechBag extends ItemBase {
         }
         setTechs(stack, progresses);
     }
-    
+
     @Override
     public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
         if (world.isRemote) {

@@ -21,11 +21,11 @@ public class FindMatchingRecipeEvent extends Event {
     public static enum EType {
         CRAFT, SMELT, OTHER;
     }
-    
+
     public final World world;
     public final ItemStack[] input, output;
     public final EType type;
-    
+
     /** Either of the item stack arrays can be null: they will be initialised to empty arrays if they are null. Type will
      * be initialised to EType.OTHER */
     public FindMatchingRecipeEvent(World world, ItemStack[] in, ItemStack[] out, EType type) {
@@ -35,23 +35,23 @@ public class FindMatchingRecipeEvent extends Event {
         this.type = type == null ? EType.OTHER : type;
         // Is this really wanted? or just throw an NPE early?
     }
-    
+
     /** This is fired whenever a block tries to craft with items. More specifically, this is when a block, or multiple
      * blocks but this as the centre, try to craft something. */
     public static class Block extends FindMatchingRecipeEvent {
         public final BlockPos pos;
-        
+
         public Block(World world, BlockPos pos, ItemStack[] in, ItemStack[] out, EType type) {
             super(world, in, out, type);
             this.pos = pos;
         }
     }
-    
+
     /** This is fired whenever a player tires to craft items. More specifically, this is whenever a player, and only one
      * player tries to craft something. */
     public static class Player extends FindMatchingRecipeEvent {
         public final EntityPlayer player;
-        
+
         public Player(World world, EntityPlayer player, ItemStack[] in, ItemStack[] out, EType type) {
             super(world, in, out, type);
             this.player = player;

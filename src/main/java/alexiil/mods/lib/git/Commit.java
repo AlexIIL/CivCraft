@@ -5,7 +5,7 @@ public class Commit {
     public final String sha;
     public final String url;
     public final GitHubUser author;
-    
+
     public Commit(String url, CommitInfo message, String id, GitHubUser user) {
         this.commit = message;
         this.sha = id;

@@ -18,14 +18,14 @@ public class TechUtils {
         NBTTagCompound persistant = tag.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
         return persistant.getCompoundTag("civcraft");
     }
-    
+
     public static void setPlayerCivNBT(EntityPlayer player, NBTTagCompound civ) {
         NBTTagCompound tag = player.getEntityData();
         NBTTagCompound persistant = tag.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
         persistant.setTag("civcraft", civ);
         tag.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistant);
     }
-    
+
     public static List<Tech> getTechs(EntityPlayer player) {
         // TODO: a way of dealing with fake players, that tries to find out the REAL player that placed them
         List<Tech> techs = new ArrayList<Tech>();
@@ -49,7 +49,7 @@ public class TechUtils {
         }
         return techs;
     }
-    
+
     public static void setTechs(EntityPlayer player, List<Tech> techs) {
         if (player == null)
             return;
@@ -60,11 +60,11 @@ public class TechUtils {
         civ.setTag("researched_techs", tagTechs);
         setPlayerCivNBT(player, civ);
     }
-    
+
     public static void setClientTechs(List<Tech> techs) {
         setTechs(Minecraft.getMinecraft().thePlayer, techs);
     }
-    
+
     public static void addTech(EntityPlayer player, Tech tech) {
         NBTTagCompound tagCiv = getPlayerCivNBT(player);
         NBTTagCompound tagTechs = tagCiv.getCompoundTag("researched_techs");
@@ -73,14 +73,14 @@ public class TechUtils {
         tagCiv.setTag("researched_techs", tagTechs);
         setPlayerCivNBT(player, tagCiv);
     }
-    
+
     /** Only use this from the client side */
     public static EChatColours getColour(Tech t) {
         if (hasTech(t, Minecraft.getMinecraft().thePlayer))
             return EChatColours.AQUA;
         return EChatColours.BLUE;
     }
-    
+
     public static boolean hasTech(Tech tech, EntityPlayer player) {
         return getTechs(player).contains(tech);
     }

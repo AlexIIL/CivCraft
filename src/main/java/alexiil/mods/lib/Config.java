@@ -15,12 +15,12 @@ public class Config {
     private List<Property> options = Collections.synchronizedList(new ArrayList<Property>());
     private final File confFile;
     private WeakReference<AlexIILMod> modParent;
-    
+
     public Config(File file, AlexIILMod parent) {
         confFile = file;
         modParent = new WeakReference<AlexIILMod>(parent);
     }
-    
+
     public void load() {
         BufferedReader br = null;
         try {
@@ -62,7 +62,7 @@ public class Config {
             }
         }
     }
-    
+
     private void save() {
         Collections.sort(options);
         PrintWriter pr = null;
@@ -79,28 +79,28 @@ public class Config {
                 pr.close();
         }
     }
-    
+
     public Property getProp(String name, String defaultP) {
         for (Property prop : options)
             if (prop.name.equals(name))
                 return prop;
         return new Property(name, defaultP);
     }
-    
+
     public Property getProp(String name) {
         for (Property prop : options)
             if (prop.name.equals(name))
                 return prop;
         return null;
     }
-    
+
     @Deprecated
     public class Property implements Comparable<Property> {
         public final String name, defaultP;
         private String stored;
         /** Placeholder for when forge exists */
         public String comment;
-        
+
         private Property(String name, String defaultP) {
             this.name = name;
             this.defaultP = defaultP;
@@ -108,23 +108,23 @@ public class Config {
             options.add(this);
             save();
         }
-        
+
         public String getStored() {
             return stored;
         }
-        
+
         public boolean getBoolean() {
             return Boolean.parseBoolean(stored);
         }
-        
+
         public int getInt() {
             return Integer.parseInt(stored);
         }
-        
+
         public double getDouble() {
             return Double.parseDouble(stored);
         }
-        
+
         @Override
         public int compareTo(Property o) {
             if (name.contains(o.name))

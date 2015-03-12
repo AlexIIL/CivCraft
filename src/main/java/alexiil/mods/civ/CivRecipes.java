@@ -15,7 +15,7 @@ import alexiil.mods.civ.item.CivItems;
 public class CivRecipes {
     public static void init() {
         RecipeSorter.register("civcraft:tech", RecipeTech.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
-        
+
         GameRegistry.addRecipe(RecipeTech.instance);
         GameRegistry.addRecipe(CivItems.technology.getStartingTech(), new Object[] { "SSS", "PBP", "SSS", 'S', Items.stick, 'P', Blocks.planks, 'B',
                 CivItems.sciencePacks[0] });
@@ -24,7 +24,7 @@ public class CivRecipes {
         addCraftingRecipe(CivItems.sciencePacks[1], new Object[] { "SGS", "GIG", "LRW", 'I', Items.iron_ingot, 'G', Blocks.glass, 'R',
                 Items.redstone, 'L', Blocks.log, 'W', Blocks.planks, 'S', new ItemStack(Blocks.stone, 1, 0) }, false, false);
     }
-    
+
     private static String flipString(String s) {
         String s2 = "";
         int l = s.length() - 1;
@@ -32,15 +32,15 @@ public class CivRecipes {
             s2 += s.substring(l, l + 1);
         return s2;
     }
-    
+
     public static void addCraftingRecipe(Item i, Object[] inputs, boolean flipVertically, boolean flipHorizontally) {
         addCraftingRecipe(new ItemStack(i, 1), inputs, flipVertically, flipHorizontally);
     }
-    
+
     public static void addCraftingRecipe(Block i, Object[] inputs, boolean flipVertically, boolean flipHorizontally) {
         addCraftingRecipe(new ItemStack(i, 1), inputs, flipVertically, flipHorizontally);
     }
-    
+
     private static void addCraftingRecipe(ItemStack is, Object[] inputs, boolean flipVertically, boolean flipHorizontally) {
         String n0 = is.getItem().getUnlocalizedName();
         String name = I18n.format(n0.substring(("item." + Lib.Mod.ID + "_").length()));

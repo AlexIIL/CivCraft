@@ -6,21 +6,22 @@ import java.io.FileReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraftforge.common.config.Property;
 import alexiil.mods.lib.AlexIILLib;
 
 public class RoamingIPAddress {
     private static Map<String, String> nameToIP = Collections.synchronizedMap(new HashMap<String, String>());
-    
+
     public static Property roamingIPLoc = null;
-    
+
     public static void init() {
         roamingIPLoc = AlexIILLib.instance.cfg.getProp("roamingIP.location", "null");
         if (AlexIILLib.roamingIP.getBoolean())
             loadIPAddresses();
     }
-    
+
     /** If its in the form roaming-[name]:port then its a roaming server */
     public static ServerData getModifiedRoamingServerData(ServerData data) {
         if (!AlexIILLib.roamingIP.getBoolean())
@@ -52,7 +53,7 @@ public class RoamingIPAddress {
         newData.version = data.version;
         return newData;
     }
-    
+
     public static void loadIPAddresses() {
         try {
             File ipFile = new File(roamingIPLoc.getString());

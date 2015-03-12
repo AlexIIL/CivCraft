@@ -15,12 +15,12 @@ public class TechCraftingHandler extends ShapelessRecipeHandler {
     public String getGuiTexture() {
         return "textures/gui/container/crafting_table.png";
     }
-    
+
     @Override
     public String getOverlayIdentifier() {
         return "crafting";
     }
-    
+
     /* @Override public void loadCraftingRecipes(String outputId, Object... results) { if ("crafting".equals(outputId))
      * { // Technology Creation + Researching for (Tech t0 : TechTree.currentTree.getTechs().values()) { Tech[] parents
      * = t0.getParentTechs(); ItemStack[] parentItems = new ItemStack[parents.length]; for (int i = 0; i <
@@ -28,7 +28,7 @@ public class TechCraftingHandler extends ShapelessRecipeHandler {
      * parents[i].getBeakersNeeded()); arecipes.add(new CachedShapelessRecipe(parentItems,
      * CivCraft.technology.getItemForTech(t0, 0))); } // Technology Duplication } else {
      * super.loadCraftingRecipes(outputId, results); } } */
-    
+
     @Override
     public void loadCraftingRecipes(ItemStack result) {
         if (result == null || result.getItem() != CivItems.technology)
@@ -42,7 +42,7 @@ public class TechCraftingHandler extends ShapelessRecipeHandler {
             parentItems[i] = CivItems.technology.getItemForTech(parents[i], parents[i].getSciencePacksNeeded());
         if (parentItems.length != 0)
             arecipes.add(new CachedShapelessRecipe(parentItems, CivItems.technology.getItemForTech(t0, new int[0])));
-        
+
         if (state == EResearchState.RESEARCHING || state == EResearchState.RESEARCHED) {
             int[] packsGot = CivItems.technology.getScienceCount(result);
             for (int idx = 0; idx < packsGot.length; idx++) {
@@ -60,7 +60,7 @@ public class TechCraftingHandler extends ShapelessRecipeHandler {
             }
         }
     }
-    
+
     @Override
     public void loadUsageRecipes(ItemStack in) {
         if (in == null)

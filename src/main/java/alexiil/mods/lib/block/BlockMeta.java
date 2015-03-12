@@ -9,17 +9,17 @@ import net.minecraft.nbt.NBTTagCompound;
 public class BlockMeta {
     public final Block block;
     public final int meta;
-    
+
     public static final String NBT_META = "BLOCK_METADATA";
     public static final String NBT_BLOCK = "BLOCK_BLOCK";
     private static ArrayList<BlockMeta> blockMetaPool = new ArrayList<BlockMeta>();
-    
+
     private BlockMeta(Block block, int meta) {
         this.block = block;
         this.meta = meta;
         blockMetaPool.add(this);
     }
-    
+
     public static BlockMeta get(Block block, int meta) {
         if (block == null || block == Blocks.air)
             return null;
@@ -29,7 +29,7 @@ public class BlockMeta {
         }
         return new BlockMeta(block, meta);
     }
-    
+
     @Override
     public int hashCode()// eclipse generated
     {
@@ -39,7 +39,7 @@ public class BlockMeta {
         result = prime * result + meta;
         return result;
     }
-    
+
     @Override
     public boolean equals(Object obj)// eclipse generated
     {
@@ -60,7 +60,7 @@ public class BlockMeta {
             return false;
         return true;
     }
-    
+
     @Override
     public String toString() {
         String toShow;
@@ -70,14 +70,14 @@ public class BlockMeta {
         catch (Throwable t) {
             toShow = block + ":" + meta;
         }
-        
+
         return toShow;
     }
-    
+
     public static BlockMeta readFromNBT(NBTTagCompound nbt) {
         return get((Block) Block.blockRegistry.getObject(nbt.getString(NBT_BLOCK)), nbt.getInteger(NBT_META));
     }
-    
+
     public void writeToNBT(NBTTagCompound nbt) {
         nbt.setInteger(NBT_META, meta);
         nbt.setString(NBT_BLOCK, (String) Block.blockRegistry.getNameForObject(block));

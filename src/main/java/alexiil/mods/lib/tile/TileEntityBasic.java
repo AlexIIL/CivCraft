@@ -12,10 +12,10 @@ public abstract class TileEntityBasic extends TileEntity implements IUpdatePlaye
         else
             onTick();
     }
-    
+
     public abstract void onTick();
-    
+
     public void onClientTick() {
-        
+
     }
 }

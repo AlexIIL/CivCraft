@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
@@ -21,7 +20,7 @@ import alexiil.mods.lib.item.IChangingItemString;
 public class ItemCraftUnlock extends TechUnlockable implements IChangingItemString, IItemBlocker {
     private static class ItemStackComparator implements IItemComparator {
         private final ItemStack stack;
-        
+
         public static ItemStackComparator load(NBTTagCompound nbt) {
             ItemStack stack = ItemStack.loadItemStackFromNBT(nbt);
             if (stack == null) {
@@ -30,31 +29,31 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
             }
             return new ItemStackComparator(stack);
         }
-        
+
         public ItemStackComparator(ItemStack stack) {
             this.stack = stack;
         }
-        
+
         public NBTTagCompound save(NBTTagCompound nbt) {
             return stack.writeToNBT(new NBTTagCompound());
         }
-        
+
         @Override
         public boolean isConsideredEqual(ItemStack toCompare) {
             return OreDictionary.itemMatches(stack, toCompare, false);
         }
-        
+
     }
-    
+
     private final List<IItemComparator> items;
     private ItemStack singleItem = null;
     private boolean singleItemFlag = false;
-    
+
     public ItemCraftUnlock(String name, Tech... techs) {
         super(name, techs, true);
         items = new ArrayList<IItemComparator>();
     }
-    
+
     public ItemCraftUnlock(NBTTagCompound nbt) {
         super(nbt);
         items = new ArrayList<IItemComparator>();
@@ -65,14 +64,14 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
             items.add(ItemStackComparator.load(item));
         }
     }
-    
+
     /** Adds all variants of these items as now craftable */
     public ItemCraftUnlock addUnlocked(Item... items) {
         for (final Item item : items)
             addUnlocked(item);
         return this;
     }
-    
+
     /** Adds all variants of this item as now craftable */
     public ItemCraftUnlock addUnlocked(final Item item) {
         if (item == null)
@@ -90,19 +89,19 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         items.add(new ItemStackComparator(new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE)));
         return this;
     }
-    
+
     public ItemCraftUnlock addUnlocked(Block... blocks) {
         for (Block block : blocks)
-            addUnlocked(ItemBlock.getItemFromBlock(block));
+            addUnlocked(Item.getItemFromBlock(block));
         return this;
     }
-    
+
     public ItemCraftUnlock addUnlocked(ItemStack... stacks) {
         for (final ItemStack stack : stacks)
             addUnlocked(stack);
         return this;
     }
-    
+
     public ItemCraftUnlock addUnlocked(final ItemStack stack) {
         if (stack == null)
             return this;
@@ -117,7 +116,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         items.add(new ItemStackComparator(stack));
         return this;
     }
-    
+
     public ItemCraftUnlock addUnlocked(IItemComparator compare) {
         singleItemFlag = false;
         singleItem = null;
@@ -125,22 +124,22 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         isLoadable = false;
         return this;
     }
-    
+
     public boolean itemMatches(ItemStack stack) {
         for (IItemComparator i : items)
             if (i.isConsideredEqual(stack))
                 return true;
         return false;
     }
-    
+
     @Override
     public void unlock(EntityPlayer player) {}
-    
+
     @Override
     public String getUnlocalisedName() {
         return "civcraft.unlock.itemcraft." + getName();
     }
-    
+
     @Override
     public String getLocalisedName() {
         String superL = super.getLocalisedName();
@@ -149,7 +148,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
                     + CivCraft.instance.format(singleItem.getUnlocalizedName() + ".name");
         return superL;
     }
-    
+
     @Override
     public String[] getString(ItemStack i, EntityPlayer player) {
         if (itemMatches(i)) {
@@ -164,12 +163,12 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         }
         return new String[0];
     }
-    
+
     @Override
     public boolean doesBlockItem(ItemStack item) {
         return itemMatches(item);
     }
-    
+
     @Override
     public void save(NBTTagCompound nbt) {
         super.save(nbt);
@@ -183,7 +182,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         }
         nbt.setTag("items", items);
     }
-    
+
     @Override
     public String getType() {
         return Lib.Mod.ID + ":ItemCraftUnlock";

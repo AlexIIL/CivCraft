@@ -8,16 +8,16 @@ import alexiil.mods.lib.AlexIILLib;
 
 public class ChatTextTime {
     private static Property doSecs, doSecsWhileMin, doTimeChar, preTimeChar, postTimeChar;
-    
+
     public static void init() {
         doSecs = AlexIILLib.instance.cfg.getProp("textTime.doSecs.enabled", "true");
         doSecsWhileMin = AlexIILLib.instance.cfg.getProp("textTime.doSecs.whileMin", "true");
         doTimeChar = AlexIILLib.instance.cfg.getProp("textTime.timeChar.enabled", "true");
         preTimeChar = AlexIILLib.instance.cfg.getProp("textTime.timeChar.pre", "<");
         postTimeChar = AlexIILLib.instance.cfg.getProp("textTime.timeChar.post", ">");
-        
+
     }
-    
+
     private static String getUnformatedText(IChatComponent chat) {
         String formatted = chat.getFormattedText();
         String unformatted = "";
@@ -29,7 +29,7 @@ public class ChatTextTime {
         }
         return unformatted;
     }
-    
+
     private static String getTime(int ticks) {
         WorldClient wc = Minecraft.getMinecraft().theWorld;
         long age = wc.getTotalWorldTime() % 20;
@@ -45,7 +45,7 @@ public class ChatTextTime {
             total += (secs == 0 ? "" : (secs + "s"));
         return total;
     }
-    
+
     private static String getPrePostChars(String time) {
         if (!doTimeChar.getBoolean())
             return time;
@@ -53,11 +53,11 @@ public class ChatTextTime {
         String post = postTimeChar.getString();
         return pre + time + post;
     }
-    
+
     private static boolean shouldDoPlayerStuff(String unformatted) {
         return unformatted.charAt(0) == '<';
     }
-    
+
     public static String getTimeText(IChatComponent chatLine, int ticks) {
         if (!AlexIILLib.timeText.getBoolean())
             return chatLine.getFormattedText();

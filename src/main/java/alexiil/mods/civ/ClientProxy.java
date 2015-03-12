@@ -11,14 +11,14 @@ public class ClientProxy extends CommonProxy {
     public void initRenderers() {
         ItemBase.initModels();
     }
-    
+
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         if (ID == Lib.Gui.TECH_TREE)
             return new GuiTechTree(player);
         return null;
     }
-    
+
     @Override
     public Side getSide() {
         return Side.CLIENT;

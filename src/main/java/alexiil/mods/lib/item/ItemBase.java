@@ -21,18 +21,18 @@ import alexiil.mods.lib.EChatColours;
 
 public class ItemBase extends Item {
     private static final List<ItemBase> items = new ArrayList<ItemBase>();
-    
+
     private final AlexIILMod mod;
     protected final String name;
     private List<Object> lines = new ArrayList<Object>();
     private List<Object> shiftLines = new ArrayList<Object>();
     private boolean hasShift, hasEffect = false;
-    
+
     public static void initModels() {
         for (ItemBase ib : items)
             ib.initModel();
     }
-    
+
     public ItemBase(String name, AlexIILMod mod) {
         this.mod = mod;
         this.name = name;
@@ -45,65 +45,65 @@ public class ItemBase extends Item {
             items.add(this);
         }
     }
-    
+
     public ItemBase setCraftingPart() {
         lines.add("Crafting Item.");
         return this;
     }
-    
+
     public ItemBase setCraftingPart(String item) {
         setCraftingPart();
         lines.add("Used for the " + item + ".");
         return this;
     }
-    
+
     public ItemBase addInfo(String line) {
         lines.add(line);
         return this;
     }
-    
+
     public ItemBase addInfo(IChangingItemString line) {
         lines.add(line);
         return this;
     }
-    
+
     public ItemBase addShiftInfo(String line) {
         shiftLines.add(line);
         hasShift = true;
         return this;
     }
-    
+
     public ItemBase addShiftInfo(IChangingItemString line) {
         shiftLines.add(line);
         hasShift = true;
         return this;
     }
-    
+
     public ItemBase setWorkInProgress() {
         lines.add("This is a WIP item!");
         return this;
     }
-    
+
     public ItemBase setEffect() {
         hasEffect = true;
         return this;
     }
-    
+
     @SideOnly(Side.CLIENT)
     public boolean hasEffect(ItemStack par1ItemStack, int pass) {
         return hasEffect && pass == 0;
     }
-    
+
     public void initModel() {
         ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
         mesher.register(this, 0, new ModelResourceLocation(mod.meta.modId + ":" + name, "inventory"));
     }
-    
+
     /** This is a replacement for EntityPlayer.isSneaking(), as that does not seem to work inside of an inventory. */
     private boolean isShiftKeyPressed() {
         return (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT));
     }
-    
+
     public String[] getString(Object o, ItemStack i, EntityPlayer p) {
         if (o instanceof String)
             return new String[] { (String) o };
@@ -111,7 +111,7 @@ public class ItemBase extends Item {
             return ((IChangingItemString) o).getString(i, p);
         return new String[] { o.toString() };
     }
-    
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean flag) {

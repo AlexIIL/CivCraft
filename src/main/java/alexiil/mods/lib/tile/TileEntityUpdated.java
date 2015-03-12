@@ -12,11 +12,11 @@ public abstract class TileEntityUpdated<M extends MessageUpdate<?, ?>> extends T
     private int updated;
     public final AlexIILMod mod;
     private TargetPoint point = null;
-    
+
     public TileEntityUpdated(AlexIILMod mod) {
         this.mod = mod;
     }
-    
+
     @Override
     public void onTick() {
         updated++;
@@ -25,17 +25,17 @@ public abstract class TileEntityUpdated<M extends MessageUpdate<?, ?>> extends T
             sendUpdatePacket();
         }
     }
-    
+
     protected void resetTargetPoint() {
         point = null;
     }
-    
+
     private TargetPoint targetPoint() {
         if (point == null)
             point = new TargetPoint(worldObj.provider.getDimensionId(), pos.getX(), pos.getY(), pos.getZ(), AlexIILLib.netDistance.getInt());
         return point;
     }
-    
+
     public void sendUpdatePacket() {
         mod.provider.get().sendToAllAround(getCustomUpdateMessage(), targetPoint());
     }

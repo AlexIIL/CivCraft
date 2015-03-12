@@ -20,23 +20,23 @@ import alexiil.mods.civ.utils.TechUtils;
 
 public class RecipeTech implements IRecipe {
     public static RecipeTech instance = new RecipeTech();
-    
+
     private RecipeTech() {}
-    
+
     @Override
     public boolean matches(InventoryCrafting craft, World world) {
         return getOutput(null, craft, false) != null;
     }
-    
+
     @Override
     public ItemStack getCraftingResult(InventoryCrafting craft) {
         return getOutput(null, craft, false);
     }
-    
+
     public ItemStack getOutput(EntityPlayer player, InventoryCrafting craft, boolean edit) {
         if (craft == null)
             return null;
-        
+
         int[] packs = new int[CivItems.sciencePacks.length];
         ItemStack t = null;
         ArrayList<ItemStack> techs = new ArrayList<ItemStack>();
@@ -64,7 +64,7 @@ public class RecipeTech implements IRecipe {
                     }
                 if (!added)
                     return null;
-                
+
             }
         }
         if (t == null)
@@ -107,17 +107,17 @@ public class RecipeTech implements IRecipe {
         // craft.decrStackSize(pos, 1);
         return nT;
     }
-    
+
     @Override
     public int getRecipeSize() {
         return 2;
     }
-    
+
     @Override
     public ItemStack getRecipeOutput() {
         return null;
     }
-    
+
     /** This just returns whatever should be in the inventory afterwards */
     @Override
     public ItemStack[] getRemainingItems(InventoryCrafting craft) {

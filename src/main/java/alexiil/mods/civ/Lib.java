@@ -6,7 +6,7 @@ public class Lib {
         public static final String NAME = "Civilization in Minecraft";
         public static final String VERSION = "@VERSION@";
         public static final String COMMIT_HASH = "@COMMIT_HASH@";
-        
+
         public static int buildType() {
             if (COMMIT_HASH.startsWith("@"))
                 return 0;
@@ -15,11 +15,11 @@ public class Lib {
             return 2;
         }
     }
-    
+
     public static class Gui {
         public static final int TECH_TREE = 0;
     }
-    
+
     public static class NBT {
         public static final int BYTE = 1;
         public static final int SHORT = 2;

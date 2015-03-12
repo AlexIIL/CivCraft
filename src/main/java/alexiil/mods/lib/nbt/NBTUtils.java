@@ -15,11 +15,11 @@ import alexiil.mods.lib.AlexIILLib;
 
 public class NBTUtils {
     public static final String NBT_STRING_BYTE = "B-";
-    
+
     public static String toString(NBTTagCompound nbt) {
         return toString(nbt, 0);
     }
-    
+
     public static String toString(NBTTagCompound nbt, int indent) {
         String s = "\n{";
         int idx = nbt.getKeySet().size();
@@ -35,7 +35,7 @@ public class NBTUtils {
         }
         return s + getNextLine(indent) + "}";
     }
-    
+
     private static String toString(NBTBase base, int indent) {
         String s = "";
         switch (base.getId()) {
@@ -70,7 +70,7 @@ public class NBTUtils {
         }
         return s;
     }
-    
+
     private static String getNextLine(int indent) {
         String s = "\n";
         while (indent > 0) {
@@ -79,7 +79,7 @@ public class NBTUtils {
         }
         return s;
     }
-    
+
     public static NBTTagCompound convertToNBT(ConfigCategory cat) {
         NBTTagCompound nbt = new NBTTagCompound();
         for (ConfigCategory child : cat.getChildren())
@@ -150,7 +150,7 @@ public class NBTUtils {
         }
         return nbt;
     }
-    
+
     public static void convertToConfigCategory(ConfigCategory cat, NBTTagCompound nbt) {
         for (Object key : nbt.getKeySet()) {
             String name = (String) key;
@@ -210,7 +210,7 @@ public class NBTUtils {
                             AlexIILLib.instance.log
                                     .warn("A tag list was found embedded in a tag list! this cannot be directly transfered to a config category, skipping");
                         }
-                        
+
                         default:
                             type = null;
                     }
@@ -231,7 +231,7 @@ public class NBTUtils {
                         if (child.getName().equals(name)) {
                             cat2 = child;
                         }
-                        
+
                     }
                     if (cat2 == null)
                         cat2 = new ConfigCategory(name, cat);

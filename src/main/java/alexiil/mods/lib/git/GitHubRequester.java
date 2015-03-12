@@ -26,11 +26,11 @@ public class GitHubRequester {
     private static final String COMMITS = "\"contributions\":";// "contributions":
     private static final String URL = "\"url\":\"";// "url":"
     public static String accessToken = null;
-    
+
     private static final Map<String, GitHubUser> usersCache = new HashMap<String, GitHubUser>();
-    
+
     // private static final Map<String, Commit> commitCache = new HashMap<String, Commit>();
-    
+
     public static List<GitHubUser> getContributors(String user, String repo) {
         String response = getResponse("repos/" + user + "/" + repo + "/contributors");
         if (response == null)
@@ -46,7 +46,7 @@ public class GitHubRequester {
             usersCache.put(usr.login, usr);
         return users;
     }
-    
+
     public static List<Commit> getCommits(String user, String repo) {
         String response = getResponse("repos/" + user + "/" + repo + "/commits");
         if (response == null)
@@ -57,7 +57,7 @@ public class GitHubRequester {
         }
         return Arrays.asList(commits);
     }
-    
+
     public static Commit getCommit(String user, String repo, String hash) {
         String response = getResponse("repos/" + user + "/" + repo + "/commits/" + hash);
         if (response == null)
@@ -67,7 +67,7 @@ public class GitHubRequester {
             return c;
         return populateUser(c);
     }
-    
+
     public static List<Release> getReleases(String user, String repo) {
         String response = getResponse("repos/" + user + "/" + repo + "/tags");
         if (response == null)
@@ -75,7 +75,7 @@ public class GitHubRequester {
         Release[] releases = new GsonBuilder().create().fromJson(response, Release[].class);
         return Arrays.asList(releases);
     }
-    
+
     private static Commit populateUser(Commit c) {
         if (!usersCache.containsKey(c.author.login))
             return c;
@@ -85,11 +85,11 @@ public class GitHubRequester {
         String author = c.author.login;
         return new Commit(url, ci, sha, usersCache.get(author));
     }
-    
+
     private static Commit parseCommit(String commit) {
         return new GsonBuilder().create().fromJson(commit, Commit.class);
     }
-    
+
     private static List<GitHubUser> parseContributors(String s) {
         String[] strings = s.split("\\},\\{");
         List<GitHubUser> lst = new ArrayList<GitHubUser>();
@@ -98,12 +98,12 @@ public class GitHubRequester {
                 string = string.substring(2);
             if (string.endsWith("}]"))
                 string = string.substring(0, string.length() - 2);
-            
+
             String name = "";
             String avatarUrl = "";
             String url = "";
             int contributions = 0;
-            
+
             for (String tag : string.split(",")) {
                 if (tag.startsWith(LOGIN))
                     name = tag.substring(LOGIN.length(), tag.length() - 1);
@@ -114,19 +114,19 @@ public class GitHubRequester {
                 if (tag.startsWith(URL))
                     url = tag.substring(URL.length(), tag.length() - 1);
             }
-            
+
             lst.add(new GitHubUser(name, avatarUrl, url, contributions));
         }
         return lst;
     }
-    
+
     /** Get a GitHub API response, without using an access token */
     public static String getResponse(String site) {
         if (site.contains("?"))
             return getResponse(site + ",access_token=" + accessToken, null);
         return getResponse(site, accessToken);
     }
-    
+
     /** This appends the site to "https://api.github.com" so you don't need to (also, so you cannot use this method for
      * non-GitHub sites)<br>
      * The accessToken parameter is for if you have an access token, and you don't have any parameters in the site (so,

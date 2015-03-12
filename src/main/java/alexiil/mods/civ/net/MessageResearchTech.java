@@ -22,13 +22,13 @@ import alexiil.mods.lib.net.MessageBase;
 
 public class MessageResearchTech extends MessageBase<MessageResearchTech> {
     private Tech tech = null;
-    
+
     public MessageResearchTech() {}
-    
+
     public MessageResearchTech(Tech tech) {
         this.tech = tech;
     }
-    
+
     @Override
     public void fromBytes(ByteBuf buf) {
         int l = buf.readInt();
@@ -37,7 +37,7 @@ public class MessageResearchTech extends MessageBase<MessageResearchTech> {
         String name = new String(bytes);
         tech = TechTree.currentTree.getTech(name);
     }
-    
+
     @Override
     public void toBytes(ByteBuf buf) {
         if (tech == null) {
@@ -49,7 +49,7 @@ public class MessageResearchTech extends MessageBase<MessageResearchTech> {
             buf.writeBytes(bytes);
         }
     }
-    
+
     @Override
     public IMessage onMessage(MessageResearchTech message, MessageContext ctx) {
         if (ctx.side == Side.SERVER) {

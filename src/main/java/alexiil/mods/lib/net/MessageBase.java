@@ -25,7 +25,7 @@ public abstract class MessageBase<M extends MessageBase<?>> implements IMessage,
         }
         return null;
     }
-    
+
     protected ByteBuf writeNBT(NBTTagCompound nbt, ByteBuf buf) {
         if (nbt == null) {
             buf.writeInt(-1);

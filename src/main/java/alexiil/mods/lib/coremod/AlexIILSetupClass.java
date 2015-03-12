@@ -10,9 +10,9 @@ public class AlexIILSetupClass implements IFMLCallHook {
         System.out.println("hi?");
         return null;
     }
-    
+
     @Override
     public void injectData(Map<String, Object> data) {
-        
+
     }
 }

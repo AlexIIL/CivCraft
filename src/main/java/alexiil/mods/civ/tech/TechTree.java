@@ -26,7 +26,7 @@ public final class TechTree {
     public enum EState {
         CONSTRUCTING, PRE, ADD_TECHS, SET_REQUIREMENTS, POST, FINALISED, SAVING;
     }
-    
+
     public class Tech implements ILocalizable {
         public static final String NAME = "name";
         public static final String BEAKERS = "beakers";
@@ -52,11 +52,11 @@ public final class TechTree {
         /** A leaf tech is just a graphical way of showing the tech. A tech can only be a leaf tech if it has one parent,
          * and no children */
         private boolean leafTech;
-        
+
         private Tech(String techName) {
             name = techName;
         }
-        
+
         private Tech(NBTTagCompound nbt, String name) {
             this.name = name;
             NBTTagList parents = nbt.getTagList("parents", Lib.NBT.STRING);
@@ -75,7 +75,7 @@ public final class TechTree {
             if (leafTech)
                 setLeafTech();
         }
-        
+
         private void save(NBTTagCompound nbt) {
             NBTTagList sciencePacksNBT = new NBTTagList();
             for (int index = 0; index < sciencePacks.length; index++)
@@ -87,7 +87,7 @@ public final class TechTree {
             nbt.setTag("parents", parentsNBT);
             nbt.setBoolean("leaf", leafTech);
         }
-        
+
         public Tech addRequirement(Tech required) {
             if (state == EState.FINALISED || state == EState.POST) {
                 CivLog.warn("Tried to add a requirement to " + name + " too late!");
@@ -108,13 +108,13 @@ public final class TechTree {
                 setLeafTech();
             return this;
         }
-        
+
         public Tech addRequirements(Tech... required) {
             for (Tech t : required)
                 addRequirement(t);
             return this;
         }
-        
+
         public Tech removeRequirement(Tech required) {
             if (state == EState.FINALISED || state == EState.POST) {
                 CivLog.warn("Tried to remove a requirement from " + name + " too late!");
@@ -148,28 +148,28 @@ public final class TechTree {
                     + parentsToString());
             return this;
         }
-        
+
         public Tech removeRequirement(Tech... required) {
             for (Tech t : required)
                 removeRequirement(t);
             return this;
         }
-        
+
         public void setRequirements(Tech... required) {
             removeRequirement(parents);
             addRequirements(required);
         }
-        
+
         public final TechTree getTechTree() {
             return TechTree.this;
         }
-        
+
         public int[] getSciencePacksNeeded() {
             if (state == EState.FINALISED || state == EState.POST)
                 return adjustedSciencePacks;
             return sciencePacks;
         }
-        
+
         /** This will not set the science pack array if the argument is null, or has a length of zero (but an array of
          * {0} would be permitted) */
         public Tech setSciencePacksNeeded(int[] sciencePacks) {
@@ -180,35 +180,35 @@ public final class TechTree {
             this.sciencePacks = sciencePacks;
             return this;
         }
-        
+
         @Override
         public String getUnlocalizedName() {
             return name;
         }
-        
+
         @Override
         public String getLocalizedName() {
             return CivCraft.instance.format("civcraft.tech." + getUnlocalizedName());
         }
-        
+
         public Tech[] getChildTechs() {
             Tech[] arr = new Tech[children.size()];
             for (int i = 0; i < children.size(); i++)
                 arr[i] = children.get(i).get();
             return arr;
         }
-        
+
         public Tech[] getParentTechs() {
             Tech[] arr = new Tech[parents.length];
             for (int idx = 0; idx < parents.length; idx++)
                 arr[idx] = parents[idx];
             return arr;
         }
-        
+
         private void addUnlockable(Unlockable req) {
             unlockables.add(new WeakReference<Unlockable>(req));
         }
-        
+
         public Unlockable[] getShownUnlockables() {
             List<Unlockable> arr = new ArrayList<Unlockable>();
             for (int i = 0; i < unlockables.size(); i++) {
@@ -219,7 +219,7 @@ public final class TechTree {
             }
             return arr.toArray(new Unlockable[0]);
         }
-        
+
         public Tech setLeafTech() {
             if (state == EState.FINALISED)
                 return this;
@@ -229,16 +229,16 @@ public final class TechTree {
                 leafTech = false;
             return this;
         }
-        
+
         public boolean isLeafTech() {
             return leafTech;
         }
-        
+
         @Override
         public String toString() {
             return getLocalizedName();
         }
-        
+
         private String parentsToString() {
             String s = "[";
             int l = parents.length;
@@ -253,7 +253,7 @@ public final class TechTree {
             }
             return s + "]";
         }
-        
+
         // method used for debugging
         @SuppressWarnings("unused")
         private String techsToString() {
@@ -271,7 +271,7 @@ public final class TechTree {
             }
             return s + "]";
         }
-        
+
         // Eclipse Generated
         @Override
         public int hashCode() {
@@ -286,7 +286,7 @@ public final class TechTree {
             result = prime * result + ((unlockables == null) ? 0 : unlockables.hashCode());
             return result;
         }
-        
+
         // Eclipse Generated
         @Override
         public boolean equals(Object obj) {
@@ -325,12 +325,12 @@ public final class TechTree {
                 return false;
             return true;
         }
-        
+
         private TechTree getOuterType() {
             return TechTree.this;
         }
     }
-    
+
     private EState state = EState.CONSTRUCTING;
     private Map<String, Tech> techs = new HashMap<String, Tech>();
     private Map<String, Unlockable> unlockables = new HashMap<String, Unlockable>();
@@ -341,7 +341,7 @@ public final class TechTree {
     /** Used to add a compat-specific prefix to the unlockable name */
     ModCompat currentCompat = null;
     public final PromotionManager promotions;
-    
+
     public List<String> getItemTooltip(ItemStack stack, EntityPlayer player) {
         List<String> strings = new ArrayList<String>();
         for (Unlockable u : unlockables.values()) {
@@ -353,16 +353,16 @@ public final class TechTree {
         }
         return strings;
     }
-    
+
     public TechTree() {
         state = EState.CONSTRUCTING;
         promotions = new PromotionManager(this);
     }
-    
+
     public EState getState() {
         return state;
     }
-    
+
     /** This initialises the tech tree. Cannot be called from itself (don't want the states being mixed up) and also
      * don't want it being called after it has been finalised (a new tech tree object should be created instead) */
     public void init(NBTTagCompound nbt) {
@@ -379,25 +379,25 @@ public final class TechTree {
         // CivCraft.log.info(NBTUtils.toString(nbt));
         techs.clear();
         unlockables.clear();
-        
+
         CivLog.info("Initializing the tech tree");
         inMethod = true;
         this.treeData = nbt;
-        
+
         state = EState.PRE;
         ModCompat.sendPreEvent(new TechTreeEvent.Pre(this, nbt));
         unlockableTypes = Collections.unmodifiableMap(unlockableTypes);
         CivLog.info("Pre-init of the tech tree done");
-        
+
         state = EState.ADD_TECHS;
         addTech("agriculture");
         ModCompat.sendAddTechsEvent(new TechTreeEvent.AddTechs(this, nbt));
         CivLog.info("Added all techs");
-        
+
         state = EState.SET_REQUIREMENTS;
         ModCompat.sendAddUnlockableEvent(new TechTreeEvent.AddUnlockables(this, nbt));
         CivLog.info("Added all unlockables");
-        
+
         for (Tech t : techs.values()) {
             int[] req = t.getSciencePacksNeeded();
             for (int idx = 1; idx < req.length; idx++) {
@@ -405,19 +405,19 @@ public final class TechTree {
             }
             t.adjustedSciencePacks = req;
         }
-        
+
         state = EState.POST;
         setChildren();
         techs = Collections.unmodifiableMap(techs);
         unlockables = Collections.unmodifiableMap(unlockables);
         ModCompat.sendPostEvent(new TechTreeEvent.Post(this, nbt));
         CivLog.info("Post-init of the tech tree done");
-        
+
         state = EState.FINALISED;
         this.treeData = null;
         inMethod = false;
     }
-    
+
     private void setChildren() {
         for (Tech t : techs.values())
             for (Tech t0 : t.parents)
@@ -426,12 +426,12 @@ public final class TechTree {
             if (t.isLeafTech())// Force the check again
                 t.setLeafTech();
     }
-    
+
     public void save(NBTTagCompound nbt) {
         EState oldState = state;
         // This is set, so that the ACTUAL value for how many science packs is used, not the adjusted one
         state = EState.SAVING;
-        
+
         NBTTagCompound techsNBT = new NBTTagCompound();
         for (String s : techs.keySet()) {
             NBTTagCompound techNBT = new NBTTagCompound();
@@ -446,12 +446,12 @@ public final class TechTree {
             reqsNBT.setTag(s, reqNBT);
         }
         nbt.setTag("unlockables", reqsNBT);
-        
+
         nbt.setTag("promotions", promotions.saveToNBT());
-        
+
         state = oldState;
     }
-    
+
     /** @param unlock
      *            The requirement to add
      * @return The unlockable, if it was added
@@ -474,7 +474,7 @@ public final class TechTree {
         CivLog.info("Added the unlockable \"" + unlock.getName() + "\"");
         return unlock;
     }
-    
+
     /** @param name
      *            The name of this tech
      * @param tier
@@ -503,15 +503,15 @@ public final class TechTree {
         CivLog.info("Added the tech \"" + t.name + "\"");
         return t;
     }
-    
+
     public Tech addTech(String name, Tech... required) {
         return addTech(name, new int[0], required);
     }
-    
+
     public Tech getBaseTech() {
         return getTech("agriculture");
     }
-    
+
     public Tech getTech(String name) {
         if (techs.containsKey(name))
             return techs.get(name);
@@ -521,21 +521,21 @@ public final class TechTree {
         techs.put(name, t);
         return t;
     }
-    
+
     public Map<String, Tech> getTechs() {
         return Collections.unmodifiableMap(techs);
     }
-    
+
     public Unlockable getUnlockable(String name) {
         if (unlockables.containsKey(name))
             return unlockables.get(name);
         return null;
     }
-    
+
     public Map<String, Unlockable> getUnlockables() {
         return Collections.unmodifiableMap(unlockables);
     }
-    
+
     public Tech getResult(ArrayList<Tech> input, int firstSlot) {
         ArrayList<Tech> allUses = new ArrayList<Tech>();
         for (Tech t : input)
@@ -561,11 +561,11 @@ public final class TechTree {
             return uses.get(firstSlot);
         return null;
     }
-    
+
     public void setModCompat(ModCompat compat) {
         currentCompat = compat;
     }
-    
+
     /** Register unlockable types here. When java 8 is used in forge, calls to this will look a whole lot nicer. */
     public void registerUnlockable(String type, IUnlockableConstructor unlockable) {
         if (state != EState.PRE) {
@@ -577,7 +577,7 @@ public final class TechTree {
         unlockableTypes.put(type, unlockable);
         CivLog.info("Registered \"" + type + "\" as an unlockable");
     }
-    
+
     /** Register an unlockable type, specifying a class to load from. Unlike the other method, this class MUST have a
      * constructor with a single NBTTagCompound argument. Use the other register method if you want more control over
      * which class is returned. */
@@ -595,7 +595,7 @@ public final class TechTree {
             }
         });
     }
-    
+
     public Map<String, IUnlockableConstructor> getUnlockableTypes() {
         return unlockableTypes;
     }

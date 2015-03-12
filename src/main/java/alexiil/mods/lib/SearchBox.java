@@ -16,7 +16,7 @@ public class SearchBox {
     public boolean doOnce, isDone = false;
     public long progress = 0;
     public long size;
-    
+
     public SearchBox(SearchBox box) {
         super();
         max = box.max;
@@ -25,24 +25,24 @@ public class SearchBox {
         resetCurrent();
         calcSize();
     }
-    
+
     public SearchBox(NBTTagCompound nbt) {
         this.readFromNBT(nbt);
     }
-    
+
     public SearchBox(BlockPos min, BlockPos max) {
         this.min = new Coordinate(min);
         this.max = new Coordinate(max);
         this.cur = new Coordinate(min.getX(), max.getY(), min.getZ());
     }
-    
+
     public SearchBox(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
         min = new Coordinate(minX, minY, minZ);
         max = new Coordinate(maxX, maxY, maxZ);
         resetCurrent();
         calcSize();
     }
-    
+
     public void writeToNBT(NBTTagCompound nbt) {
         min.writeToNBT(nbt, "PosMin");
         max.writeToNBT(nbt, "PosMax");
@@ -56,7 +56,7 @@ public class SearchBox {
             toSearch.pop().writeToNBT(nbt, Integer.toString(a));
         nbt.setBoolean("doOnce", doOnce);
     }
-    
+
     public void readFromNBT(NBTTagCompound nbt) {
         min = new Coordinate(nbt, "PosMin");
         max = new Coordinate(nbt, "PosMax");
@@ -72,21 +72,21 @@ public class SearchBox {
         calcSize();
         doOnce = nbt.getBoolean("doOnce");
     }
-    
+
     public void calcSize() {
         size = (max.getX() - min.getX() + 1) * (max.getY() - min.getY() + 1) * (max.getZ() - min.getZ() + 1);
     }
-    
+
     public boolean isDone() {
         return isDone;// progress == size;
     }
-    
+
     public void expand(int amount) {
         min = min.moveCoordinate(EnumFacing.DOWN).moveCoordinate(EnumFacing.NORTH).moveCoordinate(EnumFacing.WEST);
         max = max.moveCoordinate(EnumFacing.UP).moveCoordinate(EnumFacing.SOUTH).moveCoordinate(EnumFacing.EAST);
         calcSize();
     }
-    
+
     public void resetCurrent() {
         cur = new Coordinate(min.getX(), max.getY(), min.getZ());
         posX = true;
@@ -94,11 +94,11 @@ public class SearchBox {
         posZ = true;
         toSearch = new ArrayDeque<Coordinate>();
     }
-    
+
     public void contract(int amount) {
         expand(-amount);
     }
-    
+
     private void calcNext() {
         progress++;
         if (cur.getX() == max.getX() && posX)
@@ -109,7 +109,7 @@ public class SearchBox {
             cur = cur.moveCoordinate(posX ? EnumFacing.EAST : EnumFacing.WEST);
             return;
         }
-        
+
         if (cur.getZ() == max.getZ() && posZ)
             posZ = false;
         else if (cur.getZ() == min.getZ() && !posZ)
@@ -118,7 +118,7 @@ public class SearchBox {
             cur = cur.moveCoordinate(posZ ? EnumFacing.SOUTH : EnumFacing.NORTH);
             return;
         }
-        
+
         if (doOnce && cur.getY() == min.getY()) {
             isDone = true;
             return;
@@ -132,20 +132,20 @@ public class SearchBox {
             return;
         }
     }
-    
+
     public boolean isOnEdge(Coordinate cor) {
         return getMatches(cor) > 0;
     }
-    
+
     public boolean isInside(Coordinate cor) {
         return cor.getX() >= min.getX() && cor.getX() <= max.getX() && cor.getY() >= min.getY() && cor.getY() <= max.getY()
                 && cor.getZ() >= min.getZ() && cor.getZ() <= max.getZ();
     }
-    
+
     public boolean isOnVertex(Coordinate cor) {
         return getMatches(cor) > 1;
     }
-    
+
     public int getMatches(Coordinate cor) {
         int matches = 0;
         if (cor.getX() == min.getX() || cor.getX() == max.getX())
@@ -156,13 +156,13 @@ public class SearchBox {
             matches++;
         return matches;
     }
-    
+
     public Coordinate current() {
         if (toSearch.isEmpty())
             return cur;
         return toSearch.peek();
     }
-    
+
     public Coordinate next() {
         if (toSearch.isEmpty()) {
             calcNext();
@@ -170,12 +170,12 @@ public class SearchBox {
         }
         return toSearch.pop();
     }
-    
+
     @Override
     public String toString() {
         return progress + "/" + size;
     }
-    
+
     public void pushNext(Coordinate cor) {
         toSearch.push(cor);
     }

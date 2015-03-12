@@ -8,7 +8,7 @@ public class CivItems {
     /** The item that holds all of the technology's */
     public static ItemTechnology technology;
     public static ItemTechBag techBag;
-    
+
     public static void init() {
         sciencePacks[0] = new ItemBase("sciencePack0", CivCraft.instance);
         sciencePacks[1] = new ItemBase("sciencePack1", CivCraft.instance);

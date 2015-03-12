@@ -19,7 +19,7 @@ public class MinecraftForgeNewHooks {
         MinecraftForge.EVENT_BUS.post(evt);
         return evt.isCanceled() ? null : out;
     }
-    
+
     public static ItemStack canCraftPlayerEvent(InventoryCrafting ic, EntityPlayer player) {
         World world = player.worldObj;
         ItemStack out = CraftingManager.getInstance().findMatchingRecipe(ic, world);
@@ -32,7 +32,7 @@ public class MinecraftForgeNewHooks {
             return null;
         return out;
     }
-    
+
     public static ItemStack canCraftBlockEvent(InventoryCrafting ic, World world, BlockPos pos) {
         ItemStack out = CraftingManager.getInstance().findMatchingRecipe(ic, world);
         ItemStack[] in = new ItemStack[ic.getSizeInventory()];

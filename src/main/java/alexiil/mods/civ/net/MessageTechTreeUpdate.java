@@ -19,7 +19,7 @@ import alexiil.mods.lib.net.MessageBase;
 
 public class MessageTechTreeUpdate extends MessageBase<MessageTechTreeUpdate> {
     private ByteBuf stored = null;
-    
+
     @Override
     public void fromBytes(ByteBuf buf) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
@@ -27,7 +27,7 @@ public class MessageTechTreeUpdate extends MessageBase<MessageTechTreeUpdate> {
             stored = buf.readBytes(length);
         }
     }
-    
+
     @Override
     public void toBytes(ByteBuf buf) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
@@ -45,7 +45,7 @@ public class MessageTechTreeUpdate extends MessageBase<MessageTechTreeUpdate> {
             buf.writeBytes(b);
         }
     }
-    
+
     @Override
     public IMessage onMessage(MessageTechTreeUpdate message, MessageContext ctx) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {

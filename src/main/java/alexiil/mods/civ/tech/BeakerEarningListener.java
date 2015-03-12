@@ -46,7 +46,7 @@ public class BeakerEarningListener {
     public static double PROGRESS_REQUIRED = 10;
     public static double COOLDOWN_TIME_DIVISON = 300;
     public static final BeakerEarningListener instance = new BeakerEarningListener();
-    
+
     static {
         addBeakerAmount("block", 0.001F);
         addBeakerAmount("block.break", 0.002F);
@@ -65,11 +65,11 @@ public class BeakerEarningListener {
         // TODO: make this config based! (maybe stop doing the techs per world? kinda not sure of its uses anymore)
         addBeakerAmount("craft", 0.1F);
     }
-    
+
     public static void addBeakerAmount(String type, double amount) {
         beakerGetting.put(type, amount);
     }
-    
+
     /** @param player
      *            The player who might earn a beaker
      * @param name
@@ -148,11 +148,11 @@ public class BeakerEarningListener {
         persisted.setTag("civcraft", nbtCiv);
         nbt.setTag(EntityPlayer.PERSISTED_NBT_TAG, persisted);
     }
-    
+
     public static void earnBeaker(EntityPlayer player, String name) {
         earnBeaker(player, name, 1);
     }
-    
+
     public static String getPreTranslation(String in) {
         if (in.startsWith("craft."))
             return "civcraft.chat.earnBeaker.craft";
@@ -166,7 +166,7 @@ public class BeakerEarningListener {
             return "civcraft.chat.earnBeaker.entity.attack";
         return in;
     }
-    
+
     public static String getPostTranslation(String in) {
         if (in.contains("tile."))
             return in.substring(in.indexOf("tile.")) + ".name";
@@ -174,7 +174,7 @@ public class BeakerEarningListener {
             return in.substring(in.indexOf("item.")) + ".name";
         return in;
     }
-    
+
     @SubscribeEvent
     public void playerTick(PlayerTickEvent event) {
         if (event.player.worldObj.isRemote)
@@ -188,14 +188,13 @@ public class BeakerEarningListener {
         NBTTagCompound nbtCiv = persisted.getCompoundTag("civcraft");
         NBTTagCompound nbtCooldown = nbtCiv.getCompoundTag("cooldown");
         NBTTagCompound nbtLastDone = nbtCiv.getCompoundTag("lastdone");
-        
+
         Iterator<?> iter = nbtCooldown.getKeySet().iterator();
         ArrayList<String> strings = new ArrayList<String>();
         while (iter.hasNext())
             strings.add((String) iter.next());
-        
-        for (String key : strings) {// java.util.ConcurrentModificationException here!
-            String name = (String) key;
+
+        for (String name : strings) {
             double cooldown = nbtCooldown.getDouble(name);
             long time = nbtLastDone.getLong(name) + 1;
             nbtLastDone.setLong(name, time);
@@ -221,7 +220,7 @@ public class BeakerEarningListener {
         persisted.setTag("civcraft", nbtCiv);
         nbt.setTag(EntityPlayer.PERSISTED_NBT_TAG, persisted);
     }
-    
+
     /** @return true if the player is a real player (so not a fake one) */
     public static boolean isPlayerReal(EntityPlayer player) {
         if (player == null)
@@ -230,9 +229,9 @@ public class BeakerEarningListener {
             return false;
         return true;
     }
-    
+
     // Beaker earning events
-    
+
     @SubscribeEvent
     public void playerBreakBlock(BreakEvent event) {
         if (event.world.isRemote)
@@ -264,7 +263,7 @@ public class BeakerEarningListener {
         else
             earnBeaker(player, "block.harvest." + name);
     }
-    
+
     @SubscribeEvent
     public void playerCrafted(ItemCraftedEvent event) {
         if (event.player.worldObj.isRemote)
@@ -276,7 +275,7 @@ public class BeakerEarningListener {
         String itemName = "craft." + event.crafting.getItem().getUnlocalizedName(event.crafting);
         earnBeaker(event.player, itemName);
     }
-    
+
     @SubscribeEvent
     public void entityAttack(LivingHurtEvent event) {
         if (event.isCanceled())
@@ -308,7 +307,7 @@ public class BeakerEarningListener {
         if (arrow)
             earnBeaker(player, "entity.arrowHit", distance);
     }
-    
+
     @SubscribeEvent
     public void entityDeath(LivingDeathEvent event) {
         if (event.isCanceled())
@@ -341,7 +340,7 @@ public class BeakerEarningListener {
         if (arrow)
             earnBeaker(player, "entity.arrowHit", distance);
     }
-    
+
     // TODO: item related stuffs. So, firing (where an infinity enchantment is less than normal) of bows and
     // breaking of tools
 }

@@ -9,7 +9,7 @@ import alexiil.mods.lib.net.INetworkProvider;
 public class MessageHandler implements INetworkProvider {
     public static SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(CivCraft.modMeta.modId);
     public static MessageHandler instance = new MessageHandler();
-    
+
     static {
         INSTANCE.registerMessage(MessageTechTreeUpdate.class, MessageTechTreeUpdate.class, 0, Side.CLIENT);
         INSTANCE.registerMessage(MessageTechTreeUpdate.class, MessageTechTreeUpdate.class, 1, Side.SERVER);
@@ -18,7 +18,7 @@ public class MessageHandler implements INetworkProvider {
         INSTANCE.registerMessage(MessageResearchTech.class, MessageResearchTech.class, 4, Side.CLIENT);
         INSTANCE.registerMessage(MessageResearchTech.class, MessageResearchTech.class, 5, Side.SERVER);
     }
-    
+
     @Override
     public SimpleNetworkWrapper get() {
         return INSTANCE;

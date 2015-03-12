@@ -12,17 +12,17 @@ import alexiil.mods.lib.git.Release;
 public class CommitScrollingList extends TextGuiScrollingList {
     public final List<Commit> commitList = new ArrayList<Commit>();
     public final Config parent;
-    
+
     public CommitScrollingList(Config parent, int width, int height, int top, int bottom, int left) {
         super(Minecraft.getMinecraft(), width, height, top, bottom, left);
         this.parent = parent;
-        
+
         populateStrings();
     }
-    
+
     private void populateStrings() {
         clearLines();
-        
+
         List<Commit> commitList = CivCraft.getCommits();
         for (Commit c : commitList) {
             boolean thisOne = c == CivCraft.getCurrentCommit();
@@ -34,12 +34,12 @@ public class CommitScrollingList extends TextGuiScrollingList {
             String date = c.commit.committer.date.split("T")[0];
             String[] dates = date.split("-");
             date = dates[2] + "/" + dates[1] + "/" + dates[0];
-            
+
             String text = c.author.login + " " + date;
             LineInfo line0 = new LineInfo(text, thisOne ? 0xBFB23A : 0x00CAFF);
             LineInfo line1 = release == null ? null : new LineInfo(release.name, 0x11FF44, parent.getFontRenderer().getStringWidth(text) + 10);
             addLine(line0, line1);
-            
+
             String message = c.commit.message;
             String[] strings = message.split("\n");
             for (int i = 0; i < strings.length; i++) {

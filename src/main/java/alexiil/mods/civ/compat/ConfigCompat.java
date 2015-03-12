@@ -18,7 +18,7 @@ public class ConfigCompat extends ModCompat {
         TechTree tree = t.tree;
         NBTTagCompound n = t.treeNBTCompound;
         NBTTagCompound techs = n.getCompoundTag("techs");
-        
+
         for (Object key : techs.getKeySet()) {
             NBTTagCompound tech = techs.getCompoundTag((String) key);
             // Almost directly copied from new TechTree.Tech()
@@ -39,7 +39,7 @@ public class ConfigCompat extends ModCompat {
                 techAdded.setLeafTech();
         }
     }
-    
+
     @Override
     public void addUnlockables(AddUnlockables t) {
         TechTree tree = t.tree;
@@ -54,12 +54,12 @@ public class ConfigCompat extends ModCompat {
                 tree.addUnlockable(u);
         }
     }
-    
+
     @Override
     public String getModID() {
         return "config";
     }
-    
+
     @Override
     public String getShortModName() {
         return "Config";

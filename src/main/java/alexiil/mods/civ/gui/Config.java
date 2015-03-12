@@ -23,21 +23,21 @@ public class Config extends GuiScreen {
     private boolean help = false;
     private int xPosHelp = 0;
     private List<List<String>> helpText;
-    
+
     public Config(GuiScreen screen) {
         fontRendererObj = Minecraft.getMinecraft().fontRendererObj;
         setupGui();
     }
-    
+
     @Override
     public void setWorldAndResolution(Minecraft mc, int width, int height) {
         super.setWorldAndResolution(mc, width, height);
         setupGui();
     }
-    
+
     private void setupGui() {
         int width = 0;
-        
+
         for (GitHubUser usr : CivCraft.getContributors()) {
             String text = "civcraft.github." + usr.login;
             String newText = LangUtils.format(text);
@@ -47,16 +47,16 @@ public class Config extends GuiScreen {
                 text = usr.login + " (" + newText + ")";
             width = Math.max(width, fontRendererObj.getStringWidth(text));
         }
-        
+
         contributors = new GitHubUserScrollingList(this, width + 40, this.height, 40, this.height - 40, 10);
         for (GitHubUser c : CivCraft.getContributors())
             contributors.userList.add(c);
-        
+
         commits = new CommitScrollingList(this, this.width - width - 80, this.height, 40, this.height - 40, width + 60);
-        
+
         int index = 0;
         int maxXPos = Math.min(this.width - xPosHelp, 400);
-        
+
         helpText = new ArrayList<List<String>>();
         while (true) {
             String preTranslation = "civcraft.gui.config.help." + index;
@@ -84,7 +84,7 @@ public class Config extends GuiScreen {
             index++;
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
@@ -93,18 +93,18 @@ public class Config extends GuiScreen {
         int totalLength = 10;
         buttonList.add(new GuiButton(0, totalLength, 1, length, 20, text));
         totalLength += length;
-        
+
         text = LangUtils.format("civcraft.config.tech.button");
         length = fontRendererObj.getStringWidth(text) + 20;
         buttonList.add(new GuiButton(1, totalLength, 1, length, 20, text));
         totalLength += length;
-        
+
         text = LangUtils.format("civcraft.config.help");
         length = fontRendererObj.getStringWidth(text) + 20;
         buttonList.add(new GuiButton(2, totalLength, 1, length, 20, text));
         xPosHelp = totalLength;
         totalLength += length;
-        
+
         text = LangUtils.format("civcraft.config.closeHelp");
         length = fontRendererObj.getStringWidth(text) + 20;
         helpClose = new GuiButton(3, totalLength, 1, length, 20, text);
@@ -112,11 +112,11 @@ public class Config extends GuiScreen {
         helpClose.visible = false;
         buttonList.add(helpClose);
     }
-    
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawBackground(0);
-        
+
         if (CivConfig.connectExternally.getBoolean()) {
             commits.drawScreen(mouseX, mouseY, partialTicks);
             contributors.drawScreen(mouseX, mouseY, partialTicks);
@@ -129,9 +129,9 @@ public class Config extends GuiScreen {
             int textWidth = fontRendererObj.getStringWidth(text);
             drawHoveringText(Collections.singletonList(text), (this.width - textWidth) / 2, this.height / 2);
         }
-        
+
         super.drawScreen(mouseX, mouseY, partialTicks);
-        
+
         if (help) {
             int yHeight = 0;
             for (List<String> ss : helpText)
@@ -144,7 +144,7 @@ public class Config extends GuiScreen {
             }
         }
     }
-    
+
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         if (button.id == 0) {
@@ -162,7 +162,7 @@ public class Config extends GuiScreen {
             helpClose.visible = false;
         }
     }
-    
+
     public FontRenderer getFontRenderer() {
         return fontRendererObj;
     }

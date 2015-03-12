@@ -8,18 +8,18 @@ public class NEIConfig implements IConfigureNEI {
     public NEIConfig() {
         CivCraft.log.info("Started loading NEI compat");
     }
-    
+
     @Override
     public void loadConfig() {
         API.registerRecipeHandler(new TechCraftingHandler());
         API.registerUsageHandler(new TechCraftingHandler());
     }
-    
+
     @Override
     public String getName() {
         return "civCraftNeiAddon";
     }
-    
+
     @Override
     public String getVersion() {
         return "0.1";

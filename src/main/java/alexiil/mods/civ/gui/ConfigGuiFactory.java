@@ -20,7 +20,7 @@ public class ConfigGuiFactory implements IModGuiFactory {
         public ActualConfig(GuiScreen parent) {
             super(parent, getConfigElements(), Lib.Mod.ID, false, false, LangUtils.format("civcraft.config.title"));
         }
-        
+
         private static List<IConfigElement> getConfigElements() {
             List<IConfigElement> elements = new ArrayList<IConfigElement>();
             Configuration cfg = CivCraft.instance.cfg.cfg;
@@ -30,23 +30,23 @@ public class ConfigGuiFactory implements IModGuiFactory {
             return elements;
         }
     }
-    
+
     @Override
     public void initialize(Minecraft minecraftInstance) {}
-    
+
     @Override
     public Class<? extends GuiScreen> mainConfigGuiClass() {
         return Config.class;
     }
-    
+
     @Override
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
         return null;
     }
-    
+
     @Override
     public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
         return null;
     }
-    
+
 }

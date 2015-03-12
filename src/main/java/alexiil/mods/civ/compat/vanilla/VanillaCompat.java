@@ -15,26 +15,26 @@ import alexiil.mods.civ.tech.unlock.ItemCraftUnlock;
  * but it allows for a central place for vanilla tech code, in the same place as other tech code. */
 public class VanillaCompat extends ModCompat {
     public static final PromotionMoveSpeed[] moveSpeeds;
-    
+
     static {
         moveSpeeds = new PromotionMoveSpeed[5];
         for (int i = 0; i < moveSpeeds.length; i++)
             moveSpeeds[i] = new PromotionMoveSpeed(i);
     }
-    
+
     private Tech techAgri;
     private Tech techSail, techAnimal, techArchery, techMining;
     private Tech techSmelting, techMasonry, techWheel, techTrap, techAutomation;
     private Tech techIron, techPottery, techConstruction, techMaths, techHorses;
     private Tech techGold, techWriting, techEngineering;
     private Tech techDiamond;
-    
+
     @Override
     public void preInit(TechTreeEvent.Pre t) {
         String start = Lib.Mod.ID + ":";
         t.tree.registerUnlockable(start + "ItemCraftUnlock", ItemCraftUnlock.class);
     }
-    
+
     @Override
     public void addTechs(AddTechs event) {
         TechTree tree = event.tree;
@@ -64,7 +64,7 @@ public class VanillaCompat extends ModCompat {
         // Tier 5
         techDiamond = tree.addTech("diamond_working", new int[] { 5, 9, 4 }, techGold, techEngineering);
     }
-    
+
     @Override
     public void addUnlockables(AddUnlockables t) {
         // Agriculture
@@ -124,19 +124,19 @@ public class VanillaCompat extends ModCompat {
         tree.addUnlockable(new ItemCraftUnlock("diamond_working", techDiamond).addUnlocked(Items.diamond, Items.diamond_axe, Items.diamond_boots,
                 Items.diamond_chestplate, Items.diamond_helmet, Items.diamond_horse_armor, Items.diamond_leggings, Items.diamond_shovel,
                 Items.diamond_sword).addUnlocked(Blocks.diamond_block));
-        
+
         //
         // Promotions
         //
         for (int i = 0; i < moveSpeeds.length; i++)
             tree.promotions.addPromotion(moveSpeeds[i]);
     }
-    
+
     @Override
     public String getModID() {
         return Lib.Mod.ID;
     }
-    
+
     @Override
     public String getShortModName() {
         return "CivCraft";

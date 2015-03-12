@@ -20,7 +20,7 @@ public final class ErrorHandling {
             AlexIILLib.instance.log.info("at " + ste[i].toString());
         i++;
     }
-    
+
     public static void printStackTrace(Throwable t, String message, boolean stopAtMine) {
         AlexIILLib.instance.log.info(t.getClass().getName() + " while " + message);
         StackTraceElement[] ste = t.getStackTrace();
@@ -29,25 +29,25 @@ public final class ErrorHandling {
             AlexIILLib.instance.log.info("at " + ste[i].toString());
         i++;
     }
-    
+
     public static boolean isMyClass(String clazz) {
         return "alexiil".startsWith(clazz);
     }
-    
+
     public static boolean isVanillaClass(String clazz) {
         return (clazz.startsWith("net.minecraft") || clazz.startsWith("java"));
     }
-    
+
     public static void printClassInfo(String clsName) {
         CivLog.info("Showing info for " + clsName);
         try {
             Class<?> cls = Class.forName(clsName);
-            
+
             Annotation[] annos = cls.getDeclaredAnnotations();
             for (Annotation an : annos)
                 CivLog.info(an.toString());
             CivLog.info(cls.toString());
-            
+
             Field[] flds = cls.getFields();
             CivLog.info("  Fields:");
             for (Field fld : flds) {
@@ -72,7 +72,7 @@ public final class ErrorHandling {
                     }
                 }
             }
-            
+
             Method[] methods = cls.getMethods();
             CivLog.info("  Methods:");
             for (Method meth : methods) {

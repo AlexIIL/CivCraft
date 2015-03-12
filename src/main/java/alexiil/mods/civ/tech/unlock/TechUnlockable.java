@@ -14,7 +14,7 @@ import alexiil.mods.civ.tech.Unlockable;
 public abstract class TechUnlockable extends Unlockable {
     private final TechTree.Tech[] requiredTechs;
     private final boolean shouldShow;
-    
+
     /** @param required
      *            The technologies that are required for this object
      * @param show
@@ -43,7 +43,7 @@ public abstract class TechUnlockable extends Unlockable {
         }
         requiredTechs = required;
     }
-    
+
     public TechUnlockable(TechTree tree, String name, String[] required, boolean show) {
         super(name);
         shouldShow = show;
@@ -84,7 +84,7 @@ public abstract class TechUnlockable extends Unlockable {
         }
         requiredTechs = techs;
     }
-    
+
     public TechUnlockable(NBTTagCompound nbt) {
         super(nbt);
         shouldShow = nbt.getBoolean("shouldShow");
@@ -93,7 +93,7 @@ public abstract class TechUnlockable extends Unlockable {
         for (int i = 0; i < list.tagCount(); i++)
             requiredTechs[i] = TechTree.currentTree.getTech(list.getStringTagAt(i));
     }
-    
+
     @Override
     public void save(NBTTagCompound nbt) {
         super.save(nbt);
@@ -103,24 +103,24 @@ public abstract class TechUnlockable extends Unlockable {
             list.appendTag(new NBTTagString(t.name));
         nbt.setTag("requiredTechs", list);
     }
-    
+
     @Override
     public TechTree.Tech[] requiredTechs() {
         if (requiredTechs == null)
             return new TechTree.Tech[0];
         return Arrays.copyOf(requiredTechs, requiredTechs.length);
     }
-    
+
     @Override
     public String getLocalisedName() {
         return CivCraft.instance.format(getUnlocalisedName());
     }
-    
+
     @Override
     public String getDescription() {
         return CivCraft.instance.format(getUnlocalisedName() + ".desc");
     }
-    
+
     @Override
     public boolean shouldShow() {
         return shouldShow;

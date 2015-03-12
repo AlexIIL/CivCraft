@@ -33,9 +33,9 @@ import alexiil.mods.civ.utils.TechUtils;
 
 public class EventListner {
     public static final EventListner instance = new EventListner();
-    
+
     private EventListner() {}
-    
+
     @SubscribeEvent
     public void onClientConnect(ClientConnectedToServerEvent event) {
         CivLog.info("onClientConnect");
@@ -46,7 +46,7 @@ public class EventListner {
                     Thread.sleep(5000);
                 }
                 catch (InterruptedException e) {
-                    
+
                 }
                 CivLog.info("sending message (hopefully)");
                 MessageHandler.INSTANCE.sendToServer(new MessagePlayerTechUpdate());
@@ -56,7 +56,7 @@ public class EventListner {
             return;
         MessageHandler.INSTANCE.sendToServer(new MessageTechTreeUpdate());
     }
-    
+
     @SubscribeEvent
     public void onCraft(ItemCraftedEvent event) {
         if (event.craftMatrix instanceof InventoryCrafting) {
@@ -82,7 +82,7 @@ public class EventListner {
             event.crafting.readFromNBT(nbt);// OMG THE HAX! I LOVE IT SO MUCH!
         }
     }
-    
+
     @SubscribeEvent
     public void renderEnd(RenderTickEvent event) {
         Minecraft mc = Minecraft.getMinecraft();
@@ -101,14 +101,14 @@ public class EventListner {
             List<String> names = new ArrayList<String>();
             for (Object o : nbtProgress.getKeySet())
                 names.add((String) o);
-            
+
             Collections.sort(names, new Comparator<String>() {
                 @Override
                 public int compare(String o1, String o2) {
                     return o1.compareTo(o2);
                 }
             });
-            
+
             // ScaledResolution res = new ScaledResolution(mc, mc.displayWidth,
             // mc.displayHeight);
             // int width = res.getScaledWidth();
@@ -131,17 +131,17 @@ public class EventListner {
                         colourToUse);
                 y += mc.fontRendererObj.FONT_HEIGHT;
             }
-            
+
         }
     }
-    
+
     @SubscribeEvent
     public void techResearched(TechResearchedEvent event) {
         TechUtils.addTech(event.entityPlayer, event.tech);
         if (!event.entityPlayer.worldObj.isRemote) // Server
             MessageHandler.INSTANCE.sendTo(new MessagePlayerTechUpdate(event.entityPlayer), (EntityPlayerMP) event.entityPlayer);
     }
-    
+
     @SubscribeEvent
     public void itemToolTip(ItemTooltipEvent event) {
         ItemStack stack = event.itemStack;
@@ -150,19 +150,19 @@ public class EventListner {
         List<String> strings = TechTree.currentTree.getItemTooltip(stack, event.entityPlayer);
         event.toolTip.addAll(strings);
     }
-    
+
     @SubscribeEvent
     public void blockPlaced(BlockEvent.PlaceEvent event) {
         CraftUtils.addPlayerToChunk(event.world, event.pos, event.player);
     }
-    
+
     @SubscribeEvent
     public void blockRightClicked(PlayerInteractEvent event) {
         if (event.action != Action.RIGHT_CLICK_BLOCK)
             return;
         CraftUtils.addPlayerToChunk(event.world, event.pos, event.entityPlayer);
     }
-    
+
     // TODO: replace with forge event
     @SubscribeEvent
     public void craftAttempt(FindMatchingRecipeEvent event) {
@@ -179,7 +179,7 @@ public class EventListner {
             }
         }
     }
-    
+
     private boolean canUse(ItemStack stack, FindMatchingRecipeEvent event) {
         List<Tech> techs = new ArrayList<Tech>();
         if (event instanceof FindMatchingRecipeEvent.Player)

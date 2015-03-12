@@ -1,6 +1,7 @@
 package alexiil.mods.lib.block;
 
 import java.util.List;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -20,7 +21,7 @@ public abstract class BlockContainerBasic extends BlockContainer {
     protected TextureAtlasSprite[] icons;
     public final boolean enabled;
     protected AlexIILMod mod;
-    
+
     public BlockContainerBasic(Material material, String name, AlexIILMod mod) {
         super(material);
         this.mod = mod;
@@ -34,21 +35,21 @@ public abstract class BlockContainerBasic extends BlockContainer {
             this.setCreativeTab(mod.tab);
         }
     }
-    
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @SideOnly(Side.CLIENT)
     @Override
     // Add blocks to the creative
-            // inventory
+    // inventory
             public
             void getSubBlocks(Item item, CreativeTabs tab, List list) {
         for (int i = 0; i < getMetaBlocks(); i++)
             list.add(new ItemStack(item, 1, i));
     }
-    
+
     public int getMetaBlocks() {
         return 1;
     }
-    
+
     public abstract Class<? extends TileEntity> getTileClass();
 }

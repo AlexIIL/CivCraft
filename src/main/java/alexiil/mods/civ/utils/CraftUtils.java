@@ -25,15 +25,15 @@ import alexiil.mods.civ.tech.unlock.IItemBlocker;
 
 public class CraftUtils {
     // Ignore different dimensions for some reason... for now
-    
+
     private static Map<ChunkCoordIntPair, List<PlayerTechData>> chunkPlayers = new HashMap<ChunkCoordIntPair, List<PlayerTechData>>();
-    
+
     public static void addPlayerToChunk(World world, BlockPos pos, EntityPlayer player) {
         if (pos == null || player == null)
             return;
         addPlayerToChunk(world, pos, PlayerTechData.createPlayerTechData(player));
     }
-    
+
     public static void addPlayerToChunk(World world, BlockPos pos, PlayerTechData techs) {
         ChunkCoordIntPair ccip = new ChunkCoordIntPair(pos.getX() << 4, pos.getY() << 4);
         if (!chunkPlayers.containsKey(ccip))
@@ -41,33 +41,33 @@ public class CraftUtils {
         if (!chunkPlayers.get(ccip).contains(techs))
             chunkPlayers.get(ccip).add(techs);
     }
-    
+
     public static void removeTileEntity(TileEntity tile) {
         if (tile == null)
             return;
         removeTileEntity(tile.getWorld(), tile.getPos());
     }
-    
+
     public static void removeTileEntity(World world, BlockPos pos) {
         if (pos == null)
             return;
         chunkPlayers.remove(pos);
     }
-    
+
     public static List<PlayerTechData> getPlayers(World world, BlockPos pos) {
         return getPlayers(world, new ChunkCoordIntPair(pos.getX() << 4, pos.getZ() << 4));
     }
-    
+
     public static List<PlayerTechData> getPlayers(World world, ChunkCoordIntPair ccip) {
         if (chunkPlayers.containsKey(ccip))
             return chunkPlayers.get(ccip);
         return Collections.<PlayerTechData> emptyList();
     }
-    
+
     public static List<Tech> getTechs(World world, BlockPos pos) {
         return getTechs(world, new ChunkCoordIntPair(pos.getX() << 4, pos.getY() << 4));
     }
-    
+
     public static List<Tech> getTechs(World world, ChunkCoordIntPair ccip) {
         if (world.isRemote) // If its on the client
             return TechUtils.getTechs(Minecraft.getMinecraft().thePlayer);
@@ -79,7 +79,7 @@ public class CraftUtils {
                     techs.add(t);
         return techs;
     }
-    
+
     /** @param in
      *            The IInventory to craft from (usually an instance of InventoryCrafting)
      * @param pos
@@ -99,7 +99,7 @@ public class CraftUtils {
         CivCraft.log.info("Could not use " + item + ", aborting");// TODO: remove these
         return null;
     }
-    
+
     public static boolean canCraft(ItemStack out, ItemStack[] in, TileEntity tile) {
         if (tile == null)
             return true;
@@ -111,7 +111,7 @@ public class CraftUtils {
                     return false;
         return true;
     }
-    
+
     public static boolean canUse(ItemStack item, List<Tech> techs) {
         if (item == null)
             return true;
@@ -131,11 +131,11 @@ public class CraftUtils {
         }
         return true;
     }
-    
+
     public static boolean canUse(World world, BlockPos pos, ItemStack item) {
         return canUse(item, getTechs(world, pos));
     }
-    
+
     public static boolean canUse(EntityPlayer player, ItemStack item) {
         return canUse(item, TechUtils.getTechs(player));
     }

@@ -37,14 +37,14 @@ import alexiil.mods.lib.nbt.NBTUtils;
 public class ItemTechnology extends ItemBase {
     public static enum EResearchState {
         PENDING(EChatColours.WHITE), RESEARCHING(EChatColours.AQUA), RESEARCHED(EChatColours.GOLD);
-        
+
         public final EChatColours colour;
-        
+
         EResearchState(EChatColours colour) {
             this.colour = colour;
         }
     }
-    
+
     public ItemTechnology(String name) {
         super(name, CivCraft.instance);
         addInfo(new IChangingItemString() {
@@ -99,32 +99,32 @@ public class ItemTechnology extends ItemBase {
                     String s = NBTUtils.toString(nbt).replace("\t", "  ");
                     return s.split("\n");
                 }
-                
+
                 Tech[] parents = t.getParentTechs();
                 Tech[] children = t.getChildTechs();
                 Unlockable[] usages = t.getShownUnlockables();
                 String[] strings = new String[parents.length + children.length + usages.length + 3];
                 int index = 0;
                 strings[index++] = parents.length == 0 ? "Doesn't require any techs" : "Requires these techs:";
-                
+
                 for (Tech parent : parents)
                     strings[index++] = TechUtils.getColour(parent) + " -" + parent.getLocalizedName();
-                
+
                 strings[index++] = children.length == 0 ? "Doesn't lead to any other techs" : "Leads to these techs:";
-                
+
                 for (Tech child : children)
                     strings[index++] = TechUtils.getColour(child) + " -" + child.getLocalizedName();
-                
+
                 strings[index++] = usages.length == 0 ? "Doesn't unlock anything" : "Unlocks these things:";
-                
+
                 for (Unlockable unlock : usages)
                     strings[index++] = EChatColours.GOLD + " -" + unlock.getLocalisedName();
-                
+
                 return strings;
             }
         });
     }
-    
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
@@ -139,7 +139,7 @@ public class ItemTechnology extends ItemBase {
                 list.add(getItemForTech(t, packs));
         }
     }
-    
+
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
         Tech t = getTech(stack);
@@ -147,17 +147,17 @@ public class ItemTechnology extends ItemBase {
             return "THE TECH WAS NULL! (this is a bad item!)";
         return super.getItemStackDisplayName(stack) + " " + t.getLocalizedName();
     }
-    
+
     @Override
     public ItemStack getContainerItem(ItemStack i) {
         return i.copy();
     }
-    
+
     @Override
     public boolean hasContainerItem(ItemStack i) {
         return true;
     }
-    
+
     /** @return An integer array, containing the numbers of each type of pack that the given item has */
     public int[] getScienceCount(ItemStack item) {
         if (item == null || !item.hasTagCompound())
@@ -166,7 +166,7 @@ public class ItemTechnology extends ItemBase {
         int[] arr = nbt.getIntArray(Tech.SCIENCE_PACKS);
         return arr;
     }
-    
+
     /** @param item
      *            The item to set the science to
      * @param science
@@ -179,7 +179,7 @@ public class ItemTechnology extends ItemBase {
         item.setTagCompound(nbt);
         item.setItemDamage(getItemDamageForScience(getTech(item), science));
     }
-    
+
     /** @param s
      *            The ItemStack to add science to
      * @param toAdd
@@ -194,7 +194,7 @@ public class ItemTechnology extends ItemBase {
             already[idx] += toAdd[idx];
         setScienceCount(s, already);
     }
-    
+
     public Tech getTech(ItemStack item) {
         if (item == null || !item.hasTagCompound())
             return null;
@@ -204,17 +204,17 @@ public class ItemTechnology extends ItemBase {
             return null;
         return TechTree.currentTree.getTech(name.intern());
     }
-    
+
     public EResearchState getState(ItemStack i) {
         return EResearchState.values()[i.getItemDamage()];
     }
-    
+
     public ItemStack getItemForTech(TechProgress progress) {
         if (progress == null)
             return null;
         return getItemForTech(progress.tech, progress.progress);
     }
-    
+
     public ItemStack getItemForTech(Tech t, int[] packs) {
         if (t == null || packs == null)
             return null;
@@ -226,7 +226,7 @@ public class ItemTechnology extends ItemBase {
         item.setTagCompound(nbt);
         return item;
     }
-    
+
     /** @param tech
      *            The tech to check against
      * @param packs
@@ -258,7 +258,7 @@ public class ItemTechnology extends ItemBase {
             type = 2;
         return type;
     }
-    
+
     /** @return An integer array, containing the numbers of packs required to complete this. This will never be null, but
      *         it may be an empty array (so, []) */
     public int[] getSciencePacksRequired(ItemStack i) {
@@ -272,11 +272,11 @@ public class ItemTechnology extends ItemBase {
                 needed[idx] = techNeeded[idx] - current[idx];
         return needed;
     }
-    
+
     public ItemStack getStartingTech() {
         return getItemForTech(TechTree.currentTree.getBaseTech(), new int[0]);
     }
-    
+
     @Override
     public void initModel() {
         String mesherName = CivCraft.instance.meta.modId + ":" + name + "_";
@@ -286,7 +286,8 @@ public class ItemTechnology extends ItemBase {
             mesher.register(this, i, new ModelResourceLocation(names[i], "inventory"));
         ModelBakery.addVariantName(this, names);
     }
-    
+
+    @Override
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
         Tech t = getTech(itemStackIn);
         EResearchState state = getState(itemStackIn);
@@ -296,6 +297,6 @@ public class ItemTechnology extends ItemBase {
             return itemStackIn;
         MinecraftForge.EVENT_BUS.post(new ItemTechResearchedEvent(itemStackIn, playerIn));
         return itemStackIn;
-        
+
     }
 }

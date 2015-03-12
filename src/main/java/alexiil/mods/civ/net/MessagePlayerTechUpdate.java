@@ -20,13 +20,13 @@ public class MessagePlayerTechUpdate extends MessageBase<MessagePlayerTechUpdate
     private static int num = 0;
     private List<Tech> techs = new ArrayList<Tech>();
     private final int n = num++;
-    
+
     public MessagePlayerTechUpdate() {}
-    
+
     public MessagePlayerTechUpdate(EntityPlayer player) {
         techs = TechUtils.getTechs(player);
     }
-    
+
     @Override
     public void fromBytes(ByteBuf buf) {
         int length = buf.readInt();
@@ -43,7 +43,7 @@ public class MessagePlayerTechUpdate extends MessageBase<MessagePlayerTechUpdate
                 techs.add(t);
         }
     }
-    
+
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(techs.size());
@@ -54,7 +54,7 @@ public class MessagePlayerTechUpdate extends MessageBase<MessagePlayerTechUpdate
             CivLog.debugInfo(n + "=" + bytes.length + "->" + Arrays.toString(bytes) + "=" + t.name);
         }
     }
-    
+
     @Override
     public IMessage onMessage(MessagePlayerTechUpdate message, MessageContext ctx) {
         String s = "[";

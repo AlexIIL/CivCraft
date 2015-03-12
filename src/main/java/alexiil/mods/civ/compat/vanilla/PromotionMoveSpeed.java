@@ -13,18 +13,18 @@ import alexiil.mods.civ.xp.Promotion;
 
 public class PromotionMoveSpeed extends Promotion {
     public static final UUID modifierID = UUID.fromString("B9766B59-9566-4402-BC1F-2EE2A2765AB6");
-    
+
     public final int level;
-    
+
     public PromotionMoveSpeed(int level) {
         super(true, level * 2 + 1);
         this.level = level;
     }
-    
+
     public PromotionMoveSpeed(NBTTagCompound nbt) {
         this(nbt.getInteger("level"));
     }
-    
+
     @Override
     public List<Promotion> getRequiredPromotions() {
         List<Promotion> promotions = new ArrayList<Promotion>();
@@ -35,7 +35,7 @@ public class PromotionMoveSpeed extends Promotion {
         promotions.add(VanillaCompat.moveSpeeds[level - 1]);
         return promotions;
     }
-    
+
     @Override
     public void onActivate(EntityPlayer player) {
         double wantedLevel = 0.25 * (level + 1);
@@ -47,7 +47,7 @@ public class PromotionMoveSpeed extends Promotion {
         iai.removeModifier(oldModifier);
         iai.applyModifier(modifier);
     }
-    
+
     @Override
     public void onDeactivate(EntityPlayer player) {
         double wantedLevel = 0.25 * (level + 1);

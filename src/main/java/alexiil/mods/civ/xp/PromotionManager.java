@@ -14,21 +14,21 @@ public class PromotionManager {
     // TODO: promotions properly
     private List<Promotion> promotions = new ArrayList<Promotion>();
     private final TechTree techTree;
-    
+
     public PromotionManager(TechTree tree) {
         techTree = tree;
     }
-    
+
     public void addPromotion(Promotion toAdd) {
         if (techTree.getState() != EState.FINALISED)
             promotions.add(toAdd);
     }
-    
+
     public NBTTagCompound saveToNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
         return nbt;
     }
-    
+
     // Ouch. This feels... wrong, in so many ways
     public Promotion tryMakeNew(String clsName, NBTTagCompound data) {
         try {
@@ -36,7 +36,7 @@ public class PromotionManager {
             if (Promotion.class.isAssignableFrom(cls)) {
                 Class<? extends Promotion> clazz = cls.asSubclass(Promotion.class);
                 Constructor<? extends Promotion> c = clazz.getConstructor(NBTTagCompound.class);
-                return (Promotion) c.newInstance(data);
+                return c.newInstance(data);
             }
         }
         catch (ClassCastException e) {

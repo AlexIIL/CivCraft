@@ -18,16 +18,16 @@ public class TechResearchedEvent extends PlayerEvent {
      * @author AlexIIL */
     public static class ItemTechResearchedEvent extends TechResearchedEvent {
         public final ItemStack techItem;
-        
+
         public ItemTechResearchedEvent(ItemStack item, EntityPlayer player) {
             super(CivItems.technology.getTech(item), player);
             techItem = item;
         }
-        
+
     }
-    
+
     public final Tech tech;
-    
+
     public TechResearchedEvent(Tech tech, EntityPlayer player) {
         super(player);
         if (player == null)

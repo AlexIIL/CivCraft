@@ -38,7 +38,7 @@ public class GuiTechTree extends GuiScreen {
         public final int posY;
         public final String name;
         public final ItemStack item;
-        
+
         public DrawTechInfo(int state, int leaf, int posX, int posY, String name, ItemStack item) {
             this.state = state;
             this.leaf = leaf;
@@ -47,11 +47,11 @@ public class GuiTechTree extends GuiScreen {
             this.name = name;
             this.item = item;
         }
-        
+
         public DrawTechInfo getSelected() {
             return new DrawTechInfo(selectedState, leaf, posX, posY, name, item);
         }
-        
+
         @SuppressWarnings("unchecked")
         public void draw() {
             int texX = (state % techsPerRow) * gapX;
@@ -61,10 +61,10 @@ public class GuiTechTree extends GuiScreen {
             if (leaf > 0)
                 posY += leaf * techTexSizeY;
             drawTexturedModalRect(posX + startX, posY + startY, texX, texY, techTexSizeX, techTexSizeY);
-            
+
             if (name == null || name.length() == 0 || state == selectedState)
                 return;
-            
+
             boolean changedFlag = false;
             String name = this.name;
             while (fontRendererObj.getStringWidth(name) > 56) {
@@ -76,7 +76,7 @@ public class GuiTechTree extends GuiScreen {
             drawString(fontRendererObj, name, posX + startX + 22, posY + startY + 7, 0xFFFFFF);
             mouseX -= startX;
             mouseY -= startY;
-            
+
             if (mouseX >= posX && mouseX < posX + techTexSizeX)
                 if (mouseY >= posY && mouseY < posY + techTexSizeY) {
                     List<String> lines;
@@ -88,17 +88,17 @@ public class GuiTechTree extends GuiScreen {
                     }
                     toolTip = lines;
                 }
-            
+
             mouseX += startX;
             mouseY += startY;
-            
+
         }
     }
-    
+
     public class DrawLineInfo {
         public final int xStart, yStart, length;
         public final boolean isHorizontal, drawArrow;
-        
+
         public DrawLineInfo(int x, int y, int l, boolean horiz, boolean arrow) {
             xStart = x;
             yStart = y;
@@ -106,7 +106,7 @@ public class GuiTechTree extends GuiScreen {
             isHorizontal = horiz;
             drawArrow = arrow;
         }
-        
+
         public void draw(boolean selected, boolean unlocked) {
             int colour = selected ? 0xFF00FF : (unlocked ? 0x00BB00 : 0x005500);
             colour = 0xFFFFFF - colour;
@@ -119,11 +119,11 @@ public class GuiTechTree extends GuiScreen {
                 GuiTechTree.this.drawTexturedModalRect(startX + xStart + length - 7, startY + yStart - 4, 114, 234, 7, 11);
         }
     }
-    
+
     public class DrawConnectionInfo {
         public final DrawTechInfo parent, child;
         public final List<DrawLineInfo> lines;
-        
+
         public DrawConnectionInfo(DrawTechInfo parent, DrawTechInfo child, int[][] bars) {
             this.parent = parent;
             this.child = child;
@@ -140,11 +140,11 @@ public class GuiTechTree extends GuiScreen {
             }
             lines.add(new DrawLineInfo(x, y, child.posX - x, true, true));
         }
-        
+
         public boolean isCurrentlySelected() {
             return parent == GuiTechTree.this.selected || child == GuiTechTree.this.selected;
         }
-        
+
         public void draw() {
             boolean selected = isCurrentlySelected();
             boolean unlocked = parent.state == finishedState || child.state == finishedState;
@@ -152,32 +152,32 @@ public class GuiTechTree extends GuiScreen {
                 dli.draw(selected, unlocked);
         }
     }
-    
+
     public static final ResourceLocation achievementPage = new ResourceLocation("textures/gui/achievement/achievement_background.png");
     public static final int achieveTexX = 256;
     public static final int achieveTexY = 202;
-    
+
     public static final ResourceLocation techTree = new ResourceLocation(Lib.Mod.ID + ":textures/gui/techtree.png");
     public static final int techTexSizeX = 85;
     public static final int techTexSizeY = 22;
     public static final int gapX = techTexSizeX;
     public static final int gapY = techTexSizeY * 2;
     public static final int techsPerRow = 3;
-    
+
     public static final ResourceLocation widgets = new ResourceLocation("textures/gui/widgets.png");
     public static final int widgetHotbarSizeX = 182;
     public static final int widgetHotbarSizeY = 22;
-    
+
     public static final int finishedState = 0;
     public static final int partialState = 1;
     public static final int availableState = 2;
     public static final int lockedState = 3;
     public static final int selectedState = 4;
-    
+
     public static GuiTechTree currentGui = null;
-    
+
     public final EntityPlayer player;
-    
+
     private int startX = 0, startY = 0, mouseX, mouseY;
     private List<String> toolTip = null;
     private List<DrawTechInfo> techInfos;
@@ -186,7 +186,7 @@ public class GuiTechTree extends GuiScreen {
     private final List<Tech> playerTechs;
     private final ItemStack itemTechBag;
     private int needsRecalculating = 0;
-    
+
     public GuiTechTree(EntityPlayer player) {
         currentGui = this;
         this.player = player;
@@ -198,25 +198,25 @@ public class GuiTechTree extends GuiScreen {
             itemTechBag = item;
         recalculateTechs();
     }
-    
+
     @Override
     public void setWorldAndResolution(Minecraft mc, int width, int height) {
         super.setWorldAndResolution(mc, width, height);
         calculateTechs();
     }
-    
+
     public void calculateTechs() {
         needsRecalculating = 1;
     }
-    
+
     private void recalculateTechs() {
         if (needsRecalculating > 0)
             needsRecalculating--;
         techInfos = new ArrayList<DrawTechInfo>();
-        
+
         List<List<Tech>> techList = new ArrayList<List<Tech>>();
         Map<Tech, Integer> tempMap = new HashMap<Tech, Integer>();
-        
+
         TechTree tree = TechTree.currentTree;
         techList.add(new ArrayList<Tech>());
         for (Tech t : tree.getTechs().values()) {
@@ -229,7 +229,7 @@ public class GuiTechTree extends GuiScreen {
         orderTechs(techList);
         populateDrawPositions(techList, tempMap);
     }
-    
+
     private void populateTechMap(List<List<Tech>> techList, Map<Tech, Integer> tempMap) {
         boolean isDirty = true;
         int ttl = 1000;
@@ -260,7 +260,7 @@ public class GuiTechTree extends GuiScreen {
             ttl--;
         }
     }
-    
+
     private void orderTechs(List<List<Tech>> techList) {
         // Order all of the lists into an order for nicer displaying
         // Firstly, in alphabetical order, to try and get a general trend
@@ -271,7 +271,7 @@ public class GuiTechTree extends GuiScreen {
                     return t1.name.compareTo(t2.name);
                 }
             });
-        
+
         // Next, try and group tech parents and children
         List<Tech> lastList;
         for (int idx = 1; idx < techList.size(); idx++) {
@@ -283,12 +283,12 @@ public class GuiTechTree extends GuiScreen {
                 double bestPos = 0;
                 for (Tech p : t.getParentTechs())
                     bestPos += lastList.indexOf(p);
-                bestPos /= (double) t.getParentTechs().length;
+                bestPos /= t.getParentTechs().length;
                 List<Tech> techs = newBests.containsKey(bestPos) ? newBests.get(bestPos) : new ArrayList<Tech>();
                 techs.add(t);
                 newBests.put(bestPos, techs);
             }
-            
+
             currentList.clear();
             List<Double> keys = Arrays.asList(newBests.keySet().toArray(new Double[0]));
             Collections.sort(keys);
@@ -298,12 +298,12 @@ public class GuiTechTree extends GuiScreen {
             }
         }
     }
-    
+
     private void populateDrawPositions(List<List<Tech>> techList, Map<Tech, Integer> tempMap) {
         Map<DrawTechInfo, Tech> tempDrawMap = new HashMap<DrawTechInfo, Tech>();
         Map<Tech, DrawTechInfo> tempDrawMapOther = new HashMap<Tech, DrawTechInfo>();
         ItemTechnology techItem = CivItems.technology;
-        
+
         int xPos = 0;
         for (List<Tech> lst : techList) {
             int num = lst.size();
@@ -330,7 +330,7 @@ public class GuiTechTree extends GuiScreen {
             }
             xPos += techTexSizeX * (3 / 2F);
         }
-        
+
         // And the positions of all the connections
         connectionInfo = new ArrayList<DrawConnectionInfo>();
         for (DrawTechInfo dti : techInfos) {
@@ -338,20 +338,20 @@ public class GuiTechTree extends GuiScreen {
             for (Tech child : t.getChildTechs()) {
                 if (child.isLeafTech())
                     continue;
-                
+
                 // Parent stuffs
                 int totalTechs = techList.get(tempMap.get(t)).size();
                 int pos = techList.get(tempMap.get(t)).indexOf(t);
                 int parentXDiff = pos * 2;
                 parentXDiff -= totalTechs;
-                
+
                 // ChildStuffs
                 DrawTechInfo dtiChild = tempDrawMapOther.get(child);
                 totalTechs = techList.get(tempMap.get(child)).size();
                 pos = techList.get(tempMap.get(child)).indexOf(child);
                 int xDiff = pos * 2;
                 xDiff -= totalTechs;
-                
+
                 int[] coord1 = new int[] { dti.posX + techTexSizeX, dti.posY + techTexSizeY / 2 + parentXDiff * 2 + 2 };
                 int[] coord2 = new int[] { dtiChild.posX - techTexSizeX / 4 + xDiff * 2, dtiChild.posY + techTexSizeY / 2 + xDiff };
                 int[][] arr = new int[][] { coord1, coord2 };
@@ -359,7 +359,7 @@ public class GuiTechTree extends GuiScreen {
             }
         }
     }
-    
+
     private int getState(Tech t) {
         if (playerTechs.contains(t))
             return finishedState;
@@ -372,10 +372,10 @@ public class GuiTechTree extends GuiScreen {
         for (Tech p : t.getParentTechs())
             if (!playerTechs.contains(p))
                 hasAll = false;
-        
+
         return hasAll ? availableState : lockedState;
     }
-    
+
     private TechProgress getProgress(Tech t) {
         if (itemTechBag != null) {
             for (TechProgress tp : CivItems.techBag.getTechs(itemTechBag))
@@ -384,7 +384,7 @@ public class GuiTechTree extends GuiScreen {
         }
         return null;
     }
-    
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         if (needsRecalculating > 0)
@@ -392,28 +392,28 @@ public class GuiTechTree extends GuiScreen {
         toolTip = null;
         this.mouseX = mouseX;
         this.mouseY = mouseY;
-        
+
         drawBackground(0);
-        
+
         for (DrawTechInfo dti : techInfos)
             dti.draw();
         if (selectedCache != null)
             selectedCache.draw();
-        
+
         mc.getTextureManager().bindTexture(achievementPage);
-        
+
         for (DrawConnectionInfo dci : connectionInfo)
             if (!dci.isCurrentlySelected())
                 dci.draw();
-        
+
         for (DrawConnectionInfo dci : connectionInfo)
             if (dci.isCurrentlySelected())
                 dci.draw();
-        
+
         mc.getTextureManager().bindTexture(widgets);
-        
+
         GlStateManager.color(1F, 1F, 1F);
-        
+
         // Draw the hotbar
         drawTexturedModalRect((width - widgetHotbarSizeX) / 2, height - widgetHotbarSizeY, 0, 0, widgetHotbarSizeX, widgetHotbarSizeY);
         int x = width / 2 - widgetHotbarSizeX / 2 + 3;
@@ -428,21 +428,21 @@ public class GuiTechTree extends GuiScreen {
             itemRender.renderItemOverlayIntoGUI(fontRendererObj, stack, x, y, null);
             x += 20;
         }
-        
+
         if (toolTip != null)
             drawHoveringText(toolTip, mouseX, mouseY);
-        
+
         List<String> help = new ArrayList<String>();
         help.add("Left click a technology to select it, and show it's dependencies");
         help.add("Right click a technology to put as many science packs into researching it as possible");
         drawHoveringText(help, 10, 20);
     }
-    
+
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         mouseX -= startX;
         mouseY -= startY;
-        
+
         boolean hasSelected = false;
         for (DrawTechInfo techInfo : techInfos) {
             int altY = techInfo.posY + techInfo.leaf * techTexSizeY;
@@ -462,11 +462,11 @@ public class GuiTechTree extends GuiScreen {
             selected = null;
             selectedCache = null;
         }
-        
+
         mouseX += startX;
         mouseY += startY;
     }
-    
+
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         super.keyTyped(typedChar, keyCode);
