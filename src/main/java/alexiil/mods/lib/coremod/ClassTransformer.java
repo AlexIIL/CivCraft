@@ -44,6 +44,12 @@ public class ClassTransformer implements IClassTransformer {
             if (transformedName.equals("net.minecraft.inventory.ContainerPlayer"))
                 return transformContainerPlayer(basicClass, !name.equals(transformedName));
             
+            if (transformedName.equals("net.minecraft.inventory.ContainerWorkbench"))
+                return transformContainerWorkbench(basicClass, !name.equals(transformedName));
+            
+            if (transformedName.equals("net.minecraft.tileentity.TileEntityFurnace"))
+                return transformTileEntityFurnace(basicClass, !name.equals(transformedName));
+            
         }
         catch (Throwable t) {
             log.warn("Transforming class " + transformedName + " FAILIED! Returning the old version of the class to avoid crashes.");
@@ -123,13 +129,13 @@ public class ClassTransformer implements IClassTransformer {
                 for (int i = 0; i < m.instructions.size(); i++) {
                     AbstractInsnNode node = m.instructions.get(i);
                     if (node instanceof MethodInsnNode) {
-                        MethodInsnNode meth = (MethodInsnNode) node;
-                        if (meth.owner.equals(Type.getInternalName(ChatLine.class))
-                                && (meth.name.equals("getChatComponent") || meth.name.equals("func_151461_a"))) {
-                            m.instructions.remove(meth.getNext());
-                            m.instructions.insert(meth, new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(ChatTextTime.class),
+                        MethodInsnNode method = (MethodInsnNode) node;
+                        if (method.owner.equals(Type.getInternalName(ChatLine.class))
+                                && (method.name.equals("getChatComponent") || method.name.equals("func_151461_a"))) {
+                            m.instructions.remove(method.getNext());
+                            m.instructions.insert(method, new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(ChatTextTime.class),
                                     "getTimeText", "(" + Type.getDescriptor(IChatComponent.class) + "I)Ljava/lang/String;", false));
-                            m.instructions.insert(meth, new VarInsnNode(Opcodes.ILOAD, obfs ? 12 : 11));
+                            m.instructions.insert(method, new VarInsnNode(Opcodes.ILOAD, obfs ? 12 : 11));
                             // annoying forge hack-thing
                         }
                     }
@@ -316,7 +322,7 @@ public class ClassTransformer implements IClassTransformer {
         }
         if (!found) {
             log.warn("Didn't find the method " + targetMethodName + " in ContainerPlayer!");
-            log.info("However, these methdos exist, is it one of these?");
+            log.info("However, these methods exist, is it one of these?");
             for (MethodNode m : classNode.methods) {
                 log.info("  -" + m.name + " with desc " + m.desc);
             }
@@ -327,6 +333,91 @@ public class ClassTransformer implements IClassTransformer {
         byte[] out = cw.toByteArray();
         showDiff("net.minecraft.inventory.ContainerPlayer", input, out);
         return out;
+    }
+    
+    private byte[] transformContainerWorkbench(byte[] input, boolean obfuscated) {
+        String targetMethodName = obfuscated ? "func_75130_a" : "onCraftMatrixChanged";
+        
+        ClassNode classNode = new ClassNode();
+        ClassReader reader = new ClassReader(input);
+        reader.accept(classNode, 0);
+        boolean found = false;
+        
+        for (MethodNode m : classNode.methods) {
+            if (m.name.equals(targetMethodName)) {
+                found = true;
+                int ins = 0;
+                for (int i = 0; i < m.instructions.size(); i++) {
+                    if (m.instructions.get(i).getOpcode() == Opcodes.INVOKESTATIC) {
+                        m.instructions.remove(m.instructions.get(i));
+                        ins = i;
+                        break;
+                    }
+                }
+                
+                ins += 4;
+                m.instructions.remove(m.instructions.get(ins));
+                ins--;
+                m.instructions.insert(m.instructions.get(ins), new VarInsnNode(Opcodes.ALOAD, 0));
+                ins++;
+                m.instructions.insert(m.instructions.get(ins), new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/inventory/ContainerWorkbench",
+                        "field_178145_h", "Lnet/minecraft/util/BlockPos;"));
+                ins++;
+                
+                String owner = "alexiil/forgechanges/MinecraftForgeNewHooks";
+                String desc = "(Lnet/minecraft/inventory/InventoryCrafting;Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;)";
+                String desc2 = "Lnet/minecraft/item/ItemStack;";
+                MethodInsnNode node = new MethodInsnNode(Opcodes.INVOKESTATIC, owner, "canCraftBlockEvent", desc + desc2, false);
+                m.instructions.insert(m.instructions.get(ins), node);
+            }
+        }
+        if (!found) {
+            log.warn("Didn't find the method " + targetMethodName + " in ContainerWorkbench!");
+            log.info("However, these methods exist, is it one of these?");
+            for (MethodNode m : classNode.methods) {
+                log.info("  -" + m.name + " with desc " + m.desc);
+            }
+        }
+        
+        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+        classNode.accept(cw);
+        byte[] out = cw.toByteArray();
+        showDiff("net.minecraft.inventory.ContainerWorkbench", input, out);
+        return out;
+    }
+    
+    private byte[] transformTileEntityFurnace(byte[] input, boolean obfuscated) {
+        String targetMethodName = obfuscated ? "" : "canSmelt";
+        
+        ClassNode classNode = new ClassNode();
+        ClassReader reader = new ClassReader(input);
+        reader.accept(classNode, 0);
+        boolean found = false;
+        
+        for (MethodNode m : classNode.methods) {
+            if (m.name.equals(targetMethodName)) {}
+        }
+        if (!found) {
+            log.warn("Didn't find the method " + targetMethodName + " in TileEntityFurnace !");
+            log.info("However, these methods exist, is it one of these?");
+            for (MethodNode m : classNode.methods) {
+                log.info("  -" + m.name + " with desc " + m.desc);
+            }
+        }
+        
+        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+        classNode.accept(cw);
+        byte[] out = cw.toByteArray();
+        showDiff("net.minecraft.inventory.ContainerWorkbench", input, out);
+        return out;
+    }
+    
+    @SuppressWarnings("unused")
+    private void showMethod(MethodNode m) {
+        log.info("Showing Method...");
+        for (int i = 0; i < m.instructions.size(); i++) {
+            log.info("  -" + getInsn(m.instructions.get(i)));
+        }
     }
     
     @SuppressWarnings("unused")
