@@ -387,7 +387,7 @@ public class ClassTransformer implements IClassTransformer {
     }
 
     private byte[] transformTileEntityFurnace(byte[] input, boolean obfuscated) {
-        String targetMethodName = obfuscated ? "" : "canSmelt";
+        String targetMethodName = obfuscated ? "func_145948_k" : "canSmelt";
 
         ClassNode classNode = new ClassNode();
         ClassReader reader = new ClassReader(input);
@@ -395,7 +395,44 @@ public class ClassTransformer implements IClassTransformer {
         boolean found = false;
 
         for (MethodNode m : classNode.methods) {
-            if (m.name.equals(targetMethodName)) {}
+            if (m.name.equals(targetMethodName)) {
+                int ins = 0;
+                for (int i = 0; i < m.instructions.size(); i++) {
+                    if (m.instructions.get(i).getOpcode() == Opcodes.INVOKESTATIC) {
+                        m.instructions.remove(m.instructions.get(i));
+                        ins = i;
+                        break;
+                    }
+                }
+
+                ins += 4;
+
+                m.instructions.remove(m.instructions.get(ins));
+                ins--;
+
+                m.instructions.insert(m.instructions.get(ins), new VarInsnNode(Opcodes.ALOAD, 0));
+                ins++;
+
+                String worldObj = obfuscated ? "field_145850_b" : "worldObj";
+
+                m.instructions.insert(m.instructions.get(ins), new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/tileentity/TileEntityFurnace",
+                        worldObj, "Lnet/minecraft/world/World;"));
+                ins++;
+
+                m.instructions.insert(m.instructions.get(ins), new VarInsnNode(Opcodes.ALOAD, 0));
+                ins++;
+
+                String pos = obfuscated ? "field_174879_c" : "pos";
+
+                m.instructions.insert(m.instructions.get(ins), new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/tileentity/TileEntityFurnace", pos,
+                        "Lnet/minecraft/util/BlockPos;"));
+                ins++;
+
+                m.instructions.insert(m.instructions.get(ins), new MethodInsnNode(Opcodes.INVOKESTATIC,
+                        "alexiil/forgechanges/MinecraftForgeNewHooks", "canSmeltEvent",
+                        "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;)Lnet/minecraft/item/ItemStack;",
+                        false));
+            }
         }
         if (!found) {
             log.warn("Didn't find the method " + targetMethodName + " in TileEntityFurnace !");
@@ -413,9 +450,9 @@ public class ClassTransformer implements IClassTransformer {
     }
 
     @SuppressWarnings("unused")
-    private void showMethod(MethodNode m) {
+    private void showMethod(MethodNode m, int from) {
         log.info("Showing Method...");
-        for (int i = 0; i < m.instructions.size(); i++) {
+        for (int i = from; i < m.instructions.size() && i < from + 12; i++) {
             log.info("  -" + getInsn(m.instructions.get(i)));
         }
     }
