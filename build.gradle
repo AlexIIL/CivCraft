@@ -81,13 +81,13 @@ dependencies {
 // add a source jar
 task sourceJar(type: Jar) {
     from sourceSets.main.allSource
-    classifier = 'src'
+    classifier = 'source code'
 }
 
 // because the normal output has been made to be obfuscated
 task deobfJar(type: Jar) {
     from sourceSets.main.output
-    classifier = 'dev'
+    classifier = 'developer'
 }
 
 build.dependsOn sourceJar, deobfJar
