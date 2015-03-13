@@ -1,6 +1,8 @@
 package alexiil.mods.civ;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -111,7 +113,24 @@ public class CivCraft extends AlexIILMod {
                     modMeta.authorList.add(c.login);
                 }
 
-                commits = Collections.unmodifiableList(GitHubRequester.getCommits("AlexIIL", "CivCraft"));
+                commits = new ArrayList<Commit>();
+                int pageNo = 1;
+                while (pageNo <= 10) {
+                    // Don't fetch more than 1000 commits, thats just silly
+                    List<Commit> commitTemp = GitHubRequester.getCommits("AlexIIL", "CivCraft", pageNo);
+                    if (commitTemp.size() == 0)
+                        break;
+                    commits.addAll(commitTemp);
+                    pageNo++;
+                }
+                Collections.sort(commits, new Comparator<Commit>() {
+                    @Override
+                    public int compare(Commit c0, Commit c1) {
+                        return c1.commit.committer.date.compareTo(c0.commit.committer.date);
+                    }
+                });
+                commits = Collections.unmodifiableList(commits);
+
                 for (Commit c : commits)
                     if (Lib.Mod.COMMIT_HASH.equals(c.sha))
                         thisCommit = c;

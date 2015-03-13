@@ -47,8 +47,8 @@ public class GitHubRequester {
         return users;
     }
 
-    public static List<Commit> getCommits(String user, String repo) {
-        String response = getResponse("repos/" + user + "/" + repo + "/commits");
+    public static List<Commit> getCommits(String user, String repo, int pageNo) {
+        String response = getResponse("repos/" + user + "/" + repo + "/commits?page=" + pageNo + "&per_page=100");
         if (response == null)
             return Collections.emptyList();
         Commit[] commits = new GsonBuilder().create().fromJson(response, Commit[].class);
@@ -122,8 +122,8 @@ public class GitHubRequester {
 
     /** Get a GitHub API response, without using an access token */
     public static String getResponse(String site) {
-        if (site.contains("?"))
-            return getResponse(site + ",access_token=" + accessToken, null);
+        if (site.contains("?") && accessToken != null)
+            return getResponse(site + "&access_token=" + accessToken, null);
         return getResponse(site, accessToken);
     }
 
