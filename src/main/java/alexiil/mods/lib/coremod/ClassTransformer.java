@@ -315,7 +315,7 @@ public class ClassTransformer implements IClassTransformer {
                 m.instructions.remove(m.instructions.get(ins));
                 m.instructions.remove(m.instructions.get(ins));
                 m.instructions.insert(m.instructions.get(ins - 1), new MethodInsnNode(Opcodes.INVOKESTATIC,
-                        "alexiil/forgechanges/MinecraftForgeNewHooks", "canCraftPlayerEvent",
+                        "alexiil/mods/civ/event/VanillaEventHooks", "canCraftPlayerEvent",
                         "(Lnet/minecraft/inventory/InventoryCrafting;Lnet/minecraft/entity/player/EntityPlayer;)Lnet/minecraft/item/ItemStack;",
                         false));
             }
@@ -364,7 +364,7 @@ public class ClassTransformer implements IClassTransformer {
                         "field_178145_h", "Lnet/minecraft/util/BlockPos;"));
                 ins++;
 
-                String owner = "alexiil/forgechanges/MinecraftForgeNewHooks";
+                String owner = "alexiil/mods/civ/event/VanillaEventHooks";
                 String desc = "(Lnet/minecraft/inventory/InventoryCrafting;Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;)";
                 String desc2 = "Lnet/minecraft/item/ItemStack;";
                 MethodInsnNode node = new MethodInsnNode(Opcodes.INVOKESTATIC, owner, "canCraftBlockEvent", desc + desc2, false);
@@ -429,7 +429,7 @@ public class ClassTransformer implements IClassTransformer {
                 ins++;
 
                 m.instructions.insert(m.instructions.get(ins), new MethodInsnNode(Opcodes.INVOKESTATIC,
-                        "alexiil/forgechanges/MinecraftForgeNewHooks", "canSmeltEvent",
+                        "alexiil/mods/civ/event/VanillaEventHooks", "canSmeltEvent",
                         "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;)Lnet/minecraft/item/ItemStack;",
                         false));
             }

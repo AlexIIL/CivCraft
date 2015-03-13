@@ -1,4 +1,4 @@
-package alexiil.forgechanges;
+package alexiil.mods.civ.event;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCrafting;
@@ -11,7 +11,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 // TODO: remove these IF forge incorporates my events
-public class MinecraftForgeNewHooks {
+public class VanillaEventHooks {
     public static ItemStack canSmeltEvent(ItemStack in, World world, BlockPos pos) {
         ItemStack out = FurnaceRecipes.instance().getSmeltingResult(in);
         FindMatchingRecipeEvent evt =
