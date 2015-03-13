@@ -396,6 +396,7 @@ public class ClassTransformer implements IClassTransformer {
 
         for (MethodNode m : classNode.methods) {
             if (m.name.equals(targetMethodName)) {
+                found = true;
                 int ins = 0;
                 for (int i = 0; i < m.instructions.size(); i++) {
                     if (m.instructions.get(i).getOpcode() == Opcodes.INVOKESTATIC) {
@@ -428,8 +429,8 @@ public class ClassTransformer implements IClassTransformer {
                         "Lnet/minecraft/util/BlockPos;"));
                 ins++;
 
-                m.instructions.insert(m.instructions.get(ins), new MethodInsnNode(Opcodes.INVOKESTATIC,
-                        "alexiil/mods/civ/event/VanillaEventHooks", "canSmeltEvent",
+                m.instructions.insert(m.instructions.get(ins), new MethodInsnNode(Opcodes.INVOKESTATIC, "alexiil/mods/civ/event/VanillaEventHooks",
+                        "canSmeltEvent",
                         "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;)Lnet/minecraft/item/ItemStack;",
                         false));
             }
