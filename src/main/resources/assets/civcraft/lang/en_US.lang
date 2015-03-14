@@ -12,11 +12,12 @@ civcraft.config.tech.title=Technology tree
 civcraft.config.tech.button=Edit the technology tree
 civcraft.config.help=Help, why is this not a configuration? And what do all the colours mean?
 civcraft.config.closeHelp=Close Help
+
 #This is a list, so adding "civcraft.gui.config.help3=..." is fine (and etc) 
 civcraft.gui.config.help.0=The config can be accessed by the buttons at the top left (don't worry, the configs are still there)
 civcraft.gui.config.help.1=On the left side is a list of all the people who have put some time and effort into this mod
 civcraft.gui.config.help.2=On the right side is a changelog of this mod, where gold represents the current version you are using, blue is the start of a new changelog, and green is when a built jar is available on CurseForge.
-civcraft.gui.connectExternallyDisabled=Connect externally has been disabled, so the contributors and changelog could not be fetched
+civcraft.gui.connectExternallyDisabled=Connect externally has been disabled, so the contributors list and changelog could not be fetched
 
 civcraft.gui.contributors=Contributors
 civcraft.gui.commits=Changelog history
@@ -25,6 +26,7 @@ civcraft.gui.commits=Changelog history
 civcraft.github.AlexIIL=Original Author
 civcraft.github.Mazdallier=French Translation
 
+#Technology names
 civcraft.tech.agriculture=Agriculture
 
 civcraft.tech.sailing=Sailing
@@ -56,7 +58,10 @@ civcraft.tech.redstone_flux=Redstone Flux
 
 civcraft.tech.diamond_working=Diamond Working
 
-civcraft.chat.earnBeaker=You just earned a beaker for 
+#Earning research notes
+#    This is the first part of the sentence, a normal one would translate like this:
+#    civcraft.chat.earnBeaker + civcraft.chat.earnBeaker.block.harvest + craft.item
+civcraft.chat.earnBeaker=You just wrote a research note for 
 civcraft.chat.earnBeaker.craft=crafting
 civcraft.chat.earnBeaker.block.break=breaking
 civcraft.chat.earnBeaker.block.harvest=harvesting
@@ -67,7 +72,13 @@ craft.block=Blocks
 craft.tile=Blocks
 entity.kill.tile=Mobs
 
+#Used for unlockables, these are just put into a bullet-pointed list.
+
+#    This one is special, as it is for most singular items in-game. So, this will translate as:
+#    civcraft.unlock.itemcraft.pre + item.diamond
 civcraft.unlock.itemcraft.pre=Craft the
+
+
 civcraft.unlock.itemcraft.masonary=Smelt Stone and Craft Stone Bricks
-civcraft.unlock.itemcraft.masonary_construction=Craft Stone Slabs and Stairs
+civcraft.unlock.itemcraft.masonary+construction=Craft Stone Slabs and Stairs
 civcraft.unlock.itemcraft.construction=Craft Wooden Slabs and Stairs

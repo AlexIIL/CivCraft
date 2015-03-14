@@ -17,20 +17,21 @@ public class NBTUtils {
     public static final String NBT_STRING_BYTE = "B-";
 
     public static String toString(NBTTagCompound nbt) {
-        return toString(nbt, 0);
+        return getNextLine(0) + toString(nbt, 0);
     }
 
     public static String toString(NBTTagCompound nbt, int indent) {
-        String s = "\n{";
+        String s = "{";
         int idx = nbt.getKeySet().size();
         for (Object o : nbt.getKeySet()) {
             String key = (String) o;
+            s += getNextLine(indent + 1);
             s += key + ":";
             NBTBase base = nbt.getTag(key);
-            s += toString(base, indent);
+            s += toString(base, indent + 1);
             if (idx != 1)
                 s += ",";
-            s += getNextLine(indent + 1);
+            s += getNextLine(indent);
             idx--;
         }
         return s + getNextLine(indent) + "}";
@@ -63,9 +64,8 @@ public class NBTUtils {
                 break;
             }
             case 10: {// Compound
-                s += getNextLine(indent + 1);
                 s += toString((NBTTagCompound) base, indent + 1);
-                s += getNextLine(indent);
+                // s += getNextLine(indent + 1);
             }
         }
         return s;

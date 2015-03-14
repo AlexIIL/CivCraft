@@ -69,7 +69,6 @@ public class CivCraft extends AlexIILMod {
         provider = MessageHandler.instance;
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 
-        // Pending forge
         tab = new CreativeTabs("civCraft") {
             @Override
             public Item getTabIconItem() {
@@ -81,6 +80,8 @@ public class CivCraft extends AlexIILMod {
         CivItems.init();
 
         ModCompat.loadCompats();
+
+        initGithubRemote();
     }
 
     @EventHandler
@@ -94,8 +95,6 @@ public class CivCraft extends AlexIILMod {
         CivTechs.loadTree();
         proxy.initRenderers();
         cfg.saveAll();
-
-        initGithubRemote();
     }
 
     private void initGithubRemote() {

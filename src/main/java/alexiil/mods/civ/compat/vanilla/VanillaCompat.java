@@ -102,7 +102,7 @@ public class VanillaCompat extends ModCompat {
         // Iron Working
         tree.addUnlockable(new ItemCraftUnlock("iron_working", techIron).addUnlocked(Items.iron_ingot, Items.iron_axe, Items.iron_boots,
                 Items.iron_chestplate, Items.iron_door, Items.iron_helmet, Items.iron_horse_armor, Items.iron_leggings, Items.iron_shovel,
-                Items.iron_sword).addUnlocked(Blocks.iron_block));
+                Items.iron_sword).addUnlocked(Blocks.iron_block, Blocks.iron_ore));
         // Construction
         tree.addUnlockable(new ItemCraftUnlock("construction", techConstruction).addUnlocked(Blocks.oak_stairs, Blocks.acacia_stairs,
                 Blocks.birch_stairs, Blocks.dark_oak_stairs, Blocks.jungle_stairs, Blocks.spruce_stairs));

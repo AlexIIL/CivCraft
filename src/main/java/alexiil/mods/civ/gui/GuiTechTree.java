@@ -57,9 +57,10 @@ public class GuiTechTree extends GuiScreen {
             int texX = (state % techsPerRow) * gapX;
             int texY = (state / techsPerRow) * gapY + (leaf > 0 ? techTexSizeY : 0);
             int posY = this.posY;
-            mc.getTextureManager().bindTexture(techTree);
             if (leaf > 0)
                 posY += leaf * techTexSizeY;
+            mc.getTextureManager().bindTexture(techTree);
+
             drawTexturedModalRect(posX + startX, posY + startY, texX, texY, techTexSizeX, techTexSizeY);
 
             if (name == null || name.length() == 0 || state == selectedState)
@@ -75,6 +76,9 @@ public class GuiTechTree extends GuiScreen {
                 name += "...";
             drawString(fontRendererObj, name, posX + startX + 22, posY + startY + 7, 0xFFFFFF);
             mouseX -= startX;
+
+            mc.getTextureManager().bindTexture(techTree);
+
             mouseY -= startY;
 
             if (mouseX >= posX && mouseX < posX + techTexSizeX)
@@ -345,7 +349,7 @@ public class GuiTechTree extends GuiScreen {
                 int parentXDiff = pos * 2;
                 parentXDiff -= totalTechs;
 
-                // ChildStuffs
+                // Child Stuffs
                 DrawTechInfo dtiChild = tempDrawMapOther.get(child);
                 totalTechs = techList.get(tempMap.get(child)).size();
                 pos = techList.get(tempMap.get(child)).indexOf(child);

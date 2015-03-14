@@ -1,5 +1,7 @@
 package alexiil.mods.civ;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,11 +12,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.storage.ISaveHandler;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
@@ -29,6 +35,7 @@ import alexiil.mods.civ.tech.TechResearchedEvent;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.civ.utils.CraftUtils;
+import alexiil.mods.civ.utils.PlayerTechData;
 import alexiil.mods.civ.utils.TechUtils;
 
 public class EventListner {
@@ -177,6 +184,84 @@ public class EventListner {
                 event.setCanceled(true);
                 return;
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void worldLoad(WorldEvent.Load load) {
+        World world = load.world;
+        if (world.isRemote)
+            return;
+        ISaveHandler handler = world.getSaveHandler();
+
+        File file = handler.getWorldDirectory();
+        File civcraft = new File(file, "civcraft");
+        if (civcraft.exists()) {
+            File knownPlayers = new File(civcraft, "knownPlayers.nbt");
+            if (knownPlayers.exists()) {
+                try {
+                    NBTTagCompound nbt = CompressedStreamTools.read(knownPlayers);
+                    PlayerTechData.load(nbt);
+                }
+                catch (IOException e) {
+                    CivLog.warn("Was unable to read the owned land file, this will make most auto-crafting and smelting cease!");
+                    CivLog.warn(e.getMessage());
+                    PlayerTechData.load(new NBTTagCompound());
+                }
+            }
+            else
+                PlayerTechData.load(new NBTTagCompound());
+
+            File ownedLand = new File(civcraft, "ownedLand.nbt");
+            if (ownedLand.exists()) {
+                try {
+                    NBTTagCompound nbt = CompressedStreamTools.read(ownedLand);
+                    CraftUtils.load(nbt);
+                }
+                catch (IOException e) {
+                    CivLog.warn("Was unable to read the owned land file, this will make most auto-crafting and smelting cease!");
+                    CivLog.warn(e.getMessage());
+                    CraftUtils.load(new NBTTagCompound());
+                }
+            }
+            else
+                CraftUtils.load(new NBTTagCompound());
+        }
+        else {
+            PlayerTechData.load(new NBTTagCompound());
+            CraftUtils.load(new NBTTagCompound());
+        }
+    }
+
+    @SubscribeEvent
+    public void worldSave(WorldEvent.Save save) {
+        World world = save.world;
+        if (world.isRemote)
+            return;
+        ISaveHandler handler = world.getSaveHandler();
+        File worldDirectory = handler.getWorldDirectory();
+
+        File civcraft = new File(worldDirectory, "civcraft");
+        civcraft.mkdir();
+
+        File knownPlayers = new File(civcraft, "knownPlayers.nbt");
+        NBTTagCompound nbt = PlayerTechData.save();
+        try {
+            CompressedStreamTools.safeWrite(nbt, knownPlayers);
+        }
+        catch (IOException e) {
+            CivLog.warn("Was unable to save the known players file, this will make most auto-crafting and smelting cease when the world loads!");
+            CivLog.warn(e.getMessage());
+        }
+
+        File ownedLand = new File(civcraft, "ownedLand.nbt");
+        nbt = CraftUtils.save();
+        try {
+            CompressedStreamTools.safeWrite(nbt, ownedLand);
+        }
+        catch (IOException e) {
+            CivLog.warn("Was unable to save the owned land file, this will make most auto-crafting and smelting cease when the world loads!");
+            CivLog.warn(e.getMessage());
         }
     }
 
