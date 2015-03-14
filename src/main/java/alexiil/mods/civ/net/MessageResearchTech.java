@@ -9,12 +9,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+import alexiil.mods.civ.event.TechResearchedEvent;
 import alexiil.mods.civ.gui.GuiTechTree;
 import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.item.ItemTechBag;
 import alexiil.mods.civ.item.ItemTechBag.TechProgress;
 import alexiil.mods.civ.item.ItemTechnology.EResearchState;
-import alexiil.mods.civ.tech.TechResearchedEvent;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.lib.item.ItemBase;
@@ -97,8 +97,9 @@ public class MessageResearchTech extends MessageBase<MessageResearchTech> {
         }
         else if (ctx.side == Side.CLIENT) {
             Gui screen = Minecraft.getMinecraft().currentScreen;
-            if (screen != null && screen instanceof GuiTechTree)
-                ((GuiTechTree) screen).calculateTechs();
+            if (screen != null && screen instanceof GuiTechTree) {
+                Minecraft.getMinecraft().displayGuiScreen(null);
+            }
         }
         return null;
     }

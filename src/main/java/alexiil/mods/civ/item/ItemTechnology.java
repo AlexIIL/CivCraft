@@ -17,8 +17,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alexiil.mods.civ.CivCraft;
+import alexiil.mods.civ.event.TechResearchedEvent.ItemTechResearchedEvent;
 import alexiil.mods.civ.item.ItemTechBag.TechProgress;
-import alexiil.mods.civ.tech.TechResearchedEvent.ItemTechResearchedEvent;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.civ.tech.Unlockable;
@@ -274,7 +274,12 @@ public class ItemTechnology extends ItemBase {
     }
 
     public ItemStack getStartingTech() {
-        return getItemForTech(TechTree.currentTree.getBaseTech(), new int[0]);
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setString(Tech.NAME, "agriculture");
+        nbt.setIntArray(Tech.SCIENCE_PACKS, new int[0]);
+        ItemStack item = new ItemStack(this, 1, 0);
+        item.setTagCompound(nbt);
+        return item;
     }
 
     @Override

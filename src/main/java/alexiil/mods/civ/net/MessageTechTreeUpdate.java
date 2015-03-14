@@ -49,10 +49,9 @@ public class MessageTechTreeUpdate extends MessageBase<MessageTechTreeUpdate> {
     @Override
     public IMessage onMessage(MessageTechTreeUpdate message, MessageContext ctx) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-            TechTree.currentTree = new TechTree();
             try {
                 NBTTagCompound nbt = CompressedStreamTools.read(new DataInputStream(new ByteBufInputStream(stored)));
-                TechTree.currentTree.init(nbt);
+                TechTree.currentTree = new TechTree(nbt);
             }
             catch (IOException e) {
                 e.printStackTrace();

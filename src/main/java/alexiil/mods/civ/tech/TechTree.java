@@ -183,12 +183,12 @@ public final class TechTree {
 
         @Override
         public String getUnlocalizedName() {
-            return name;
+            return "civcraft.tech." + name;
         }
 
         @Override
         public String getLocalizedName() {
-            return CivCraft.instance.format("civcraft.tech." + getUnlocalizedName());
+            return CivCraft.instance.format(getUnlocalizedName());
         }
 
         public Tech[] getChildTechs() {
@@ -335,9 +335,10 @@ public final class TechTree {
     private Map<String, Tech> techs = new HashMap<String, Tech>();
     private Map<String, Unlockable> unlockables = new HashMap<String, Unlockable>();
     private Map<String, IUnlockableConstructor> unlockableTypes = new HashMap<String, IUnlockableConstructor>();
-    private boolean inMethod = false;
-    public static TechTree currentTree = new TechTree();
-    private NBTTagCompound treeData;
+    /** WARNING: This will be null if a save has not been loaded yet, or it will be the old tech tree if a save has been
+     * unloaded */
+    public static TechTree currentTree = null;
+    private final NBTTagCompound treeData;
     /** Used to add a compat-specific prefix to the unlockable name */
     ModCompat currentCompat = null;
     public final PromotionManager promotions;
@@ -354,35 +355,14 @@ public final class TechTree {
         return strings;
     }
 
-    public TechTree() {
+    public TechTree(NBTTagCompound nbt) {
+        TechTree oldTree = TechTree.currentTree;
+        TechTree.currentTree = this;
         state = EState.CONSTRUCTING;
         promotions = new PromotionManager(this);
-    }
-
-    public EState getState() {
-        return state;
-    }
-
-    /** This initialises the tech tree. Cannot be called from itself (don't want the states being mixed up) and also
-     * don't want it being called after it has been finalised (a new tech tree object should be created instead) */
-    public void init(NBTTagCompound nbt) {
-        if (inMethod) {
-            new Exception("Tried to init the tech tree during its initialisation! This is a severe mistake, and needs be fixed!").printStackTrace();
-            return;
-        }
-        if (state != EState.CONSTRUCTING) {
-            new Exception("Tried to init the tech tree when it was in the wrong state (was " + state + ", when it needs to be in "
-                    + EState.CONSTRUCTING + ")").printStackTrace();
-            return;
-        }
-        // CivCraft.log.info("Writing the NBT Tag Compound out");
-        // CivCraft.log.info(NBTUtils.toString(nbt));
-        techs.clear();
-        unlockables.clear();
 
         CivLog.info("Initializing the tech tree");
-        inMethod = true;
-        this.treeData = nbt;
+        treeData = nbt;
 
         state = EState.PRE;
         ModCompat.sendPreEvent(new TechTreeEvent.Pre(this, nbt));
@@ -414,8 +394,12 @@ public final class TechTree {
         CivLog.info("Post-init of the tech tree done");
 
         state = EState.FINALISED;
-        this.treeData = null;
-        inMethod = false;
+
+        TechTree.currentTree = oldTree;
+    }
+
+    public EState getState() {
+        return state;
     }
 
     private void setChildren() {
@@ -427,7 +411,7 @@ public final class TechTree {
                 t.setLeafTech();
     }
 
-    public void save(NBTTagCompound nbt) {
+    public NBTTagCompound save(NBTTagCompound nbt) {
         EState oldState = state;
         // This is set, so that the ACTUAL value for how many science packs is used, not the adjusted one
         state = EState.SAVING;
@@ -450,6 +434,8 @@ public final class TechTree {
         nbt.setTag("promotions", promotions.saveToNBT());
 
         state = oldState;
+
+        return nbt;
     }
 
     /** @param unlock

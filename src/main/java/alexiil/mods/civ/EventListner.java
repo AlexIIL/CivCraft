@@ -14,8 +14,11 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.ISaveHandler;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
@@ -27,16 +30,17 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import alexiil.mods.civ.crafting.RecipeTech;
 import alexiil.mods.civ.event.FindMatchingRecipeEvent;
+import alexiil.mods.civ.event.TechResearchedEvent;
 import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.net.MessageHandler;
 import alexiil.mods.civ.net.MessagePlayerTechUpdate;
 import alexiil.mods.civ.net.MessageTechTreeUpdate;
-import alexiil.mods.civ.tech.TechResearchedEvent;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.civ.utils.CraftUtils;
 import alexiil.mods.civ.utils.PlayerTechData;
 import alexiil.mods.civ.utils.TechUtils;
+import alexiil.mods.lib.nbt.NBTUtils;
 
 public class EventListner {
     public static final EventListner instance = new EventListner();
@@ -45,17 +49,15 @@ public class EventListner {
 
     @SubscribeEvent
     public void onClientConnect(ClientConnectedToServerEvent event) {
-        CivLog.info("onClientConnect");
-        new Thread("AlexIIL|ClientConnectedToServer") {
+        new Thread("CivCraft|ClientConnectedToServer") {
             @Override
             public void run() {
                 try {
                     Thread.sleep(5000);
                 }
                 catch (InterruptedException e) {
-
+                    CivLog.warn("Was interupted for some reason (" + e.getMessage() + ")");
                 }
-                CivLog.info("sending message (hopefully)");
                 MessageHandler.INSTANCE.sendToServer(new MessagePlayerTechUpdate());
             }
         }.start();
@@ -197,6 +199,16 @@ public class EventListner {
         File file = handler.getWorldDirectory();
         File civcraft = new File(file, "civcraft");
         if (civcraft.exists()) {
+            File techTree = new File(civcraft, "techTree.cfg");
+            if (techTree.exists()) {
+                Configuration tree = new Configuration(techTree);
+                tree.load();
+                NBTTagCompound nbtTree = NBTUtils.convertToNBT(tree.getCategory("TechTree"));
+                TechTree.currentTree = new TechTree(nbtTree);
+            }
+            else
+                useDefaultTree();
+
             File knownPlayers = new File(civcraft, "knownPlayers.nbt");
             if (knownPlayers.exists()) {
                 try {
@@ -230,6 +242,22 @@ public class EventListner {
         else {
             PlayerTechData.load(new NBTTagCompound());
             CraftUtils.load(new NBTTagCompound());
+            useDefaultTree();
+        }
+    }
+
+    private void useDefaultTree() {
+        File defaultTree = new File("./config/civcraftDefaultTechTree.cfg");
+        boolean save = !defaultTree.exists();
+        Configuration tree = new Configuration(defaultTree);
+        tree.load();
+        NBTTagCompound nbtTree = NBTUtils.convertToNBT(tree.getCategory("TechTree"));
+        TechTree.currentTree = new TechTree(nbtTree);
+        if (save) {
+            nbtTree = TechTree.currentTree.save(new NBTTagCompound());
+            NBTUtils.convertToConfigCategory(tree.getCategory("TechTree"), nbtTree);
+            tree.save();
+            CivLog.info("Exported a new default Tech Tree");
         }
     }
 
@@ -244,8 +272,15 @@ public class EventListner {
         File civcraft = new File(worldDirectory, "civcraft");
         civcraft.mkdir();
 
+        File techTree = new File(civcraft, "techTree.cfg");
+        Configuration config = new Configuration(techTree);
+        config.load();
+        NBTTagCompound nbt = TechTree.currentTree.save(new NBTTagCompound());
+        NBTUtils.convertToConfigCategory(config.getCategory("TechTree"), nbt);
+        config.save();
+
         File knownPlayers = new File(civcraft, "knownPlayers.nbt");
-        NBTTagCompound nbt = PlayerTechData.save();
+        nbt = PlayerTechData.save();
         try {
             CompressedStreamTools.safeWrite(nbt, knownPlayers);
         }
@@ -272,5 +307,15 @@ public class EventListner {
         else if (event instanceof FindMatchingRecipeEvent.Block)
             techs = CraftUtils.getTechs(event.world, ((FindMatchingRecipeEvent.Block) event).pos);
         return CraftUtils.canUse(stack, techs);
+    }
+
+    @SubscribeEvent
+    public void researchTech(TechResearchedEvent event) {
+        if (event.entityPlayer.worldObj.isRemote)
+            return;
+        ChatComponentText text = new ChatComponentText("");
+        text.appendSibling(new ChatComponentTranslation("civcraft.chat.unlocktech"));
+        text.appendSibling(new ChatComponentTranslation(event.tech.getUnlocalizedName()));
+        event.entityPlayer.addChatMessage(text);
     }
 }

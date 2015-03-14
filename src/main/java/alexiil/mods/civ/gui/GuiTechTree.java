@@ -189,7 +189,7 @@ public class GuiTechTree extends GuiScreen {
     private DrawTechInfo selected = null, selectedCache = null;
     private final List<Tech> playerTechs;
     private final ItemStack itemTechBag;
-    private int needsRecalculating = 0;
+    private boolean needsRecalculating = true;
 
     public GuiTechTree(EntityPlayer player) {
         currentGui = this;
@@ -210,12 +210,13 @@ public class GuiTechTree extends GuiScreen {
     }
 
     public void calculateTechs() {
-        needsRecalculating = 1;
+        needsRecalculating = true;
     }
 
     private void recalculateTechs() {
-        if (needsRecalculating > 0)
-            needsRecalculating--;
+        if (!needsRecalculating)
+            return;
+        needsRecalculating = false;
         techInfos = new ArrayList<DrawTechInfo>();
 
         List<List<Tech>> techList = new ArrayList<List<Tech>>();
@@ -391,8 +392,7 @@ public class GuiTechTree extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        if (needsRecalculating > 0)
-            recalculateTechs();
+        recalculateTechs();
         toolTip = null;
         this.mouseX = mouseX;
         this.mouseY = mouseY;

@@ -23,10 +23,10 @@ public class VanillaCompat extends ModCompat {
     }
 
     private Tech techAgri;
-    private Tech techSail, techAnimal, techArchery, techMining;
-    private Tech techSmelting, techMasonry, techWheel, techTrap, techAutomation;
-    private Tech techIron, techPottery, techConstruction, techMaths, techHorses;
-    private Tech techGold, techWriting, techEngineering;
+    private Tech techSail, techAnimal, techArchery, techMining, techWriting;
+    private Tech techSmelting, techMasonry, techTrap, techAutomation, techEnchanting;
+    private Tech techIron, techPottery, techConstruction, techHorses;
+    private Tech techGold, techEngineering;
     private Tech techDiamond;
 
     @Override
@@ -45,22 +45,21 @@ public class VanillaCompat extends ModCompat {
         techAnimal = tree.addTech("animal_husbandry", new int[] { 2 }, techAgri);
         techArchery = tree.addTech("archery", new int[] { 2 }, techAgri);
         techMining = tree.addTech("mining", new int[] { 2 }, techAgri);
+        techWriting = tree.addTech("writing", new int[] { 3 }, techAgri);
         // Tier 2
         techSmelting = tree.addTech("smelting", new int[] { 3 }, techMining);
         techMasonry = tree.addTech("masonry", new int[] { 3 }, techMining);
-        techWheel = tree.addTech("the_wheel", new int[] { 3 }, techArchery, techAnimal);
         techTrap = tree.addTech("trapping", new int[] { 3 }, techAnimal);
         techAutomation = tree.addTech("automation", new int[] { 5 }, techAnimal, techArchery, techMining);
+        techEnchanting = tree.addTech("enchanting", new int[] { 10, 5 }, techWriting);
         // Tier 3
         techPottery = tree.addTech("pottery", new int[] { 4 }, techSmelting);
         techIron = tree.addTech("iron_working", new int[] { 4 }, techSmelting);
-        techConstruction = tree.addTech("construction", new int[] { 4 }, techMasonry, techWheel);
-        techMaths = tree.addTech("maths", new int[] { 4 }, techWheel);
-        techHorses = tree.addTech("horseback_riding", new int[] { 4 }, techWheel, techTrap);
+        techConstruction = tree.addTech("construction", new int[] { 4 }, techMasonry);
+        techHorses = tree.addTech("horseback_riding", new int[] { 4 }, techTrap);
         // Tier 4
         techGold = tree.addTech("gold_working", new int[] { 3, 6 }, techIron);
-        techWriting = tree.addTech("writing", new int[] { 8 }, techPottery);
-        techEngineering = tree.addTech("engineering", new int[] { 2, 6 }, techConstruction, techMaths);
+        techEngineering = tree.addTech("engineering", new int[] { 2, 6 }, techConstruction);
         // Tier 5
         techDiamond = tree.addTech("diamond_working", new int[] { 5, 9, 4 }, techGold, techEngineering);
     }
@@ -86,17 +85,21 @@ public class VanillaCompat extends ModCompat {
         tree.addUnlockable(new ItemCraftUnlock("mining+iron", techMining, techIron).addUnlocked(Items.iron_pickaxe));
         tree.addUnlockable(new ItemCraftUnlock("mining+gold", techMining, techGold).addUnlocked(Items.golden_pickaxe));
         tree.addUnlockable(new ItemCraftUnlock("mining+diamond", techMining, techDiamond).addUnlocked(Items.diamond_pickaxe));
+        // Writing
+        tree.addUnlockable(new ItemCraftUnlock("writing", techWriting).addUnlocked(Items.paper, Items.book, Items.writable_book, Items.written_book)
+                .addUnlocked(Blocks.bookshelf));
         // Smelting
         tree.addUnlockable(new ItemCraftUnlock("smelting", techSmelting).addUnlocked(Blocks.furnace));
         // Masonry
         tree.addUnlockable(new ItemCraftUnlock("masonry", techMasonry).addUnlocked(Blocks.stone));
         tree.addUnlockable(new ItemCraftUnlock("masonry+construction", techMasonry, techConstruction).addUnlocked(Blocks.stone_stairs,
                 Blocks.stone_pressure_plate, Blocks.stone_slab2));
-        // The Wheel
         // Trapping
         tree.addUnlockable(new ItemCraftUnlock("trapping", techTrap).addUnlocked(Items.lead));
         // Automation
         tree.addUnlockable(new ItemCraftUnlock("automation", techAutomation).addUnlocked(Blocks.hopper, Blocks.dispenser, Blocks.dropper));
+        // Enchanting
+        tree.addUnlockable(new ItemCraftUnlock("enchanting", techEnchanting).addUnlocked(Blocks.enchanting_table).addUnlocked(Items.enchanted_book));
         // Pottery
         tree.addUnlockable(new ItemCraftUnlock("pottery", techPottery).addUnlocked(Items.brick));
         // Iron Working
@@ -107,16 +110,12 @@ public class VanillaCompat extends ModCompat {
         tree.addUnlockable(new ItemCraftUnlock("construction", techConstruction).addUnlocked(Blocks.oak_stairs, Blocks.acacia_stairs,
                 Blocks.birch_stairs, Blocks.dark_oak_stairs, Blocks.jungle_stairs, Blocks.spruce_stairs));
         tree.addUnlockable(new ItemCraftUnlock("construction+iron_working", techConstruction, techIron).addUnlocked(Blocks.iron_bars));
-        // Maths
         // Horses
         tree.addUnlockable(new ItemCraftUnlock("horseback_riding", techHorses).addUnlocked(Items.saddle));
         // Gold
         tree.addUnlockable(new ItemCraftUnlock("gold_working", techGold).addUnlocked(Items.gold_ingot, Items.golden_axe, Items.golden_boots,
                 Items.golden_chestplate, Items.golden_helmet, Items.golden_horse_armor, Items.golden_leggings, Items.golden_shovel,
                 Items.golden_sword));
-        // Writing
-        tree.addUnlockable(new ItemCraftUnlock("writing", techWriting).addUnlocked(Items.paper, Items.book, Items.writable_book, Items.written_book)
-                .addUnlocked(Blocks.bookshelf));
         // Engineering
         tree.addUnlockable(new ItemCraftUnlock("engineering", techEngineering).addUnlocked(Items.comparator, Items.repeater).addUnlocked(
                 Blocks.redstone_torch, Blocks.piston));

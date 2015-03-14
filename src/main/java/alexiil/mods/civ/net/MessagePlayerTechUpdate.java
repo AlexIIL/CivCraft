@@ -61,7 +61,6 @@ public class MessagePlayerTechUpdate extends MessageBase<MessagePlayerTechUpdate
         List<Tech> ts = message.techs;
         for (Tech t : ts)
             s += t.name + (t == ts.get(ts.size() - 1) ? "" : ", ");
-        CivLog.info(n + "=" + s + "]");
         if (ctx.side == Side.CLIENT) {
             TechUtils.setClientTechs(ts);
             return null;

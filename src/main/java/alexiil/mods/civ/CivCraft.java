@@ -92,7 +92,6 @@ public class CivCraft extends AlexIILMod {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
-        CivTechs.loadTree();
         proxy.initRenderers();
         cfg.saveAll();
     }

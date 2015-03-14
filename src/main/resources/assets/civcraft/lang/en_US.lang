@@ -67,6 +67,8 @@ civcraft.chat.earnBeaker.block.break=breaking
 civcraft.chat.earnBeaker.block.harvest=harvesting
 civcraft.chat.earnBeaker.entity.kill=killing
 
+civcraft.chat.unlocktech=You just researched 
+
 craft.item=Items
 craft.block=Blocks
 craft.tile=Blocks
@@ -77,8 +79,3 @@ entity.kill.tile=Mobs
 #    This one is special, as it is for most singular items in-game. So, this will translate as:
 #    civcraft.unlock.itemcraft.pre + item.diamond
 civcraft.unlock.itemcraft.pre=Craft the
-
-
-civcraft.unlock.itemcraft.masonary=Smelt Stone and Craft Stone Bricks
-civcraft.unlock.itemcraft.masonary+construction=Craft Stone Slabs and Stairs
-civcraft.unlock.itemcraft.construction=Craft Wooden Slabs and Stairs
