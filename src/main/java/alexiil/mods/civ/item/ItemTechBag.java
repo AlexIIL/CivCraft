@@ -192,28 +192,69 @@ public class ItemTechBag extends ItemBase {
     }
 
     private void updateTechs(ItemStack stack, EntityPlayer player) {
-        TechProgress[] progresses = this.getTechs(stack);
+        List<TechProgress> currentProgress = new ArrayList<TechProgress>();
+        for (TechProgress tp : getTechs(stack)) {
+            currentProgress.add(tp);
+        }
         for (Tech t : TechUtils.getTechs(player)) {
-            boolean has = false;
-            int index = -1;
-            int i = 0;
-            for (TechProgress tp : progresses) {
-                if (tp.tech == t) {
-                    if (tp.state == EResearchState.RESEARCHED)
-                        has = true;
-                    else {
-                        index = i;
-                        break;
+            currentProgress.add(new TechProgress(t, t.getSciencePacksNeeded()));
+        }
+
+        List<TechProgress> list = new ArrayList<TechProgress>();
+        int[] toAdd1 = new int[CivItems.sciencePacks.length];
+        for (TechProgress addToList : currentProgress) {
+            boolean shouldAdd = true;
+            TechProgress toRemove = null;
+            for (TechProgress alreadyInList : list) {
+                if (addToList.tech == alreadyInList.tech) {
+                    if (alreadyInList.state == EResearchState.RESEARCHED) {
+                        shouldAdd = false;
+                        if (addToList.state == EResearchState.RESEARCHING) {
+                            int[] progress = addToList.progress;
+                            for (int i = 0; i < progress.length; i++)
+                                toAdd1[i] += progress[i];
+                        }
+                    }
+                    else if (alreadyInList.state == EResearchState.PENDING) {
+                        shouldAdd = true;
+                        toRemove = alreadyInList;
+                    }
+                    else {// The one in the list is researching
+                        if (addToList.state == EResearchState.PENDING) {
+                            shouldAdd = false;
+                        }
+                        else if (addToList.state == EResearchState.RESEARCHING) {
+                            shouldAdd = false;
+                            int[] progress = addToList.progress;
+                            for (int i = 0; i < progress.length; i++)
+                                toAdd1[i] += progress[i];
+                        }
+                        else {// The one we are trying to add is researched
+                            int[] progress = alreadyInList.progress;
+                            for (int i = 0; i < progress.length; i++)
+                                toAdd1[i] += progress[i];
+                            shouldAdd = true;
+                            toRemove = alreadyInList;
+                        }
                     }
                 }
-                i++;
             }
-            if (has)
-                continue;
-            if (index != -1)
-                progresses[index] = new TechProgress(t, t.getSciencePacksNeeded());
+            if (shouldAdd) {
+                list.add(addToList);
+                if (toRemove != null)
+                    list.remove(toRemove);
+            }
         }
-        setTechs(stack, progresses);
+
+        setTechs(stack, list.toArray(new TechProgress[0]));
+        List<ItemStack> sciencePacks = new ArrayList<ItemStack>();
+        for (int i = 0; i < toAdd1.length; i++) {
+            if (toAdd1[i] > 0)
+                sciencePacks.add(new ItemStack(CivItems.sciencePacks[i], toAdd1[i]));
+        }
+        for (ItemStack toAdd : sciencePacks) {
+            player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, player.posX, player.posY, player.posZ, toAdd));
+        }
     }
 
     @Override

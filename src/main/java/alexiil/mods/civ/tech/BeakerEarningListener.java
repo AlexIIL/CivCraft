@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
@@ -128,8 +129,10 @@ public class BeakerEarningListener {
             IChatComponent cc = new ChatComponentTranslation("civcraft.chat.earnBeaker");
             cc.appendSibling(new ChatComponentTranslation(getPreTranslation(name)));
             String post = getPostTranslation(name);
-            if (post != null && post.length() > 0)
+            if (post != null && post.length() > 0) {
+                cc.appendSibling(new ChatComponentText(" "));
                 cc.appendSibling(new ChatComponentTranslation(post).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GOLD)));
+            }
             player.addChatMessage(cc);
             nbtCiv.setInteger("beakers_to_give", nbtCiv.getInteger("beakers_to_give") + 1);
         }

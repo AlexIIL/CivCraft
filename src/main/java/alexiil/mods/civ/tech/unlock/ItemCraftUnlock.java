@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,6 +14,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.tech.TechTree.Tech;
+import alexiil.mods.civ.tech.Unlockable;
 import alexiil.mods.civ.utils.TechUtils;
 import alexiil.mods.lib.EChatColours;
 import alexiil.mods.lib.LangUtils;
@@ -50,8 +52,9 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         }
 
         @Override
-        public List<String> getDescription() {
-            return Collections.singletonList(EChatColours.GOLD + " -" + LangUtils.format("civcraft.unlock.itemcraft.pre") + stack.getDisplayName());
+        public List<String> getDescription(Unlockable unlockable) {
+            EChatColours colour = unlockable.isUnlocked(Minecraft.getMinecraft().thePlayer) ? EChatColours.GOLD : EChatColours.BLUE;
+            return Collections.singletonList(colour + " -" + LangUtils.format("civcraft.unlock.itemcraft.pre") + stack.getDisplayName());
         }
     }
 
@@ -203,7 +206,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
     public List<String> getDescription() {
         List<String> list = new ArrayList<String>();
         for (IItemComparator c : items) {
-            list.addAll(c.getDescription());
+            list.addAll(c.getDescription(this));
         }
         return list;
     }

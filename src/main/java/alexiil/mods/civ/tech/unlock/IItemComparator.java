@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import alexiil.mods.civ.tech.Unlockable;
 
 public interface IItemComparator {
     public boolean isConsideredEqual(ItemStack toCompare);
@@ -18,5 +19,5 @@ public interface IItemComparator {
     public IItemComparator load(NBTTagCompound nbt);
 
     /** @return A list of what this comparator does, to be shown on technological progress notes and in the tech tree gui */
-    public List<String> getDescription();
+    public List<String> getDescription(Unlockable unlockable);
 }
