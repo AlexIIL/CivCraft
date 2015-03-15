@@ -66,16 +66,21 @@ civcraft.chat.earnBeaker.craft=crafting
 civcraft.chat.earnBeaker.block.break=breaking
 civcraft.chat.earnBeaker.block.harvest=harvesting
 civcraft.chat.earnBeaker.entity.kill=killing
+civcraft.chat.earnBeaker.entity.attack=attacking
 
 civcraft.chat.unlocktech=You just researched 
 
-craft.item=Items
-craft.block=Blocks
-craft.tile=Blocks
-entity.kill.tile=Mobs
+craft=all the things
+craft.item=items
+craft.block=blocks
+craft.tile=blocks
+entity.kill.tile=mobs
+entity.attack=mobs
+block.harvest=blocks
+block.harvest.tile=blocks
 
 #Used for unlockables, these are just put into a bullet-pointed list.
 
 #    This one is special, as it is for most singular items in-game. So, this will translate as:
 #    civcraft.unlock.itemcraft.pre + item.diamond
-civcraft.unlock.itemcraft.pre=Craft the
+civcraft.unlock.itemcraft.pre=Craft the 

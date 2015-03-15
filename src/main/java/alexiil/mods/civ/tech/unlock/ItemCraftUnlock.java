@@ -1,6 +1,7 @@
 package alexiil.mods.civ.tech.unlock;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -9,19 +10,19 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
-import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.civ.utils.TechUtils;
 import alexiil.mods.lib.EChatColours;
+import alexiil.mods.lib.LangUtils;
 import alexiil.mods.lib.item.IChangingItemString;
 
 public class ItemCraftUnlock extends TechUnlockable implements IChangingItemString, IItemBlocker {
     private static class ItemStackComparator implements IItemComparator {
         private final ItemStack stack;
 
-        public static ItemStackComparator load(NBTTagCompound nbt) {
+        public ItemStackComparator load(NBTTagCompound nbt) {
             ItemStack stack = ItemStack.loadItemStackFromNBT(nbt);
             if (stack == null) {
                 CivLog.warn("The item stack was null! (for NBT " + nbt.toString() + ")");
@@ -34,7 +35,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
             this.stack = stack;
         }
 
-        public NBTTagCompound save(NBTTagCompound nbt) {
+        public NBTTagCompound save() {
             return stack.writeToNBT(new NBTTagCompound());
         }
 
@@ -43,7 +44,18 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
             return OreDictionary.itemMatches(stack, toCompare, false);
         }
 
+        @Override
+        public boolean canSaveAndLoad() {
+            return true;
+        }
+
+        @Override
+        public List<String> getDescription() {
+            return Collections.singletonList(EChatColours.GOLD + " -" + LangUtils.format("civcraft.unlock.itemcraft.pre") + stack.getDisplayName());
+        }
     }
+
+    private static final ItemStackComparator basicComparer = new ItemStackComparator(null);
 
     private final List<IItemComparator> items;
     private ItemStack singleItem = null;
@@ -61,7 +73,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         for (Object key : itemsNBT.getKeySet()) {
             String skey = (String) key;
             NBTTagCompound item = itemsNBT.getCompoundTag(skey);
-            items.add(ItemStackComparator.load(item));
+            items.add(basicComparer.load(item));
         }
     }
 
@@ -121,7 +133,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         singleItemFlag = false;
         singleItem = null;
         items.add(compare);
-        isLoadable = false;
+        isLoadable &= compare.canSaveAndLoad();
         return this;
     }
 
@@ -144,8 +156,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
     public String getLocalisedName() {
         String superL = super.getLocalisedName();
         if (superL.equals(getUnlocalisedName()) && singleItemFlag)
-            return CivCraft.instance.format("civcraft.unlock.itemcraft.pre") + " "
-                    + CivCraft.instance.format(singleItem.getUnlocalizedName() + ".name");
+            return LangUtils.format("civcraft.unlock.itemcraft.pre") + " " + LangUtils.format(singleItem.getUnlocalizedName() + ".name");
         return superL;
     }
 
@@ -177,7 +188,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         NBTTagCompound items = new NBTTagCompound();
         int index = 0;
         for (IItemComparator c : this.items) {
-            items.setTag(Integer.toString(index), ((ItemStackComparator) c).save(new NBTTagCompound()));
+            items.setTag(Integer.toString(index), c.save());
             index++;
         }
         nbt.setTag("items", items);
@@ -186,5 +197,14 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
     @Override
     public String getType() {
         return Lib.Mod.ID + ":ItemCraftUnlock";
+    }
+
+    @Override
+    public List<String> getDescription() {
+        List<String> list = new ArrayList<String>();
+        for (IItemComparator c : items) {
+            list.addAll(c.getDescription());
+        }
+        return list;
     }
 }

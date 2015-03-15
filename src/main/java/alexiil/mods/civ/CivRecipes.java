@@ -19,8 +19,8 @@ public class CivRecipes {
         GameRegistry.addRecipe(RecipeTech.instance);
         GameRegistry.addRecipe(CivItems.technology.getStartingTech(), new Object[] { "SSS", "PBP", "SSS", 'S', Items.stick, 'P', Blocks.planks, 'B',
                 CivItems.sciencePacks[0] });
-        addCraftingRecipe(CivItems.techBag, new Object[] { "LR ", "LC ", "LIL", 'L', Items.stick, 'C', Blocks.chest, 'R', CivItems.sciencePacks[0],
-                'I', Items.iron_ingot }, false, true);
+        addCraftingRecipe(CivItems.techBag, new Object[] { "LRP", "PBP", "PCL", 'L', Items.stick, 'C', Blocks.chest, 'R', CivItems.sciencePacks[0],
+                'B', Items.book, 'P', Items.paper }, false, true);
         addCraftingRecipe(CivItems.sciencePacks[1], new Object[] { "SGS", "GIG", "LRW", 'I', Items.iron_ingot, 'G', Blocks.glass, 'R',
                 Items.redstone, 'L', Blocks.log, 'W', Blocks.planks, 'S', new ItemStack(Blocks.stone, 1, 0) }, false, false);
     }

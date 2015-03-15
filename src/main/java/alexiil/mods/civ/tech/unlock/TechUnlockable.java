@@ -1,6 +1,8 @@
 package alexiil.mods.civ.tech.unlock;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -117,8 +119,8 @@ public abstract class TechUnlockable extends Unlockable {
     }
 
     @Override
-    public String getDescription() {
-        return CivCraft.instance.format(getUnlocalisedName() + ".desc");
+    public List<String> getDescription() {
+        return Collections.singletonList(CivCraft.instance.format(getUnlocalisedName() + ".desc"));
     }
 
     @Override

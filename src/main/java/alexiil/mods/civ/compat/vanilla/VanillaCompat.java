@@ -4,6 +4,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.compat.ModCompat;
+import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.civ.tech.TechTreeEvent;
@@ -86,8 +87,8 @@ public class VanillaCompat extends ModCompat {
         tree.addUnlockable(new ItemCraftUnlock("mining+gold", techMining, techGold).addUnlocked(Items.golden_pickaxe));
         tree.addUnlockable(new ItemCraftUnlock("mining+diamond", techMining, techDiamond).addUnlocked(Items.diamond_pickaxe));
         // Writing
-        tree.addUnlockable(new ItemCraftUnlock("writing", techWriting).addUnlocked(Items.paper, Items.book, Items.writable_book, Items.written_book)
-                .addUnlocked(Blocks.bookshelf));
+        tree.addUnlockable(new ItemCraftUnlock("writing", techWriting).addUnlocked(Items.paper, Items.book, Items.writable_book, Items.written_book,
+                CivItems.techBag).addUnlocked(Blocks.bookshelf));
         // Smelting
         tree.addUnlockable(new ItemCraftUnlock("smelting", techSmelting).addUnlocked(Blocks.furnace));
         // Masonry

@@ -70,7 +70,7 @@ public final class TechTree {
             for (int idx = 0; idx < sciencePacks.tagCount(); idx++) {
                 required[idx] = ((NBTTagInt) sciencePacks.get(idx)).getInt();
             }
-            setSciencePacksNeeded(required);
+            this.sciencePacks = required;
             leafTech = nbt.getBoolean("leaf");
             if (leafTech)
                 setLeafTech();
@@ -165,7 +165,7 @@ public final class TechTree {
         }
 
         public int[] getSciencePacksNeeded() {
-            if (state == EState.FINALISED || state == EState.POST)
+            if (state != EState.ADD_TECHS && state != EState.SET_REQUIREMENTS)
                 return adjustedSciencePacks;
             return sciencePacks;
         }
@@ -173,7 +173,7 @@ public final class TechTree {
         /** This will not set the science pack array if the argument is null, or has a length of zero (but an array of
          * {0} would be permitted) */
         public Tech setSciencePacksNeeded(int[] sciencePacks) {
-            if (state == EState.FINALISED || state == EState.POST)
+            if (state == EState.FINALISED || state == EState.POST || state == EState.SAVING)
                 return this;
             if (sciencePacks == null || sciencePacks.length == 0)
                 return this;
@@ -378,10 +378,12 @@ public final class TechTree {
         ModCompat.sendAddUnlockableEvent(new TechTreeEvent.AddUnlockables(this, nbt));
         CivLog.info("Added all unlockables");
 
+        double multiplier = CivConfig.sciencePacksRequired.getDouble();
+
         for (Tech t : techs.values()) {
-            int[] req = t.getSciencePacksNeeded();
+            int[] req = Arrays.copyOf(t.sciencePacks, t.sciencePacks.length);
             for (int idx = 1; idx < req.length; idx++) {
-                req[idx] *= CivConfig.sciencePacksRequired.getDouble();
+                req[idx] *= multiplier;
             }
             t.adjustedSciencePacks = req;
         }

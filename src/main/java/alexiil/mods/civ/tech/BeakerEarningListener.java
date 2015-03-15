@@ -19,7 +19,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
@@ -36,21 +35,20 @@ import alexiil.mods.civ.CivConfig;
 import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.item.CivItems;
-import alexiil.mods.lib.EChatColours;
 
 public class BeakerEarningListener {
     private static Map<String, Double> beakerGetting = Collections.synchronizedMap(new HashMap<String, Double>());
     public static double COOLDOWN_MULTIPLIER = 1.01;
     public static double COOLDOWN_ADDITION = 0.05;
     public static double COOLDOWN_DIVISION = 40;
-    public static double PROGRESS_REQUIRED = 10;
+    public static double PROGRESS_REQUIRED = 3;
     public static double COOLDOWN_TIME_DIVISON = 300;
     public static final BeakerEarningListener instance = new BeakerEarningListener();
 
     static {
         addBeakerAmount("block", 0.001F);
         addBeakerAmount("block.break", 0.002F);
-        addBeakerAmount("block.break.obsidian", 0.01F);// TODO: do this one properly
+        addBeakerAmount("block.break.obsidian", 0.1F);
         addBeakerAmount("block.break.oreGold", 0.005F);
         addBeakerAmount("block.harvest", 0.1F);
         addBeakerAmount("block.harvest.oreDiamond", 0.5F);
@@ -58,11 +56,13 @@ public class BeakerEarningListener {
         addBeakerAmount("block.harvest.oreEmerald", 1.5F);
         addBeakerAmount("block.harvest.oreRedstone", 0.4F);
         addBeakerAmount("entity", 0.01F);
+        addBeakerAmount("entity.attack", 0.03F);
         addBeakerAmount("entity.arrowHit", 0.1F);
         addBeakerAmount("entity.breed", 0.1F);
         addBeakerAmount("entity.kill", 0.1F);
+        addBeakerAmount("entity.kill.Zombie", 0.2F);
+        addBeakerAmount("entity.kill.Enderman", 1F);
         addBeakerAmount("entity.attack", 0.04F);
-        // TODO: make this config based! (maybe stop doing the techs per world? kinda not sure of its uses anymore)
         addBeakerAmount("craft", 0.1F);
     }
 
@@ -128,11 +128,8 @@ public class BeakerEarningListener {
             IChatComponent cc = new ChatComponentTranslation("civcraft.chat.earnBeaker");
             cc.appendSibling(new ChatComponentTranslation(getPreTranslation(name)));
             String post = getPostTranslation(name);
-            if (post != null && post.length() > 0) {
-                cc.appendSibling(new ChatComponentText(EChatColours.GOLD + " ["));
+            if (post != null && post.length() > 0)
                 cc.appendSibling(new ChatComponentTranslation(post).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GOLD)));
-                cc.appendSibling(new ChatComponentText(EChatColours.GOLD + "]"));
-            }
             player.addChatMessage(cc);
             nbtCiv.setInteger("beakers_to_give", nbtCiv.getInteger("beakers_to_give") + 1);
         }
@@ -154,11 +151,11 @@ public class BeakerEarningListener {
     }
 
     public static String getPreTranslation(String in) {
-        if (in.startsWith("craft."))
+        if (in.startsWith("craft"))
             return "civcraft.chat.earnBeaker.craft";
-        if (in.startsWith("block.break."))
+        if (in.startsWith("block.break"))
             return "civcraft.chat.earnBeaker.block.break";
-        if (in.startsWith("block.harvest."))
+        if (in.startsWith("block.harvest"))
             return "civcraft.chat.earnBeaker.block.harvest";
         if (in.startsWith("entity.kill"))
             return "civcraft.chat.earnBeaker.entity.kill";

@@ -74,8 +74,8 @@ public abstract class Unlockable {
      *         returns the unlocalised name */
     public abstract String getLocalisedName();
 
-    /** @return The description for this unlockable, which is shown to the player */
-    public abstract String getDescription();
+    /** @return The description for this unlockable, which is shown to the player. */
+    public abstract List<String> getDescription();
 
     /** Called whenever the player unlocks all the tech's required for this 'thing'.
      * <p>

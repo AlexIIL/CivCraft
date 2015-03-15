@@ -1,5 +1,6 @@
 package alexiil.mods.civ.item;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -74,7 +75,8 @@ public class ItemTechnology extends ItemBase {
                 if (required.length < got.length)
                     required = Arrays.copyOf(required, got.length);
                 String[] gotton = new String[required.length];
-                int lastNull = 4646;// Random big number
+                int lastNull = 4646;// Random big number, okay this would cause issues if there are more than 4646
+                                    // science packs, but the just seems unlikely
                 for (int idx = 0; idx < gotton.length; idx++)
                     if (got[idx] != 0 || required[idx] != 0) {
                         int diff = required[idx] - got[idx];
@@ -103,24 +105,25 @@ public class ItemTechnology extends ItemBase {
                 Tech[] parents = t.getParentTechs();
                 Tech[] children = t.getChildTechs();
                 Unlockable[] usages = t.getShownUnlockables();
-                String[] strings = new String[parents.length + children.length + usages.length + 3];
+                List<String> strings = new ArrayList<String>();
                 int index = 0;
-                strings[index++] = parents.length == 0 ? "Doesn't require any techs" : "Requires these techs:";
+                strings.add(parents.length == 0 ? "Doesn't require any techs" : "Requires these techs:");
 
                 for (Tech parent : parents)
-                    strings[index++] = TechUtils.getColour(parent) + " -" + parent.getLocalizedName();
+                    strings.add(TechUtils.getColour(parent) + " -" + parent.getLocalizedName());
 
-                strings[index++] = children.length == 0 ? "Doesn't lead to any other techs" : "Leads to these techs:";
+                strings.add(children.length == 0 ? "Doesn't lead to any other techs" : "Leads to these techs:");
 
                 for (Tech child : children)
-                    strings[index++] = TechUtils.getColour(child) + " -" + child.getLocalizedName();
+                    strings.add(TechUtils.getColour(child) + " -" + child.getLocalizedName());
 
-                strings[index++] = usages.length == 0 ? "Doesn't unlock anything" : "Unlocks these things:";
+                strings.add(usages.length == 0 ? "Doesn't unlock anything" : "Unlocks these things:");
 
-                for (Unlockable unlock : usages)
-                    strings[index++] = EChatColours.GOLD + " -" + unlock.getLocalisedName();
+                for (Unlockable unlock : usages) {
+                    strings.addAll(unlock.getDescription());
+                }
 
-                return strings;
+                return strings.toArray(new String[0]);
             }
         });
     }
