@@ -20,12 +20,13 @@ repositories {
         name = "chickenbones"
         url = "http://chickenbones.net/maven"
     }
+    maven {
+        name = "OpenComputers"
+        url = "http://maven.cil.li/"
+    }
 }
 
 apply plugin: 'forge'
-
-group= "alexiil.mods.civcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "CivCraft"
 
 ext.configFile = file "build.properties"
 configFile.withReader {
@@ -34,6 +35,10 @@ configFile.withReader {
     prop.load(it)
     project.ext.config = new ConfigSlurper().parse prop
 }
+
+group= "alexiil.mods.civcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "[${config.mc_version}]CivCraft"
+
 def buildNumber = System.getenv("DRONE_BUILD_NUMBER") ?: config.fallback_build_number
 
 version = "${project.config.mod_version}." + buildNumber
@@ -67,6 +72,8 @@ dependencies {
     compile "codechicken:CodeChickenLib:${config.mc_version}-${config.ccl_version}:dev"
     compile "codechicken:CodeChickenCore:${config.mc_version}-${config.ccc_version}:dev"
     compile "codechicken:NotEnoughItems:${config.mc_version}-${config.nei_version}:dev"
+
+    compile "li.cil.oc:OpenComputers:MC${config.mc_version}-${config.oc_version}:api"
    
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html

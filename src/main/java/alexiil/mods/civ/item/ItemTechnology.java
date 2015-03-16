@@ -205,6 +205,8 @@ public class ItemTechnology extends ItemBase {
         String name = nbt.getString(Tech.NAME);
         if (name == null)
             return null;
+        if (TechTree.currentTree == null)
+            return null;
         return TechTree.currentTree.getTech(name.intern());
     }
 

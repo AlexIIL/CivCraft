@@ -49,7 +49,7 @@ public class ProgressiveAutomationCompat extends ModCompat {
         return "PA";
     }
 
-    private Block[] getBlocks(String name) {
+    public static Block[] getBlocks(String name) {
         String clsName = "com.vanhal.progressiveautomation.blocks.PABlocks";
         try {
             Class<?> cls = Class.forName(clsName);
@@ -68,12 +68,14 @@ public class ProgressiveAutomationCompat extends ModCompat {
         return new Block[0];
     }
 
-    private Item getItem(String name) {
+    public static Item getItem(String name) {
         String clsName = "com.vanhal.progressiveautomation.items.PAItems";
         try {
             Class<?> cls = Class.forName(clsName);
             Field fld = cls.getField(name);
-            return (Item) fld.get(null);
+            Object stored = fld.get(null);
+            if (stored instanceof Item)
+                return (Item) stored;   
         }
         catch (Throwable e) {
             ErrorHandling.printClassInfo(clsName);
