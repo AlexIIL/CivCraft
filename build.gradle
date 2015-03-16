@@ -37,11 +37,11 @@ configFile.withReader {
 }
 
 group= "alexiil.mods.civcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "[${config.mc_version}]CivCraft"
+archivesBaseName = "CivCraft"
 
 def buildNumber = System.getenv("DRONE_BUILD_NUMBER") ?: config.fallback_build_number
 
-version = "${project.config.mod_version}." + buildNumber
+version = "${project.config.mc_version}-${project.config.mod_version}." + buildNumber
 
 minecraft {
     version = config.mc_version + "-" + config.forge_version
