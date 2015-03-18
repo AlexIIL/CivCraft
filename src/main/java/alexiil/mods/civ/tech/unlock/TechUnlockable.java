@@ -1,5 +1,6 @@
 package alexiil.mods.civ.tech.unlock;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import alexiil.mods.civ.CivCraft;
+import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
@@ -42,58 +44,35 @@ public abstract class TechUnlockable extends Unlockable {
                         + " was null. This is most likely a bug, and would have caused issues later down the line.").printStackTrace();
                 return;
             }
+            else if (!TechTree.currentTree.hasTech(t.name)) {
+                TechTree.Tech[] nrequired = new TechTree.Tech[required.length - 1];
+                for (int i = 0; i < required.length; i++) {
+                    int changedIndex = ((i < index) ? i : (i - 1));
+                    if (i == index)
+                        continue;
+                    nrequired[changedIndex] = required[i];
+                }
+                required = nrequired;
+                index--;
+
+                CivLog.info("The tech \"" + t.name
+                        + "\" was not in the tech tree. It is most likely that this tech did not exist in the config, so ignoring this one");
+            }
         }
         requiredTechs = required;
-    }
-
-    public TechUnlockable(TechTree tree, String name, String[] required, boolean show) {
-        super(name);
-        shouldShow = show;
-        if (required == null) {
-            requiredTechs = null;
-            new NullPointerException("This must require at least one tech (was null)").printStackTrace();
-            return;
-        }
-        if (required.length <= 0) {
-            requiredTechs = null;
-            new UnsupportedOperationException("This must require at least one Tech (was an empty list)").printStackTrace();
-            return;
-        }
-        TechTree.Tech[] techs = new TechTree.Tech[required.length];
-        for (int index = 0; index < required.length; index++) {
-            String t = required[index];
-            if (t == null) {
-                requiredTechs = null;
-                new NullPointerException("The string found at position " + index
-                        + " was null. This is most likely a bug, and would have caused issues later down the line if it was allowed.")
-                        .printStackTrace();
-                return;
-            }
-            if (tree.getTech(t) != null) {// If this exists, then use that
-                techs[index] = tree.getTech(t);
-            }
-            else {
-                requiredTechs = null;
-                new NullPointerException(
-                        "The string found at position "
-                                + index
-                                + "("
-                                + required[index]
-                                + ") did not have a corresponding tech. This is most likely a bug, and would have caused issues later down the line if it was allowed.")
-                        .printStackTrace();
-                return;
-            }
-        }
-        requiredTechs = techs;
     }
 
     public TechUnlockable(NBTTagCompound nbt) {
         super(nbt);
         shouldShow = nbt.getBoolean("shouldShow");
         NBTTagList list = nbt.getTagList("requiredTechs", Lib.NBT.STRING);
-        requiredTechs = new TechTree.Tech[list.tagCount()];
-        for (int i = 0; i < list.tagCount(); i++)
-            requiredTechs[i] = TechTree.currentTree.getTech(list.getStringTagAt(i));
+        List<TechTree.Tech> techs = new ArrayList<TechTree.Tech>();
+        for (int i = 0; i < list.tagCount(); i++) {
+            TechTree.Tech t = TechTree.currentTree.getTech(list.getStringTagAt(i));
+            if (t != null)
+                techs.add(t);
+        }
+        requiredTechs = techs.toArray(new TechTree.Tech[0]);
     }
 
     @Override

@@ -451,8 +451,12 @@ public final class TechTree {
                     + ") that is not contained in the type map! This means that this unlockable will NOT persist through saves or in the config");
         TechTreeEvent.RegisterUnlockable e = new TechTreeEvent.RegisterUnlockable(this, unlock, treeData);
         MinecraftForge.EVENT_BUS.post(e);
-        for (Tech t : unlock.requiredTechs())
-            t.addUnlockable(unlock);
+        if (e.isCanceled())
+            return unlock;
+        for (Tech t : unlock.requiredTechs()) {
+            if (techs.containsValue(t))
+                t.addUnlockable(unlock);
+        }
         unlockables.put(unlock.getName(), unlock);
         CivLog.info("Added the unlockable \"" + unlock.getName() + "\"");
         return unlock;
@@ -464,7 +468,8 @@ public final class TechTree {
      *            The beaker tier to init the tech to
      * @param required
      *            The techs that are required. only add the techs you add yourself, in the same method
-     * @return The tech that was created
+     * @return The tech that was created. If the addition of this tech was cancelled by some-one, the returned tech
+     *         object is useless
      * @throws Exception
      *             If something went wrong during this */
     public Tech addTech(String name, int[] packs, Tech... required) {
@@ -482,6 +487,10 @@ public final class TechTree {
         t.setSciencePacksNeeded(packs);
         TechTreeEvent.RegisterTech e = new TechTreeEvent.RegisterTech(this, t, treeData);
         MinecraftForge.EVENT_BUS.post(e);
+        if (e.isCanceled()) {
+            CivLog.info("Canceled the addition of the tech \"" + t.name + "\"");
+            return t;
+        }
         techs.put(name, t);
         CivLog.info("Added the tech \"" + t.name + "\"");
         return t;
@@ -502,11 +511,9 @@ public final class TechTree {
     public Tech getTech(String name) {
         if (techs.containsKey(name))
             return techs.get(name);
-        if (state == EState.FINALISED)// Don't create create techs if this tree has been finalised
+        if (state != EState.ADD_TECHS)// Don't create create techs if this tree has been finalised
             return null;
-        Tech t = new Tech(name);
-        techs.put(name, t);
-        return t;
+        return addTech(name);
     }
 
     public Map<String, Tech> getTechs() {

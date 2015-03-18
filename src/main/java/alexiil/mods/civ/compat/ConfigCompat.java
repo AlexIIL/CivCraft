@@ -10,6 +10,7 @@ import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.civ.tech.TechTreeEvent.AddTechs;
 import alexiil.mods.civ.tech.TechTreeEvent.AddUnlockables;
+import alexiil.mods.civ.tech.TechTreeEvent.RegisterTech;
 import alexiil.mods.civ.tech.Unlockable;
 import alexiil.mods.lib.nbt.NBTUtils;
 
@@ -39,6 +40,18 @@ public class ConfigCompat {
             if (tech.getBoolean("leaf"))
                 techAdded.setLeafTech();
         }
+    }
+
+    @SubscribeEvent
+    public void registerTech(RegisterTech event) {
+        String name = event.tech.name;
+        NBTTagCompound n = event.treeNBTCompound;
+        NBTTagCompound techs = n.getCompoundTag("techs");
+        if (techs.hasNoTags())
+            return;
+        if (!techs.hasKey(name))
+            event.setCanceled(true);
+
     }
 
     @SubscribeEvent
