@@ -10,6 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
@@ -52,6 +54,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public List<String> getDescription(Unlockable unlockable) {
             EChatColours colour = unlockable.isUnlocked(Minecraft.getMinecraft().thePlayer) ? EChatColours.GOLD : EChatColours.BLUE;
             return Collections.singletonList(colour + " -" + LangUtils.format("civcraft.unlock.itemcraft.pre") + stack.getDisplayName());

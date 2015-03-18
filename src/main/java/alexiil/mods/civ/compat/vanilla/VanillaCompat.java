@@ -60,9 +60,9 @@ public class VanillaCompat extends ModCompat {
         techHorses = tree.addTech("horseback_riding", new int[] { 4 }, techTrap);
         // Tier 4
         techGold = tree.addTech("gold_working", new int[] { 3, 6 }, techIron);
-        techEngineering = tree.addTech("engineering", new int[] { 2, 6 }, techConstruction);
+        techEngineering = tree.addTech("engineering", new int[] { 3, 6 }, techConstruction);
         // Tier 5
-        techDiamond = tree.addTech("diamond_working", new int[] { 5, 9, 4 }, techGold, techEngineering);
+        techDiamond = tree.addTech("diamond_working", new int[] { 4, 9, 4 }, techGold, techEngineering);
     }
 
     @Override

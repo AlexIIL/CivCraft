@@ -1,7 +1,6 @@
 package alexiil.mods.civ;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -13,6 +12,7 @@ import net.minecraftforge.oredict.RecipeSorter;
 import alexiil.mods.civ.compat.ProgressiveAutomationCompat;
 import alexiil.mods.civ.crafting.RecipeTech;
 import alexiil.mods.civ.item.CivItems;
+import alexiil.mods.lib.LangUtils;
 
 public class CivRecipes {
     public static void init() {
@@ -71,7 +71,7 @@ public class CivRecipes {
 
     private static void addCraftingRecipe(ItemStack is, Object[] inputs, boolean flipVertically, boolean flipHorizontally) {
         String n0 = is.getItem().getUnlocalizedName();
-        String name = I18n.format(n0.substring(("item." + Lib.Mod.ID + "_").length()));
+        String name = LangUtils.format(n0.substring(("item." + Lib.Mod.ID + "_").length()));
         Property prop = CivCraft.instance.cfg.cfg.get("crafting", name, "true");
         prop.comment = "Allow the " + is.getDisplayName() + " to be crafted";
         boolean isAllowed = prop.getBoolean();

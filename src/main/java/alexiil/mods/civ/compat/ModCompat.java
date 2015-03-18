@@ -39,8 +39,8 @@ public abstract class ModCompat {
         if (Loader.isModLoaded("progressiveautomation"))
             compats.add(new ProgressiveAutomationCompat());
 
-        // if (Loader.isModLoaded("OpenComputers"))
-        // compats.add(new OpenComputersCompat());
+        if (Loader.isModLoaded("OpenComputers"))
+            compats.add(new OpenComputersCompat());
 
         // ALWAYS the last one
         compats.add(new ConfigCompat());

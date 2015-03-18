@@ -25,9 +25,9 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import alexiil.mods.civ.crafting.RecipeTech;
 import alexiil.mods.civ.event.FindMatchingRecipeEvent;
 import alexiil.mods.civ.event.TechResearchedEvent;
@@ -48,22 +48,14 @@ public class EventListner {
     private EventListner() {}
 
     @SubscribeEvent
-    public void onClientConnect(ClientConnectedToServerEvent event) {
-        new Thread("CivCraft|ClientConnectedToServer") {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(5000);
-                }
-                catch (InterruptedException e) {
-                    CivLog.warn("Was interupted for some reason (" + e.getMessage() + ")");
-                }
-                MessageHandler.INSTANCE.sendToServer(new MessagePlayerTechUpdate());
-            }
-        }.start();
-        if (event.isLocal)
-            return;
-        MessageHandler.INSTANCE.sendToServer(new MessageTechTreeUpdate());
+    public void onClientConnect(PlayerEvent.PlayerLoggedInEvent login) {
+        EntityPlayerMP mp = (EntityPlayerMP) login.player;
+        CivLog.info("mp.playerNetServerHandler = " + mp.playerNetServerHandler);
+        MessageHandler.INSTANCE.sendTo(new MessageTechTreeUpdate(), mp);
+        MessageHandler.INSTANCE.sendTo(new MessagePlayerTechUpdate(mp), mp);
+        // if (!event.isLocal)
+        // MessageHandler.INSTANCE.sendToServer(new MessageTechTreeUpdate());
+        // MessageHandler.INSTANCE.sendToServer(new MessagePlayerTechUpdate());
     }
 
     @SubscribeEvent
@@ -155,6 +147,8 @@ public class EventListner {
     public void itemToolTip(ItemTooltipEvent event) {
         ItemStack stack = event.itemStack;
         if (stack == null)
+            return;
+        if (TechTree.currentTree == null)
             return;
         List<String> strings = TechTree.currentTree.getItemTooltip(stack, event.entityPlayer);
         event.toolTip.addAll(strings);

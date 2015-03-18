@@ -133,6 +133,8 @@ public class ItemTechnology extends ItemBase {
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs tab, List list) {
         int[] singleInt = new int[] { 1 };
+        if (TechTree.currentTree == null)
+            return;
         for (String s : TechTree.currentTree.getTechs().keySet()) {
             Tech t = TechTree.currentTree.getTech(s);
             int[] packs = t.getSciencePacksNeeded();

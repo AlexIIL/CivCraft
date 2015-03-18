@@ -500,6 +500,10 @@ public final class TechTree {
         return getTech("agriculture");
     }
 
+    public boolean hasTech(String name) {
+        return techs.containsKey(name);
+    }
+
     public Tech getTech(String name) {
         if (techs.containsKey(name))
             return techs.get(name);

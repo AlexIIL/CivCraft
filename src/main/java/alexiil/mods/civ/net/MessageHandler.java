@@ -12,9 +12,9 @@ public class MessageHandler implements INetworkProvider {
 
     static {
         INSTANCE.registerMessage(MessageTechTreeUpdate.class, MessageTechTreeUpdate.class, 0, Side.CLIENT);
-        INSTANCE.registerMessage(MessageTechTreeUpdate.class, MessageTechTreeUpdate.class, 1, Side.SERVER);
+        // INSTANCE.registerMessage(MessageTechTreeUpdate.class, MessageTechTreeUpdate.class, 1, Side.SERVER);
         INSTANCE.registerMessage(MessagePlayerTechUpdate.class, MessagePlayerTechUpdate.class, 2, Side.CLIENT);
-        INSTANCE.registerMessage(MessagePlayerTechUpdate.class, MessagePlayerTechUpdate.class, 3, Side.SERVER);
+        // INSTANCE.registerMessage(MessagePlayerTechUpdate.class, MessagePlayerTechUpdate.class, 3, Side.SERVER);
         INSTANCE.registerMessage(MessageResearchTech.class, MessageResearchTech.class, 4, Side.CLIENT);
         INSTANCE.registerMessage(MessageResearchTech.class, MessageResearchTech.class, 5, Side.SERVER);
     }

@@ -6,6 +6,8 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import alexiil.mods.civ.net.MessageHandler;
 import alexiil.mods.civ.net.MessagePlayerTechUpdate;
 import alexiil.mods.civ.tech.TechTree;
@@ -61,6 +63,7 @@ public class TechUtils {
         setPlayerCivNBT(player, civ);
     }
 
+    @SideOnly(Side.CLIENT)
     public static void setClientTechs(List<Tech> techs) {
         setTechs(Minecraft.getMinecraft().thePlayer, techs);
     }
@@ -75,6 +78,7 @@ public class TechUtils {
     }
 
     /** Only use this from the client side */
+    @SideOnly(Side.CLIENT)
     public static EChatColours getColour(Tech t) {
         if (hasTech(t, Minecraft.getMinecraft().thePlayer))
             return EChatColours.AQUA;

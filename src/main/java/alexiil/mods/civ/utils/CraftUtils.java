@@ -20,6 +20,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.tech.TechTree;
@@ -80,7 +82,7 @@ public class CraftUtils {
 
     public static List<Tech> getTechs(World world, ChunkCoordIntPair ccip) {
         if (world.isRemote) // If its on the client, just get whatever the client has
-            return TechUtils.getTechs(Minecraft.getMinecraft().thePlayer);
+            return TechUtils.getTechs(getClientPlayer());
         List<PlayerTechData> players = getPlayers(world, ccip);
         List<Tech> techs = new ArrayList<Tech>();
         for (PlayerTechData data : players)
@@ -88,6 +90,11 @@ public class CraftUtils {
                 if (!techs.contains(t))
                     techs.add(t);
         return techs;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static EntityPlayer getClientPlayer() {
+        return Minecraft.getMinecraft().thePlayer;
     }
 
     public static NBTTagCompound save() {

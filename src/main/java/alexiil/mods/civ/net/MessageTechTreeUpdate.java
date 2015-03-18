@@ -13,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.lib.net.MessageBase;
 
@@ -22,42 +22,40 @@ public class MessageTechTreeUpdate extends MessageBase<MessageTechTreeUpdate> {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-            int length = buf.readInt();
-            stored = buf.readBytes(length);
-        }
+        CivLog.info("fromBytes()");
+        int length = buf.readInt();
+        stored = buf.readBytes(length);
+        CivLog.info("stored = " + stored);
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-            ByteBuf b = Unpooled.buffer();
-            NBTTagCompound nbt = new NBTTagCompound();
-            TechTree.currentTree.save(nbt);
-            try {
-                CompressedStreamTools.writeCompressed(nbt, new ByteBufOutputStream(b));
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-            int i = b.readableBytes();
-            buf.writeInt(i);
-            buf.writeBytes(b);
+        CivLog.info("toBytes(), side == " + FMLCommonHandler.instance().getEffectiveSide());
+        ByteBuf b = Unpooled.buffer();
+        NBTTagCompound nbt = new NBTTagCompound();
+        TechTree.currentTree.save(nbt);
+        try {
+            CompressedStreamTools.writeCompressed(nbt, new ByteBufOutputStream(b));
         }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        int i = b.readableBytes();
+        buf.writeInt(i);
+        buf.writeBytes(b);
     }
 
     @Override
     public IMessage onMessage(MessageTechTreeUpdate message, MessageContext ctx) {
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-            try {
-                NBTTagCompound nbt = CompressedStreamTools.read(new DataInputStream(new ByteBufInputStream(stored)));
-                TechTree.currentTree = new TechTree(nbt);
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
+        CivLog.info("onMessage(), stored = " + message.stored);
+        try {
+            NBTTagCompound nbt = CompressedStreamTools.readCompressed(new DataInputStream(new ByteBufInputStream(message.stored)));
+            TechTree.currentTree = new TechTree(nbt);
+            CivLog.info("TechTree.currentTree == null ?" + (TechTree.currentTree == null));
         }
-        return new MessageTechTreeUpdate();
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
