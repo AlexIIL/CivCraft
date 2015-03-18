@@ -28,7 +28,7 @@ public class ProgressiveAutomationCompat {
     @SubscribeEvent
     public void addUnlockables(AddUnlockables t) {
         TechTree tree = t.tree;
-        tree.setUnlockablePrefix("ProgressiveAutomation");
+        tree.setUnlockablePrefix("progressiveautomation");
 
         Tech automation = tree.getTech("automation");
         Tech mining = tree.getTech("mining");

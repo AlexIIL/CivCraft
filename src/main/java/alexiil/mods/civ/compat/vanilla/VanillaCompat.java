@@ -63,7 +63,7 @@ public class VanillaCompat {
         // Agriculture
         TechTree tree = t.tree;
 
-        tree.setUnlockablePrefix("CivCraft");
+        tree.setUnlockablePrefix("civcraft");
 
         tree.addUnlockable(new ItemCraftUnlock("agriculture", techAgri).addUnlocked(Items.wooden_hoe));
         tree.addUnlockable(new ItemCraftUnlock("agriculture+masonry", techAgri, techMasonry).addUnlocked(Items.stone_hoe));

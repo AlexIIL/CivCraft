@@ -45,7 +45,7 @@ public class OpenComputersCompat {
     @SubscribeEvent
     public void addUnlockables(AddUnlockables t) {
         TechTree tree = t.tree;
-        tree.setUnlockablePrefix("OpenComputers");
+        tree.setUnlockablePrefix("opencomputers");
 
         if (tree.hasTech("power"))
             computing.addRequirement(tree.getTech("power"));
