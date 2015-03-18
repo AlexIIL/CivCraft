@@ -1,12 +1,16 @@
 package alexiil.mods.civ.tech;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.eventhandler.Cancelable;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 /** Fired at intervals throughout the tech tree creation process. All of the events have (at least) two fields: the tree
  * that is being created, and the NBTTagCompound that is saved to the world folder that describes the tree.
  * 
+ * All of these events are fired on the main forge event bus
+ * 
  * @author AlexIIL */
-public abstract class TechTreeEvent {
+public abstract class TechTreeEvent extends Event {
     /** Fired before you are allowed to add to the tech tree, so before any techs have been registered. Use this to
      * register Unlockable types */
     public static class Pre extends TechTreeEvent {
@@ -24,6 +28,7 @@ public abstract class TechTreeEvent {
 
     /** Fired whenever a tech is registered with the tech tree. most of the time you wont need to use this, unless you
      * want to make some adjustments to a tech while it is being made. */
+    @Cancelable()
     public static class RegisterTech extends TechTreeEvent {
         public final TechTree.Tech tech;
 
@@ -33,6 +38,7 @@ public abstract class TechTreeEvent {
         }
     }
 
+    @Cancelable()
     public static class RegisterUnlockable extends TechTreeEvent {
         public final Unlockable unlockable;
 

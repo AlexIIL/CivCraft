@@ -18,6 +18,7 @@ package alexiil.mods.civ.compat;
 
 import li.cil.oc.api.detail.ItemInfo;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
@@ -25,11 +26,11 @@ import alexiil.mods.civ.tech.TechTreeEvent.AddTechs;
 import alexiil.mods.civ.tech.TechTreeEvent.AddUnlockables;
 import alexiil.mods.civ.tech.unlock.ItemCraftUnlock;
 
-public class OpenComputersCompat extends ModCompat {
+public class OpenComputersCompat {
     private Tech computing, robotics, expansions;
     private Tech upgrades, upgrade2;
 
-    @Override
+    @SubscribeEvent
     public void addTechs(AddTechs t) {
         TechTree tree = t.tree;
 
@@ -41,9 +42,10 @@ public class OpenComputersCompat extends ModCompat {
         upgrade2 = tree.addTech("computing_upgrade_2", new int[] { 6, 21, 15 }, upgrades, tree.getTech("diamond_working"));
     }
 
-    @Override
+    @SubscribeEvent
     public void addUnlockables(AddUnlockables t) {
         TechTree tree = t.tree;
+        tree.setUnlockablePrefix("OpenComputers");
 
         if (tree.hasTech("power"))
             computing.addRequirement(tree.getTech("power"));
@@ -77,10 +79,5 @@ public class OpenComputersCompat extends ModCompat {
             return null;
         }
         return ii.createItemStack(1);
-    }
-
-    @Override
-    public String getModID() {
-        return "OpenComputers";
     }
 }

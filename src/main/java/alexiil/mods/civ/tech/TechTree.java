@@ -14,12 +14,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraftforge.common.MinecraftForge;
 import alexiil.mods.civ.CivConfig;
 import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
-import alexiil.mods.civ.compat.ModCompat;
-import alexiil.mods.civ.xp.PromotionManager;
 import alexiil.mods.lib.item.IChangingItemString;
 
 public final class TechTree {
@@ -340,8 +339,7 @@ public final class TechTree {
     public static TechTree currentTree = null;
     private final NBTTagCompound treeData;
     /** Used to add a compat-specific prefix to the unlockable name */
-    ModCompat currentCompat = null;
-    public final PromotionManager promotions;
+    String currentPrefix = null;
 
     public List<String> getItemTooltip(ItemStack stack, EntityPlayer player) {
         List<String> strings = new ArrayList<String>();
@@ -359,23 +357,22 @@ public final class TechTree {
         TechTree oldTree = TechTree.currentTree;
         TechTree.currentTree = this;
         state = EState.CONSTRUCTING;
-        promotions = new PromotionManager(this);
 
         CivLog.info("Initializing the tech tree");
         treeData = nbt;
 
         state = EState.PRE;
-        ModCompat.sendPreEvent(new TechTreeEvent.Pre(this, nbt));
+        MinecraftForge.EVENT_BUS.post(new TechTreeEvent.Pre(this, nbt));
         unlockableTypes = Collections.unmodifiableMap(unlockableTypes);
         CivLog.info("Pre-init of the tech tree done");
 
         state = EState.ADD_TECHS;
         addTech("agriculture");
-        ModCompat.sendAddTechsEvent(new TechTreeEvent.AddTechs(this, nbt));
+        MinecraftForge.EVENT_BUS.post(new TechTreeEvent.AddTechs(this, nbt));
         CivLog.info("Added all techs");
 
         state = EState.SET_REQUIREMENTS;
-        ModCompat.sendAddUnlockableEvent(new TechTreeEvent.AddUnlockables(this, nbt));
+        MinecraftForge.EVENT_BUS.post(new TechTreeEvent.AddUnlockables(this, nbt));
         CivLog.info("Added all unlockables");
 
         double multiplier = CivConfig.sciencePacksRequired.getDouble();
@@ -392,7 +389,7 @@ public final class TechTree {
         setChildren();
         techs = Collections.unmodifiableMap(techs);
         unlockables = Collections.unmodifiableMap(unlockables);
-        ModCompat.sendPostEvent(new TechTreeEvent.Post(this, nbt));
+        MinecraftForge.EVENT_BUS.post(new TechTreeEvent.Post(this, nbt));
         CivLog.info("Post-init of the tech tree done");
 
         state = EState.FINALISED;
@@ -433,8 +430,6 @@ public final class TechTree {
         }
         nbt.setTag("unlockables", reqsNBT);
 
-        nbt.setTag("promotions", promotions.saveToNBT());
-
         state = oldState;
 
         return nbt;
@@ -455,7 +450,7 @@ public final class TechTree {
             CivLog.warn("Adding an unlockable (type == " + unlock.getType()
                     + ") that is not contained in the type map! This means that this unlockable will NOT persist through saves or in the config");
         TechTreeEvent.RegisterUnlockable e = new TechTreeEvent.RegisterUnlockable(this, unlock, treeData);
-        ModCompat.sendRegisterUnlockableEvent(e);
+        MinecraftForge.EVENT_BUS.post(e);
         for (Tech t : unlock.requiredTechs())
             t.addUnlockable(unlock);
         unlockables.put(unlock.getName(), unlock);
@@ -486,7 +481,7 @@ public final class TechTree {
         t.addRequirements(required);
         t.setSciencePacksNeeded(packs);
         TechTreeEvent.RegisterTech e = new TechTreeEvent.RegisterTech(this, t, treeData);
-        ModCompat.sendRegisterTechEvent(e);
+        MinecraftForge.EVENT_BUS.post(e);
         techs.put(name, t);
         CivLog.info("Added the tech \"" + t.name + "\"");
         return t;
@@ -554,14 +549,15 @@ public final class TechTree {
         return null;
     }
 
-    public void setModCompat(ModCompat compat) {
-        currentCompat = compat;
+    /** You MUST call this before registering any unlockable's (with {@link #addUnlockable(Unlockable)}) */
+    public void setUnlockablePrefix(String modId) {
+        currentPrefix = modId;
     }
 
     /** Register unlockable types here. When java 8 is used in forge, calls to this will look a whole lot nicer. */
     public void registerUnlockable(String type, IUnlockableConstructor unlockable) {
         if (state != EState.PRE) {
-            CivLog.warn("Tried to register an unlockable outside of PRE-INIT. This is not meant to happen, change ths code please!");
+            CivLog.warn("Tried to register an unlockable type outside of PRE-INIT. This is not meant to happen, change this code please!");
             return;
         }
         if (unlockableTypes.containsKey(type))

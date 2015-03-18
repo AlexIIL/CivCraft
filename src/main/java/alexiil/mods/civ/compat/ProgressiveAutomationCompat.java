@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
@@ -13,10 +14,10 @@ import alexiil.mods.civ.tech.TechTreeEvent.AddUnlockables;
 import alexiil.mods.civ.tech.unlock.ItemCraftUnlock;
 import alexiil.mods.lib.ErrorHandling;
 
-public class ProgressiveAutomationCompat extends ModCompat {
+public class ProgressiveAutomationCompat {
     private Tech techLogging, techPower, techRF;
 
-    @Override
+    @SubscribeEvent
     public void addTechs(AddTechs t) {
         TechTree tree = t.tree;
         techLogging = tree.addTech("logging", new int[] { 2 }, tree.getTech("mining"));
@@ -24,9 +25,11 @@ public class ProgressiveAutomationCompat extends ModCompat {
         techRF = tree.addTech("redstone_flux", new int[] { 2 }, techPower).setLeafTech();
     }
 
-    @Override
+    @SubscribeEvent
     public void addUnlockables(AddUnlockables t) {
         TechTree tree = t.tree;
+        tree.setUnlockablePrefix("ProgressiveAutomation");
+
         Tech automation = tree.getTech("automation");
         Tech mining = tree.getTech("mining");
 
@@ -37,16 +40,6 @@ public class ProgressiveAutomationCompat extends ModCompat {
         tree.addUnlockable(new ItemCraftUnlock("planting", tree.getTech("agriculture"), automation).addUnlocked(getBlocks("planter")));
 
         tree.addUnlockable(new ItemCraftUnlock("redstone_flux", techRF).addUnlocked(getItem("rfEngine")));
-    }
-
-    @Override
-    public String getModID() {
-        return "progressiveautomation";
-    }
-
-    @Override
-    public String getShortModName() {
-        return "PA";
     }
 
     public static Block[] getBlocks(String name) {
@@ -75,7 +68,7 @@ public class ProgressiveAutomationCompat extends ModCompat {
             Field fld = cls.getField(name);
             Object stored = fld.get(null);
             if (stored instanceof Item)
-                return (Item) stored;   
+                return (Item) stored;
         }
         catch (Throwable e) {
             ErrorHandling.printClassInfo(clsName);

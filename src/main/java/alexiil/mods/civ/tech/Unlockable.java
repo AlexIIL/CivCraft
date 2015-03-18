@@ -7,7 +7,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import alexiil.mods.civ.CivLog;
-import alexiil.mods.civ.compat.ModCompat;
 import alexiil.mods.civ.item.ItemTechnology;
 import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.civ.utils.TechUtils;
@@ -40,8 +39,7 @@ public abstract class Unlockable {
     }
 
     public Unlockable(String name) {
-        ModCompat compat = TechTree.currentTree.currentCompat;
-        this.name = compat == null ? "unknown:" + name : compat.getUnlockableName(name);
+        this.name = TechTree.currentTree.currentPrefix + ":" + name;
     }
 
     protected Unlockable(NBTTagCompound nbt) {

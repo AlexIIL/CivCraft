@@ -3,6 +3,7 @@ package alexiil.mods.civ.compat;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.tech.TechTree;
@@ -12,8 +13,8 @@ import alexiil.mods.civ.tech.TechTreeEvent.AddUnlockables;
 import alexiil.mods.civ.tech.Unlockable;
 import alexiil.mods.lib.nbt.NBTUtils;
 
-public class ConfigCompat extends ModCompat {
-    @Override
+public class ConfigCompat {
+    @SubscribeEvent
     public void addTechs(AddTechs t) {
         TechTree tree = t.tree;
         NBTTagCompound n = t.treeNBTCompound;
@@ -40,9 +41,12 @@ public class ConfigCompat extends ModCompat {
         }
     }
 
-    @Override
+    @SubscribeEvent
     public void addUnlockables(AddUnlockables t) {
         TechTree tree = t.tree;
+
+        tree.setUnlockablePrefix("config");
+
         NBTTagCompound n = t.treeNBTCompound;
         NBTTagCompound unlocks = n.getCompoundTag("unlockables");
         for (Object key : unlocks.getKeySet()) {
@@ -53,15 +57,5 @@ public class ConfigCompat extends ModCompat {
             else
                 tree.addUnlockable(u);
         }
-    }
-
-    @Override
-    public String getModID() {
-        return "config";
-    }
-
-    @Override
-    public String getShortModName() {
-        return "Config";
     }
 }

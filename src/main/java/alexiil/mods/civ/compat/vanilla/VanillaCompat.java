@@ -2,8 +2,8 @@ package alexiil.mods.civ.compat.vanilla;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import alexiil.mods.civ.Lib;
-import alexiil.mods.civ.compat.ModCompat;
 import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.tech.TechTree;
 import alexiil.mods.civ.tech.TechTree.Tech;
@@ -14,14 +14,7 @@ import alexiil.mods.civ.tech.unlock.ItemCraftUnlock;
 
 /** Okay, technically this isn't a mod compatibility (vanilla minecraft is a hard dependency of this mod, how strange),
  * but it allows for a central place for vanilla tech code, in the same place as other tech code. */
-public class VanillaCompat extends ModCompat {
-    public static final PromotionMoveSpeed[] moveSpeeds;
-
-    static {
-        moveSpeeds = new PromotionMoveSpeed[5];
-        for (int i = 0; i < moveSpeeds.length; i++)
-            moveSpeeds[i] = new PromotionMoveSpeed(i);
-    }
+public class VanillaCompat {
 
     private Tech techAgri;
     private Tech techSail, techAnimal, techArchery, techMining, techWriting;
@@ -30,13 +23,13 @@ public class VanillaCompat extends ModCompat {
     private Tech techGold, techEngineering;
     private Tech techDiamond;
 
-    @Override
+    @SubscribeEvent
     public void preInit(TechTreeEvent.Pre t) {
         String start = Lib.Mod.ID + ":";
         t.tree.registerUnlockable(start + "ItemCraftUnlock", ItemCraftUnlock.class);
     }
 
-    @Override
+    @SubscribeEvent
     public void addTechs(AddTechs event) {
         TechTree tree = event.tree;
         // Tier 0
@@ -65,10 +58,13 @@ public class VanillaCompat extends ModCompat {
         techDiamond = tree.addTech("diamond_working", new int[] { 4, 9, 4 }, techGold, techEngineering);
     }
 
-    @Override
+    @SubscribeEvent
     public void addUnlockables(AddUnlockables t) {
         // Agriculture
         TechTree tree = t.tree;
+
+        tree.setUnlockablePrefix("CivCraft");
+
         tree.addUnlockable(new ItemCraftUnlock("agriculture", techAgri).addUnlocked(Items.wooden_hoe));
         tree.addUnlockable(new ItemCraftUnlock("agriculture+masonry", techAgri, techMasonry).addUnlocked(Items.stone_hoe));
         tree.addUnlockable(new ItemCraftUnlock("agriculture+iron", techAgri, techIron).addUnlocked(Items.iron_hoe));
@@ -124,21 +120,5 @@ public class VanillaCompat extends ModCompat {
         tree.addUnlockable(new ItemCraftUnlock("diamond_working", techDiamond).addUnlocked(Items.diamond, Items.diamond_axe, Items.diamond_boots,
                 Items.diamond_chestplate, Items.diamond_helmet, Items.diamond_horse_armor, Items.diamond_leggings, Items.diamond_shovel,
                 Items.diamond_sword).addUnlocked(Blocks.diamond_block));
-
-        //
-        // Promotions
-        //
-        for (int i = 0; i < moveSpeeds.length; i++)
-            tree.promotions.addPromotion(moveSpeeds[i]);
-    }
-
-    @Override
-    public String getModID() {
-        return Lib.Mod.ID;
-    }
-
-    @Override
-    public String getShortModName() {
-        return "CivCraft";
     }
 }
