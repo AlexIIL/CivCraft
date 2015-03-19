@@ -332,6 +332,7 @@ public final class TechTree {
 
     private EState state = EState.CONSTRUCTING;
     private Map<String, Tech> techs = new HashMap<String, Tech>();
+    private Map<String, Tech> disabledTechs = new HashMap<String, Tech>();
     private Map<String, Unlockable> unlockables = new HashMap<String, Unlockable>();
     private Map<String, IUnlockableConstructor> unlockableTypes = new HashMap<String, IUnlockableConstructor>();
     /** WARNING: This will be null if a save has not been loaded yet, or it will be the old tech tree if a save has been
@@ -421,6 +422,12 @@ public final class TechTree {
             techs.get(s).save(techNBT);
             techsNBT.setTag(s, techNBT);
         }
+        for (String s : disabledTechs.keySet()) {
+            NBTTagCompound techNBT = new NBTTagCompound();
+            disabledTechs.get(s).save(techNBT);
+            techNBT.setBoolean("disabled", true);
+            techsNBT.setTag(s, techNBT);
+        }
         nbt.setTag("techs", techsNBT);
         NBTTagCompound reqsNBT = new NBTTagCompound();
         for (String s : unlockables.keySet()) {
@@ -481,6 +488,8 @@ public final class TechTree {
         Tech t;
         if (techs.containsKey(name))
             t = techs.get(name);
+        else if (disabledTechs.containsKey(name))
+            t = disabledTechs.get(name);
         else
             t = new Tech(name);
         t.addRequirements(required);
@@ -489,7 +498,11 @@ public final class TechTree {
         MinecraftForge.EVENT_BUS.post(e);
         if (e.isCanceled()) {
             CivLog.info("Canceled the addition of the tech \"" + t.name + "\"");
+            disabledTechs.put(name, t);
             return t;
+        }
+        else if (disabledTechs.containsValue(t)) {
+            disabledTechs.remove(name);
         }
         techs.put(name, t);
         CivLog.info("Added the tech \"" + t.name + "\"");

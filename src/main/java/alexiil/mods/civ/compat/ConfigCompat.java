@@ -47,11 +47,10 @@ public class ConfigCompat {
         String name = event.tech.name;
         NBTTagCompound n = event.treeNBTCompound;
         NBTTagCompound techs = n.getCompoundTag("techs");
-        if (techs.hasNoTags())
-            return;
-        if (!techs.hasKey(name))
+        NBTTagCompound tech = techs.getCompoundTag(name);
+        boolean disabled = tech.getBoolean("disabled");
+        if (disabled)
             event.setCanceled(true);
-
     }
 
     @SubscribeEvent
