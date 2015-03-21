@@ -25,6 +25,12 @@ public class AlexIILMod {
         log = event.getModLog();
         meta = event.getModMetadata();
         cfg = new ConfigAccess(event.getSuggestedConfigurationFile(), this);
+
+        netRate = cfg.getProp("netRate", 120);
+        netRate.comment = "How long to wait between sending updates, in ticks";
+
+        netDistance = cfg.getProp("netDistance", 120);
+        netDistance.comment = "The range in which to send updates to players";
     }
 
     public void postInit(FMLPostInitializationEvent event) {

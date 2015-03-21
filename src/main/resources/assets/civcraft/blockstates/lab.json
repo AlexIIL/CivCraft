@@ -1,0 +1,7 @@
+{
+    "variants": {
+   	    "normal": { "model": "civcraft:lab_off" },
+        "researching=false": { "model": "civcraft:lab_off" },
+        "researching=true": { "model": "civcraft:lab_on" }
+    }
+}

@@ -1,11 +1,13 @@
 package alexiil.mods.lib.nbt;
 
+import java.util.Arrays;
 import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.common.config.ConfigCategory;
@@ -66,6 +68,11 @@ public class NBTUtils {
             case 10: {// Compound
                 s += toString((NBTTagCompound) base, indent + 1);
                 // s += getNextLine(indent + 1);
+                break;
+            }
+            case 11: {
+                int[] intarr = ((NBTTagIntArray) base).getIntArray();
+                s += Arrays.toString(intarr);
             }
         }
         return s;

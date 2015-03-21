@@ -1,11 +1,11 @@
 package alexiil.mods.lib.net;
 
-import alexiil.mods.lib.Coordinate;
+import net.minecraft.util.BlockPos;
 
 public interface INetworkTile<M extends MessageUpdate<?, ?>> {
     public M getCustomUpdateMessage();
 
     public void setTileData(M message);
 
-    public Coordinate getCor();
+    public BlockPos getCor();
 }

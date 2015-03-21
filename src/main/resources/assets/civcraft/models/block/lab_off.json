@@ -1,0 +1,7 @@
+{
+    "parent": "civcraft:block/lab_base",
+    "textures": {
+        "outer": "civcraft:blocks/lab_off",
+        "inner": "civcraft:blocks/lab_off_inner"
+    }
+}

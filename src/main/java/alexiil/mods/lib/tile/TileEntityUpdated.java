@@ -22,7 +22,8 @@ public abstract class TileEntityUpdated<M extends MessageUpdate<?, ?>> extends T
         updated++;
         if (updated >= AlexIILLib.netRate.getInt()) {
             updated = 0;
-            sendUpdatePacket();
+            if (needsNetworkUpdate())
+                sendUpdatePacket();
         }
     }
 
@@ -38,5 +39,9 @@ public abstract class TileEntityUpdated<M extends MessageUpdate<?, ?>> extends T
 
     public void sendUpdatePacket() {
         mod.provider.get().sendToAllAround(getCustomUpdateMessage(), targetPoint());
+    }
+
+    public boolean needsNetworkUpdate() {
+        return true;
     }
 }

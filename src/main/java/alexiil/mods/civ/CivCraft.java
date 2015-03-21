@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import org.apache.logging.log4j.Logger;
 
+import alexiil.mods.civ.block.CivBlocks;
 import alexiil.mods.civ.compat.ModCompat;
 import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.net.MessageHandler;
@@ -78,6 +79,7 @@ public class CivCraft extends AlexIILMod {
 
         CivConfig.init();
         CivItems.init();
+        CivBlocks.init();
 
         ModCompat.loadCompats();
 
@@ -87,12 +89,12 @@ public class CivCraft extends AlexIILMod {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         CivRecipes.init();
+        proxy.initRenderers();
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
-        proxy.initRenderers();
         cfg.saveAll();
     }
 

@@ -1,10 +1,13 @@
 package alexiil.mods.lib.block;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,32 +20,39 @@ import alexiil.mods.lib.AlexIILMod;
 import alexiil.mods.lib.item.ItemBlockMeta;
 
 public abstract class BlockContainerBasic extends BlockContainer {
-    @SideOnly(Side.CLIENT)
-    protected TextureAtlasSprite[] icons;
+    private static final List<BlockContainerBasic> blocks = new ArrayList<BlockContainerBasic>();
+
     public final boolean enabled;
+    public final String name;
+
     protected AlexIILMod mod;
+
+    public static void initModels() {
+        for (BlockContainerBasic ib : blocks)
+            ib.initModel();
+    }
 
     public BlockContainerBasic(Material material, String name, AlexIILMod mod) {
         super(material);
+        this.name = name;
         this.mod = mod;
         setUnlocalizedName(mod.meta.modId + "_" + name);
+
         Property prop = mod.cfg.cfg.get("blocks", name, "true");
-        // prop.comment = "Enable the " + mod.format(getUnlocalizedName() + ".name") + " block";
+        prop.comment = "Enable the " + mod.format(getUnlocalizedName() + ".name") + " block";
         enabled = prop.getBoolean();
         if (enabled) {
             GameRegistry.registerBlock(this, ItemBlockMeta.class, name);
             GameRegistry.registerTileEntity(getTileClass(), mod.meta.modId + "_tile_" + name);
             this.setCreativeTab(mod.tab);
+            blocks.add(this);
         }
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @SideOnly(Side.CLIENT)
     @Override
-    // Add blocks to the creative
-    // inventory
-            public
-            void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
         for (int i = 0; i < getMetaBlocks(); i++)
             list.add(new ItemStack(item, 1, i));
     }
@@ -52,4 +62,14 @@ public abstract class BlockContainerBasic extends BlockContainer {
     }
 
     public abstract Class<? extends TileEntity> getTileClass();
+
+    public void initModel() {
+        ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+        mesher.register(Item.getItemFromBlock(this), 0, new ModelResourceLocation(mod.meta.modId + ":" + name));
+    }
+
+    @Override
+    public int getRenderType() {
+        return 3;
+    }
 }

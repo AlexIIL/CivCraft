@@ -102,7 +102,7 @@ public final class TechTree {
             String s = parentsToString();
             parents = Arrays.copyOf(parents, 1 + parents.length);
             parents[start] = required;
-            CivLog.info("Added a requirement to \"" + name + "\", the list went from " + s + " to " + parentsToString());
+            CivLog.debugInfo("Added a requirement to \"" + name + "\", the list went from " + s + " to " + parentsToString());
             if (isLeafTech())
                 setLeafTech();
             return this;
@@ -143,7 +143,7 @@ public final class TechTree {
                     i++;
                 }
             parents = newParents;
-            CivLog.info("Sucsessfully removed \"" + required.name + "\" from " + name + ", the parents list went from " + parentsString + " to "
+            CivLog.debugInfo("Sucsessfully removed \"" + required.name + "\" from " + name + ", the parents list went from " + parentsString + " to "
                     + parentsToString());
             return this;
         }
@@ -465,7 +465,7 @@ public final class TechTree {
                 t.addUnlockable(unlock);
         }
         unlockables.put(unlock.getName(), unlock);
-        CivLog.info("Added the unlockable \"" + unlock.getName() + "\"");
+        CivLog.debugInfo("Added the unlockable \"" + unlock.getName() + "\"");
         return unlock;
     }
 
@@ -497,7 +497,7 @@ public final class TechTree {
         TechTreeEvent.RegisterTech e = new TechTreeEvent.RegisterTech(this, t, treeData);
         MinecraftForge.EVENT_BUS.post(e);
         if (e.isCanceled()) {
-            CivLog.info("Canceled the addition of the tech \"" + t.name + "\"");
+            CivLog.debugInfo("Canceled the addition of the tech \"" + t.name + "\"");
             disabledTechs.put(name, t);
             return t;
         }
@@ -505,7 +505,7 @@ public final class TechTree {
             disabledTechs.remove(name);
         }
         techs.put(name, t);
-        CivLog.info("Added the tech \"" + t.name + "\"");
+        CivLog.debugInfo("Added the tech \"" + t.name + "\"");
         return t;
     }
 
@@ -581,9 +581,9 @@ public final class TechTree {
             return;
         }
         if (unlockableTypes.containsKey(type))
-            CivLog.info("\"" + type + "\" is already registered! Replacing it with the new one...");
+            CivLog.warn("\"" + type + "\" is already registered! Replacing it with the new one...");
         unlockableTypes.put(type, unlockable);
-        CivLog.info("Registered \"" + type + "\" as an unlockable");
+        CivLog.debugInfo("Registered \"" + type + "\" as an unlockable");
     }
 
     /** Register an unlockable type, specifying a class to load from. Unlike the other method, this class MUST have a

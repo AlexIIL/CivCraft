@@ -4,12 +4,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import alexiil.mods.civ.gui.GuiTechTree;
+import alexiil.mods.lib.block.BlockContainerBasic;
 import alexiil.mods.lib.item.ItemBase;
 
 public class ClientProxy extends CommonProxy {
     @Override
     public void initRenderers() {
         ItemBase.initModels();
+        BlockContainerBasic.initModels();
     }
 
     @Override

@@ -3,7 +3,9 @@ package alexiil.mods.lib.block;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,28 +19,35 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import alexiil.mods.lib.AlexIILMod;
 
 public abstract class BlockContainerRotatable extends BlockContainerBasic {
-    private static final PropertyDirection PROP_DIRECTION = PropertyDirection.create("facing");
+    private static final PropertyDirection DIRECTION = PropertyDirection.create("facing");
 
     public BlockContainerRotatable(Material material, String name, AlexIILMod mod) {
         super(material, name, mod);
-        this.setDefaultState(blockState.getBaseState().withProperty(PROP_DIRECTION, EnumFacing.UP));
+        this.setDefaultState(blockState.getBaseState().withProperty(DIRECTION, EnumFacing.UP));
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @SideOnly(Side.CLIENT)
     @Override
-    // Add blocks to the creative
-    // inventory
-            public
-            void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
         list.add(new ItemStack(item, 1, 3));
     }
 
     public void rotate(World world, BlockPos pos, IBlockState state, boolean shift) {
-        state.cycleProperty(PROP_DIRECTION);
+        state.cycleProperty(DIRECTION);
         /* int meta = world.getBlockMetadata(x, y, z); if (!canRotate(world, x, y, z, meta)) return; boolean flag =
          * false; if (meta > 7) { flag = true; meta -= 8; } if (!shift) { meta += 1; if (meta > 5) meta = 0; } else {
          * meta -= 1; if (meta < 0) meta = 5; } if (flag) meta += 8; world.setBlockMetadataWithNotify(x, y, z, meta, 3); */
+    }
+
+    @Override
+    protected BlockState createBlockState() {
+        return new BlockState(this, new IProperty[] { DIRECTION });
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(DIRECTION, meta != 0);
     }
 
     @Override
