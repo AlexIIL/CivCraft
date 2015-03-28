@@ -78,6 +78,6 @@ public class BlockLab extends BlockContainerBasic {
         // super.initModel();
         // ModelLoader.addVariantName(Item.getItemFromBlock(this), "civcraft:lab_off", "civcraft:lab_on");
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-                .register(Item.getItemFromBlock(this), 0, new ModelResourceLocation("civcraft:lab"));
+                .register(Item.getItemFromBlock(this), 0, new ModelResourceLocation("civcraft:lab", "inventory"));
     }
 }
