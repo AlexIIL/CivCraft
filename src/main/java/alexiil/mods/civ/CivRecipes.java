@@ -9,6 +9,8 @@ import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter;
+import alexiil.mods.civ.block.CivBlocks;
+import alexiil.mods.civ.compat.OpenComputersCompat;
 import alexiil.mods.civ.compat.ProgressiveAutomationCompat;
 import alexiil.mods.civ.crafting.RecipeTech;
 import alexiil.mods.civ.item.CivItems;
@@ -29,6 +31,9 @@ public class CivRecipes {
         addCraftingRecipe(CivItems.sciencePacks[1], new Object[] { "SGS", "GIG", "LRW", 'I', Items.iron_ingot, 'G', Blocks.glass, 'R',
                 Items.redstone, 'L', Blocks.log, 'W', Blocks.planks, 'S', new ItemStack(Blocks.stone, 1, 0) }, false, false);
 
+        // Long code for adding items for science pack 2, but only if the mod exists.
+        // TODO: do this better (perhaps with a weighted system?)
+
         ItemStack stack0 = new ItemStack(Blocks.lapis_block);
         ItemStack stack1 = new ItemStack(Items.redstone);
         ItemStack stack2 = new ItemStack(Blocks.hopper);
@@ -46,11 +51,14 @@ public class CivRecipes {
                 stack1 = new ItemStack(stoneMiner);
         }
         if (Loader.isModLoaded("OpenComputers")) {
-            stack4 = li.cil.oc.api.Items.get("ram1").createItemStack(1);
+            stack4 = OpenComputersCompat.getItem("ram1");
         }
 
         addCraftingRecipe(CivItems.sciencePacks[2], new Object[] { "010", "323", "4M5", '0', stack0, '1', stack1, '2', stack2, '3', stack3, '4',
                 stack4, '5', stack5, 'M', Items.chest_minecart }, false, false);
+
+        addCraftingRecipe(CivBlocks.lab, new Object[] { "0I1", "ICI", "1I0", 'I', Blocks.iron_bars, '0', CivItems.sciencePacks[0], '1',
+                CivItems.sciencePacks[1], 'C', Blocks.chest }, true, false);
     }
 
     private static String flipString(String s) {

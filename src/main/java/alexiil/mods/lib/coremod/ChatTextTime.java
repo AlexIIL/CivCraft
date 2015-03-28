@@ -55,6 +55,8 @@ public class ChatTextTime {
     }
 
     private static boolean shouldDoPlayerStuff(String unformatted) {
+        if (unformatted == null || unformatted.length() == 0)
+            return false;
         return unformatted.charAt(0) == '<';
     }
 

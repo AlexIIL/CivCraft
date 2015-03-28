@@ -5,19 +5,22 @@ import java.util.List;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alexiil.mods.lib.AlexIILMod;
 import alexiil.mods.lib.item.ItemBlockMeta;
+import alexiil.mods.lib.tile.TileEntityBasic;
 
 public abstract class BlockContainerBasic extends BlockContainer {
     private static final List<BlockContainerBasic> blocks = new ArrayList<BlockContainerBasic>();
@@ -61,7 +64,7 @@ public abstract class BlockContainerBasic extends BlockContainer {
         return 1;
     }
 
-    public abstract Class<? extends TileEntity> getTileClass();
+    public abstract Class<? extends TileEntityBasic> getTileClass();
 
     public void initModel() {
         ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
@@ -71,5 +74,11 @@ public abstract class BlockContainerBasic extends BlockContainer {
     @Override
     public int getRenderType() {
         return 3;
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        ((TileEntityBasic) world.getTileEntity(pos)).dropItems();
+        super.breakBlock(world, pos, state);
     }
 }

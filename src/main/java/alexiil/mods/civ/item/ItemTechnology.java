@@ -269,6 +269,8 @@ public class ItemTechnology extends ItemBase {
     /** @return An integer array, containing the numbers of packs required to complete this. This will never be null, but
      *         it may be an empty array (so, []) */
     public int[] getSciencePacksRequired(ItemStack i) {
+        if (i == null)
+            return new int[0];
         int[] current = getScienceCount(i);
         int[] techNeeded = getTech(i).getSciencePacksNeeded();
         int[] needed = new int[techNeeded.length];

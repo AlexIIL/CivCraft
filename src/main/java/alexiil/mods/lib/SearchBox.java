@@ -9,10 +9,10 @@ import net.minecraft.util.EnumFacing;
 /** Currently unused, this class allowed for searching a give volume, incrementing the position at any time. This also
  * allows for adding coordinates to search at any time. */
 public class SearchBox {
-    public Coordinate min, max, cur;
+    public BlockPos min, max, cur;
     /** This determines whether to increment or decrement the value. */
     public boolean posX, posY, posZ;
-    public ArrayDeque<Coordinate> toSearch;
+    public ArrayDeque<BlockPos> toSearch;
     public boolean doOnce, isDone = false;
     public long progress = 0;
     public long size;
@@ -31,44 +31,44 @@ public class SearchBox {
     }
 
     public SearchBox(BlockPos min, BlockPos max) {
-        this.min = new Coordinate(min);
-        this.max = new Coordinate(max);
-        this.cur = new Coordinate(min.getX(), max.getY(), min.getZ());
+        this.min = min;
+        this.max = max;
+        this.cur = min;
     }
 
     public SearchBox(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-        min = new Coordinate(minX, minY, minZ);
-        max = new Coordinate(maxX, maxY, maxZ);
+        min = new BlockPos(minX, minY, minZ);
+        max = new BlockPos(maxX, maxY, maxZ);
         resetCurrent();
         calcSize();
     }
 
     public void writeToNBT(NBTTagCompound nbt) {
-        min.writeToNBT(nbt, "PosMin");
-        max.writeToNBT(nbt, "PosMax");
-        cur.writeToNBT(nbt, "PosCur");
+        BlockPosUtils.saveToNBT(min, "min");
+        BlockPosUtils.saveToNBT(max, "max");
+        BlockPosUtils.saveToNBT(cur, "cur");
         nbt.setBoolean("DirectionX", posX);
         nbt.setBoolean("DirectionY", posY);
         nbt.setBoolean("DirectionZ", posZ);
         nbt.setInteger("ToSearch", toSearch.size());
         nbt.setLong("Progress", progress);
         for (int a = toSearch.size() - 1; a >= 0; a--)
-            toSearch.pop().writeToNBT(nbt, Integer.toString(a));
+            BlockPosUtils.saveToNBT(toSearch.pop(), Integer.toString(a));
         nbt.setBoolean("doOnce", doOnce);
     }
 
     public void readFromNBT(NBTTagCompound nbt) {
-        min = new Coordinate(nbt, "PosMin");
-        max = new Coordinate(nbt, "PosMax");
-        cur = new Coordinate(nbt, "PosCur");
+        min = BlockPosUtils.readFromNBT(nbt, "min");
+        max = BlockPosUtils.readFromNBT(nbt, "min");
+        cur = BlockPosUtils.readFromNBT(nbt, "min");
         posX = nbt.getBoolean("DirectionX");
         posY = nbt.getBoolean("DirectionY");
         posZ = nbt.getBoolean("DirectionZ");
         progress = nbt.getLong("Progress");
         int cors = nbt.getInteger("ToSearch");
-        toSearch = new ArrayDeque<Coordinate>(cors);// TODO: Test this!!!!!!!!!!!
+        toSearch = new ArrayDeque<BlockPos>(cors);// TODO: Test this!!!!!!!!!!!
         for (int a = 0; a < cors; a++)
-            toSearch.push(new Coordinate(nbt, Integer.toString(a)));
+            toSearch.push(BlockPosUtils.readFromNBT(nbt, Integer.toString(a)));
         calcSize();
         doOnce = nbt.getBoolean("doOnce");
     }
@@ -82,17 +82,17 @@ public class SearchBox {
     }
 
     public void expand(int amount) {
-        min = min.moveCoordinate(EnumFacing.DOWN).moveCoordinate(EnumFacing.NORTH).moveCoordinate(EnumFacing.WEST);
-        max = max.moveCoordinate(EnumFacing.UP).moveCoordinate(EnumFacing.SOUTH).moveCoordinate(EnumFacing.EAST);
+        min = min.offset(EnumFacing.DOWN).offset(EnumFacing.NORTH).offset(EnumFacing.WEST);
+        max = max.offset(EnumFacing.UP).offset(EnumFacing.SOUTH).offset(EnumFacing.EAST);
         calcSize();
     }
 
     public void resetCurrent() {
-        cur = new Coordinate(min.getX(), max.getY(), min.getZ());
+        cur = new BlockPos(min.getX(), max.getY(), min.getZ());
         posX = true;
         posY = false;
         posZ = true;
-        toSearch = new ArrayDeque<Coordinate>();
+        toSearch = new ArrayDeque<BlockPos>();
     }
 
     public void contract(int amount) {
@@ -106,7 +106,7 @@ public class SearchBox {
         else if (cur.getX() == min.getX() && !posX)
             posX = true;
         else {
-            cur = cur.moveCoordinate(posX ? EnumFacing.EAST : EnumFacing.WEST);
+            cur = cur.offset(posX ? EnumFacing.EAST : EnumFacing.WEST);
             return;
         }
 
@@ -115,7 +115,7 @@ public class SearchBox {
         else if (cur.getZ() == min.getZ() && !posZ)
             posZ = true;
         else {
-            cur = cur.moveCoordinate(posZ ? EnumFacing.SOUTH : EnumFacing.NORTH);
+            cur = cur.offset(posZ ? EnumFacing.SOUTH : EnumFacing.NORTH);
             return;
         }
 
@@ -128,42 +128,42 @@ public class SearchBox {
         else if (cur.getY() == min.getY() && !posY)
             posY = true;
         else {
-            cur = cur.moveCoordinate(posY ? EnumFacing.UP : EnumFacing.DOWN);
+            cur = cur.offset(posY ? EnumFacing.UP : EnumFacing.DOWN);
             return;
         }
     }
 
-    public boolean isOnEdge(Coordinate cor) {
-        return getMatches(cor) > 0;
+    public boolean isOnEdge(BlockPos pos) {
+        return getMatches(pos) > 0;
     }
 
-    public boolean isInside(Coordinate cor) {
-        return cor.getX() >= min.getX() && cor.getX() <= max.getX() && cor.getY() >= min.getY() && cor.getY() <= max.getY()
-                && cor.getZ() >= min.getZ() && cor.getZ() <= max.getZ();
+    public boolean isInside(BlockPos pos) {
+        return pos.getX() >= min.getX() && pos.getX() <= max.getX() && pos.getY() >= min.getY() && pos.getY() <= max.getY()
+                && pos.getZ() >= min.getZ() && pos.getZ() <= max.getZ();
     }
 
-    public boolean isOnVertex(Coordinate cor) {
-        return getMatches(cor) > 1;
+    public boolean isOnVertex(BlockPos pos) {
+        return getMatches(pos) > 1;
     }
 
-    public int getMatches(Coordinate cor) {
+    public int getMatches(BlockPos pos) {
         int matches = 0;
-        if (cor.getX() == min.getX() || cor.getX() == max.getX())
+        if (pos.getX() == min.getX() || pos.getX() == max.getX())
             matches++;
-        if (cor.getY() == min.getY() || cor.getY() == max.getY())
+        if (pos.getY() == min.getY() || pos.getY() == max.getY())
             matches++;
-        if (cor.getZ() == min.getZ() || cor.getZ() == max.getZ())
+        if (pos.getZ() == min.getZ() || pos.getZ() == max.getZ())
             matches++;
         return matches;
     }
 
-    public Coordinate current() {
+    public BlockPos current() {
         if (toSearch.isEmpty())
             return cur;
         return toSearch.peek();
     }
 
-    public Coordinate next() {
+    public BlockPos next() {
         if (toSearch.isEmpty()) {
             calcNext();
             return current();
@@ -176,7 +176,7 @@ public class SearchBox {
         return progress + "/" + size;
     }
 
-    public void pushNext(Coordinate cor) {
-        toSearch.push(cor);
+    public void pushNext(BlockPos pos) {
+        toSearch.push(pos);
     }
 }

@@ -16,10 +16,8 @@ import alexiil.mods.civ.net.MessageLab;
 import alexiil.mods.lib.tile.TileEntityUpdated;
 
 public class TileLab extends TileEntityUpdated<MessageLab> implements ISidedInventory {
-    private static final int PROGRESS_NEEDED = 1200;
-
     private final InventoryLab inventory = new InventoryLab();
-    private int progress = 0;
+    private int cooldown = 0;
 
     public TileLab() {
         super(CivCraft.instance);
@@ -29,33 +27,43 @@ public class TileLab extends TileEntityUpdated<MessageLab> implements ISidedInve
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
         inventory.load(nbt.getCompoundTag("inventory"));
-        progress = nbt.getInteger("progress");
+        cooldown = nbt.getInteger("cooldown");
     }
 
     @Override
     public void writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         nbt.setTag("inventory", inventory.save());
-        nbt.setInteger("progress", progress);
+        nbt.setInteger("cooldown", cooldown);
     }
 
     @Override
     public void onTick() {
         super.onTick();
+        cooldown--;
+        if (cooldown <= 0)
+            cooldown = 0;
         if (isReady()) {
-            if (progress == 0) {
-                worldObj.setBlockState(getPos(), worldObj.getBlockState(getPos()).withProperty(BlockLab.RESEARCHING, true), 3);
-            }
-            progress++;
-            if (progress >= PROGRESS_NEEDED && inventory.researchTech()) {
-                usePower();
-                progress -= PROGRESS_NEEDED;
-                worldObj.setBlockState(getPos(), worldObj.getBlockState(getPos()).withProperty(BlockLab.RESEARCHING, false), 3);
+            usePower();
+            worldObj.setBlockState(getPos(), worldObj.getBlockState(getPos()).withProperty(BlockLab.RESEARCHING, true), 3);
+            if (inventory.researchTech()) {
+                cooldown = 80;
             }
         }
-        else {
+        else if (cooldown <= 0) {
             worldObj.setBlockState(getPos(), worldObj.getBlockState(getPos()).withProperty(BlockLab.RESEARCHING, false), 3);
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("TileLab [inventory=");
+        builder.append(inventory);
+        builder.append(", cooldown=");
+        builder.append(cooldown);
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
@@ -64,7 +72,7 @@ public class TileLab extends TileEntityUpdated<MessageLab> implements ISidedInve
     }
 
     private boolean isReady() {
-        return hasPower() && inventory.canResearch();
+        return cooldown <= 0 && hasPower() && inventory.canResearch();
     }
 
     /* Power requirements- not used so far, but here for easy implementation later (say, whenever a mod that provides
@@ -98,7 +106,12 @@ public class TileLab extends TileEntityUpdated<MessageLab> implements ISidedInve
         return false;
     }
 
-    // IInventory delegate methods
+    @Override
+    public void dropItems() {
+        inventory.dropItems(this);
+    }
+
+    // ISidedInventory delegate methods
 
     @Override
     public ItemStack getStackInSlot(int index) {

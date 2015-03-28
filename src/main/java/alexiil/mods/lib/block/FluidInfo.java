@@ -6,8 +6,8 @@ import java.util.List;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import alexiil.mods.lib.Coordinate;
 
 public class FluidInfo {
     public static enum FluidType {
@@ -26,8 +26,8 @@ public class FluidInfo {
         return new FluidInfo(type, b);
     }
 
-    public static FluidInfo getFluidInfo(World world, Coordinate cor) {
-        IBlockState block = world.getBlockState(cor);
+    public static FluidInfo getFluidInfo(World world, BlockPos pos) {
+        IBlockState block = world.getBlockState(pos);
         FluidInfo.FluidType type;
 
         if (block == null)

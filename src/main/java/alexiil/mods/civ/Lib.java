@@ -18,6 +18,7 @@ public class Lib {
 
     public static class Gui {
         public static final int TECH_TREE = 0;
+        public static final int LAB = 1;
     }
 
     public static class NBT {

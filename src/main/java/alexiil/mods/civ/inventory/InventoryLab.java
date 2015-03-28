@@ -1,15 +1,15 @@
 package alexiil.mods.civ.inventory;
 
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.item.ItemTechnology;
 import alexiil.mods.civ.item.ItemTechnology.EResearchState;
+import alexiil.mods.lib.nbt.NBTUtils;
 
 public class InventoryLab extends InventoryPermanent implements ISidedInventory {
-    private static final int INVENTORY_SIZE = CivItems.sciencePacks.length + 1;
+    public static final int INVENTORY_SIZE = CivItems.sciencePacks.length + 1;
     private static final int[] AVAILABLE_SLOTS = new int[INVENTORY_SIZE];
 
     static {
@@ -17,36 +17,25 @@ public class InventoryLab extends InventoryPermanent implements ISidedInventory 
             AVAILABLE_SLOTS[i] = i;
     }
 
-    public final int[] requiredCache = new int[INVENTORY_SIZE - 1];
-
     public InventoryLab() {
         super("Lab", false, INVENTORY_SIZE);
     }
 
-    @Override
-    public void onInventoryChanged(InventoryBasic invBasic) {
-        refreshCache();
-    }
-
-    private void refreshCache() {
-        ItemStack tech = super.getStackInSlot(0);
-        int[] required = new int[CivItems.sciencePacks.length];
-        if (tech != null)
-            required = CivItems.technology.getSciencePacksRequired(tech);
-        for (int i = 0; i < requiredCache.length; i++) {
-            requiredCache[i] = i < required.length ? required[i] : 0;
-            ItemStack stack = getStackInSlot(i + 1);
-            requiredCache[i] -= stack == null ? 0 : stack.stackSize;
-        }
-    }
-
     public boolean canResearch() {
-        for (int i = 0; i < requiredCache.length; i++) {
-            ItemStack stack = super.getStackInSlot(i + 1);
+        ItemStack research = super.getStackInSlot(0);
+        if (research == null)
+            return false;
+        EResearchState state = CivItems.technology.getState(research);
+        if (state == EResearchState.RESEARCHED)
+            return false;
+
+        for (int i = 1; i < INVENTORY_SIZE; i++) {
+            ItemStack stack = super.getStackInSlot(i);
             if (stack == null)
                 continue;
             int got = stack.stackSize;
-            if (got > 0)
+            int needed = CivItems.technology.getSciencePacksRequired(research)[i - 1];
+            if (needed > 0 && got > 0 && stack.getItem() == CivItems.sciencePacks[i - 1])
                 return true;
         }
         return false;
@@ -54,12 +43,16 @@ public class InventoryLab extends InventoryPermanent implements ISidedInventory 
 
     /** @return <code>True</code> If any tech was researched */
     public boolean researchTech() {
-        for (int i = 0; i < requiredCache.length; i++) {
-            ItemStack stack = super.getStackInSlot(i + 1);
+        ItemStack research = super.getStackInSlot(0);
+        for (int i = 1; i < INVENTORY_SIZE; i++) {
+            ItemStack stack = super.getStackInSlot(i);
             if (stack != null) {
-                super.decrStackSize(i + 1, 1);
-                int[] toAdd = new int[i + 1];
-                toAdd[i] = 1;
+                int needed = CivItems.technology.getSciencePacksRequired(research)[i - 1];
+                if (needed <= 0)
+                    continue;
+                super.decrStackSize(i, 1);
+                int[] toAdd = new int[i];
+                toAdd[i - 1] = 1;
                 CivItems.technology.addPackCount(super.getStackInSlot(0), toAdd);
                 return true;
             }
@@ -81,7 +74,15 @@ public class InventoryLab extends InventoryPermanent implements ISidedInventory 
             return false;
         if (CivItems.sciencePacks[index] != stack.getItem())
             return false;
-        return requiredCache[index] >= stack.stackSize;
+        int[] requiredArr = CivItems.technology.getSciencePacksRequired(getStackInSlot(0));
+        if (requiredArr.length <= index)
+            return false;
+        ItemStack alreadyHere = getStackInSlot(index + 1);
+        int required = requiredArr[index];
+        if (alreadyHere == null)
+            return required >= stack.stackSize;
+        required -= alreadyHere.stackSize;
+        return required >= stack.stackSize;
     }
 
     @Override
@@ -99,5 +100,10 @@ public class InventoryLab extends InventoryPermanent implements ISidedInventory 
         if (index != 0)
             return false;
         return (stack.getItem() instanceof ItemTechnology) && CivItems.technology.getState(stack) == EResearchState.RESEARCHED;
+    }
+
+    @Override
+    public String toString() {
+        return NBTUtils.toString(save()).replace("\t", "");
     }
 }

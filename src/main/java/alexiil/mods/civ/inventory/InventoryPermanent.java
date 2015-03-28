@@ -1,9 +1,11 @@
 package alexiil.mods.civ.inventory;
 
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInvBasic;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 
 public abstract class InventoryPermanent extends InventoryBasic implements IInvBasic {
     public InventoryPermanent(String title, boolean customName, int slotCount) {
@@ -36,4 +38,14 @@ public abstract class InventoryPermanent extends InventoryBasic implements IInvB
 
     @Override
     public void onInventoryChanged(InventoryBasic invBasic) {}
+
+    public void dropItems(TileEntity tile) {
+        for (int i = 0; i < this.getSizeInventory(); i++) {
+            ItemStack item = super.decrStackSize(i, getInventoryStackLimit());
+            if (item == null)
+                continue;
+            EntityItem ei = new EntityItem(tile.getWorld(), tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), item);
+            tile.getWorld().spawnEntityInWorld(ei);
+        }
+    }
 }
