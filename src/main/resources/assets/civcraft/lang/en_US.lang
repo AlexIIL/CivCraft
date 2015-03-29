@@ -5,6 +5,7 @@ item.civcraft_sciencePack3.name=Science Pack 3
 item.civcraft_sciencePack4.name=Science Pack 4
 item.civcraft_technology.name=Technology
 item.civcraft_techBag.name=Book of Technology
+block.civcraft_lab.name=Lab
 
 civcraft.config.title=Main Configuration File
 civcraft.config.button=Edit the main configuration
@@ -66,17 +67,18 @@ civcraft.chat.earnBeaker.block.break=breaking
 civcraft.chat.earnBeaker.block.harvest=harvesting
 civcraft.chat.earnBeaker.entity.kill=killing
 civcraft.chat.earnBeaker.entity.attack=attacking
+civcraft.chat.earnBeaker.explore=exploring
 
 civcraft.chat.unlocktech=You just researched 
 
+block.harvest=blocks
+block.harvest.tile=blocks
 craft=all the things
 craft.item=items
 craft.block=blocks
 craft.tile=blocks
 entity.kill.tile=mobs
 entity.attack=mobs
-block.harvest=blocks
-block.harvest.tile=blocks
 
 #Used for unlockables, these are just put into a bullet-pointed list.
 

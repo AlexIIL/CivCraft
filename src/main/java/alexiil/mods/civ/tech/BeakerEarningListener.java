@@ -36,6 +36,7 @@ import alexiil.mods.civ.CivConfig;
 import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.item.CivItems;
+import alexiil.mods.civ.utils.CraftUtils;
 
 public class BeakerEarningListener {
     private static Map<String, Double> beakerGetting = Collections.synchronizedMap(new HashMap<String, Double>());
@@ -65,6 +66,7 @@ public class BeakerEarningListener {
         addBeakerAmount("entity.kill.Enderman", 1F);
         addBeakerAmount("entity.attack", 0.04F);
         addBeakerAmount("craft", 0.1F);
+        addBeakerAmount("explore", 0.01F);
     }
 
     public static void addBeakerAmount(String type, double amount) {
@@ -83,8 +85,11 @@ public class BeakerEarningListener {
      *            default is used form the map. If it does not exist in the map, then nothing happens
      * @param multiplier
      *            The multiplier to add to this- use this if (say) you should earn differing amounts for the same name-
-     *            say hitting an arrow from really far away, as opposed to close */
-    public static void earnBeaker(EntityPlayer player, String name, double multiplier) {
+     *            say hitting an arrow from really far away, as opposed to close
+     * @param shouldCool
+     *            Whether or not to add to the cooldown for this. This should only be false for things that cannot be
+     *            automated in any way (say, exploring new chunks) */
+    public static void earnBeaker(EntityPlayer player, String name, double multiplier, boolean shouldCool) {
         String unlocalizedName = name.replace("tile", "").replace("item", "").replace("..", ".");
         if (unlocalizedName.endsWith("."))
             unlocalizedName = unlocalizedName.substring(0, unlocalizedName.length() - 1);
@@ -138,7 +143,8 @@ public class BeakerEarningListener {
         }
         cooldown += COOLDOWN_ADDITION * (1 + beakers);
         cooldown *= COOLDOWN_MULTIPLIER;
-        nbtCooldown.setDouble(unlocalizedName, cooldown);
+        if (shouldCool)
+            nbtCooldown.setDouble(unlocalizedName, cooldown);
         nbtProgress.setDouble(unlocalizedName, progress);
         nbtLastDone.setLong(unlocalizedName, 0);
         CivLog.debugInfo("cooldown = " + cooldown + ", progress = " + progress);
@@ -151,6 +157,10 @@ public class BeakerEarningListener {
 
     public static void earnBeaker(EntityPlayer player, String name) {
         earnBeaker(player, name, 1);
+    }
+
+    public static void earnBeaker(EntityPlayer player, String name, double multiplier) {
+        earnBeaker(player, name, multiplier, true);
     }
 
     public static String getPreTranslation(String in) {
@@ -181,6 +191,9 @@ public class BeakerEarningListener {
             return;
         if (event.phase != Phase.END)
             return;
+
+        // Decrement ALL cooldowns
+
         NBTTagCompound nbt = event.player.getEntityData();
         NBTTagCompound persisted = nbt.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
         if (CivConfig.debugMode.getBoolean())
@@ -219,6 +232,11 @@ public class BeakerEarningListener {
         nbtCiv.setTag("cooldown", nbtCooldown);
         persisted.setTag("civcraft", nbtCiv);
         nbt.setTag(EntityPlayer.PERSISTED_NBT_TAG, persisted);
+
+        // Handle exploration
+        boolean exploredNew = CraftUtils.addPlayerToChunk(event.player.worldObj, event.player.getPosition(), event.player);
+        if (exploredNew)
+            earnBeaker(event.player, "explore", 1, false);
     }
 
     /** @return true if the player is a real player (so not a fake one) */

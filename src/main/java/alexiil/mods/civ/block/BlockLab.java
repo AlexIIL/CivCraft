@@ -10,7 +10,6 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.World;
@@ -67,8 +66,6 @@ public class BlockLab extends BlockContainerBasic {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY,
             float hitZ) {
-        player.addChatMessage(new ChatComponentText(world.getTileEntity(pos).toString()));
-
         player.openGui(CivCraft.instance, Lib.Gui.LAB, world, pos.getX(), pos.getY(), pos.getZ());
         return false;
     }

@@ -73,7 +73,7 @@ dependencies {
     compile "codechicken:CodeChickenCore:${config.mc_version}-${config.ccc_version}:dev"
     compile "codechicken:NotEnoughItems:${config.mc_version}-${config.nei_version}:dev"
 
-    compile "li.cil.oc:OpenComputers:MC${config.mc_version}-${config.oc_version}:api"
+    compile "li.cil.oc:OpenComputers:MC${config.mc_version}-${config.oc_version}:dev"
    
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html

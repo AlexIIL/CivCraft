@@ -54,13 +54,13 @@ public class CraftUtils {
         return map.get(ccip);
     }
 
-    public static void addPlayerToChunk(World world, BlockPos pos, EntityPlayer player) {
+    public static boolean addPlayerToChunk(World world, BlockPos pos, EntityPlayer player) {
         if (pos == null || player == null)
-            return;
-        addPlayerToChunk(world, pos, PlayerTechData.createPlayerTechData(player));
+            return false;
+        return addPlayerToChunk(world, pos, PlayerTechData.createPlayerTechData(player));
     }
 
-    public static void addPlayerToChunk(World world, BlockPos pos, PlayerTechData techs) {
+    public static boolean addPlayerToChunk(World world, BlockPos pos, PlayerTechData techs) {
         ChunkCoordIntPair ccip = new ChunkCoordIntPair(pos.getX() << 4, pos.getY() << 4);
         List<PlayerTechData> list = getPlayers(world, ccip);
         boolean found = false;
@@ -70,6 +70,7 @@ public class CraftUtils {
         }
         if (!found)
             list.add(techs);
+        return !found;
     }
 
     public static List<PlayerTechData> getPlayers(World world, BlockPos pos) {

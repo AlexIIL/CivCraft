@@ -194,7 +194,10 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         NBTTagCompound items = new NBTTagCompound();
         int index = 0;
         for (IItemComparator c : this.items) {
-            items.setTag(Integer.toString(index), c.save());
+            if (c == null)
+                CivLog.warn("The item comparator was null! (" + getName() + ")");
+            else
+                items.setTag(Integer.toString(index), c.save());
             index++;
         }
         nbt.setTag("items", items);
