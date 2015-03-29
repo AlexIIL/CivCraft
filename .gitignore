@@ -2,9 +2,11 @@
 /testing/
 /.gradle/
 /.project
+/.classpath
 /.settings/
 /eclipse/
 /libs/
 /serverTest/
 /tempChanges/
+
 
