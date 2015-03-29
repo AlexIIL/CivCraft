@@ -1,0 +1,10 @@
+/bin/
+/testing/
+/.gradle/
+/.project
+/.settings/
+/eclipse/
+/libs/
+/serverTest/
+/tempChanges/
+
