@@ -29,7 +29,7 @@ import alexiil.mods.civ.net.MessageHandler;
 import alexiil.mods.civ.tech.BeakerEarningListener;
 import alexiil.mods.lib.AlexIILMod;
 import alexiil.mods.lib.git.Commit;
-import alexiil.mods.lib.git.GitHubRequester;
+import alexiil.mods.lib.git.SiteRequester;
 import alexiil.mods.lib.git.GitHubUser;
 import alexiil.mods.lib.git.Release;
 
@@ -104,7 +104,7 @@ public class CivCraft extends AlexIILMod {
             @Override
             public void run() {
                 String droneSite = "https://drone.io/github.com/AlexIIL/CivCraft/files/VersionInfo/build/libs/version/";
-                contributors = Collections.unmodifiableList(GitHubRequester.getContributors(droneSite + "contributors.json"));
+                contributors = Collections.unmodifiableList(SiteRequester.getContributors(droneSite + "contributors.json"));
                 if (contributors.size() == 0)
                     modMeta.authorList.add("Could not connect to GitHub to fetch the rest...");
                 for (GitHubUser c : contributors) {
@@ -113,7 +113,7 @@ public class CivCraft extends AlexIILMod {
                     modMeta.authorList.add(c.login);
                 }
 
-                commits = Collections.unmodifiableList(GitHubRequester.getCommits(droneSite + "commits.json"));
+                commits = Collections.unmodifiableList(SiteRequester.getCommits(droneSite + "commits.json"));
                 Collections.sort(commits, new Comparator<Commit>() {
                     @Override
                     public int compare(Commit c0, Commit c1) {
@@ -130,7 +130,7 @@ public class CivCraft extends AlexIILMod {
                     CivLog.warn("Commit Hash : \"" + Lib.Mod.COMMIT_HASH + "\"");
                 }
 
-                releases = Collections.unmodifiableList(GitHubRequester.getReleases(droneSite + "releases.json"));
+                releases = Collections.unmodifiableList(SiteRequester.getReleases(droneSite + "releases.json"));
             }
         }.start();
     }

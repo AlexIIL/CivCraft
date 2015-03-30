@@ -18,7 +18,7 @@ import java.util.Map;
 
 import com.google.gson.GsonBuilder;
 
-public class GitHubRequester {
+public class SiteRequester {
     private static final String LOGIN = "\"login\":\"";// "login":"
     private static final String AVATAR = "\"avatar_url\":\"";// "avatar_url":"
     private static final String COMMITS = "\"contributions\":";// "contributions":

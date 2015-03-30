@@ -35,7 +35,7 @@ public class CivConfig {
         debugMode.comment = "Enables debug mode. Will be annoying if you do not want to debug!";
 
         connectExternally = cfg.getProp("connectExternally", true);
-        connectExternally.comment = "Allows this mod to connect to github to fetch a list of contributors, commits and releases for this mod.";
+        connectExternally.comment = "Allows this mod to connect to drone.io to fetch a list of contributors, commits and releases for this mod.";
 
         sciencePacksRequired = cfg.getProp("sciencePacksRequired", 1);
         sciencePacksRequired.comment =
