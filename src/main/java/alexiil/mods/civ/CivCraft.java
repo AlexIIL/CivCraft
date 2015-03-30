@@ -1,6 +1,5 @@
 package alexiil.mods.civ;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -104,7 +103,8 @@ public class CivCraft extends AlexIILMod {
         new Thread("CivCraft-github") {
             @Override
             public void run() {
-                contributors = Collections.unmodifiableList(GitHubRequester.getContributors("AlexIIL", "CivCraft"));
+                String droneSite = "https://drone.io/github.com/AlexIIL/CivCraft/files/VersionInfo/build/libs/version/";
+                contributors = Collections.unmodifiableList(GitHubRequester.getContributors(droneSite + "contributors.json"));
                 if (contributors.size() == 0)
                     modMeta.authorList.add("Could not connect to GitHub to fetch the rest...");
                 for (GitHubUser c : contributors) {
@@ -113,16 +113,7 @@ public class CivCraft extends AlexIILMod {
                     modMeta.authorList.add(c.login);
                 }
 
-                commits = new ArrayList<Commit>();
-                int pageNo = 1;
-                while (pageNo <= 10) {
-                    // Don't fetch more than 1000 commits, thats just silly
-                    List<Commit> commitTemp = GitHubRequester.getCommits("AlexIIL", "CivCraft", pageNo);
-                    if (commitTemp.size() == 0)
-                        break;
-                    commits.addAll(commitTemp);
-                    pageNo++;
-                }
+                commits = Collections.unmodifiableList(GitHubRequester.getCommits(droneSite + "commits.json"));
                 Collections.sort(commits, new Comparator<Commit>() {
                     @Override
                     public int compare(Commit c0, Commit c1) {
@@ -134,10 +125,12 @@ public class CivCraft extends AlexIILMod {
                 for (Commit c : commits)
                     if (Lib.Mod.COMMIT_HASH.equals(c.sha))
                         thisCommit = c;
-                if (thisCommit == null && commits.size() > 0 && Lib.Mod.buildType() == 2)
-                    thisCommit = GitHubRequester.getCommit("AlexIIL", "CivCraft", Lib.Mod.COMMIT_HASH);
+                if (thisCommit == null && commits.size() > 0 && Lib.Mod.buildType() == 2) {
+                    CivLog.warn("Didn't find my commit! This is unexpected, consider this a bug!");
+                    CivLog.warn("Commit Hash : \"" + Lib.Mod.COMMIT_HASH + "\"");
+                }
 
-                releases = Collections.unmodifiableList(GitHubRequester.getReleases("AlexIIL", "CivCraft"));
+                releases = Collections.unmodifiableList(GitHubRequester.getReleases(droneSite + "releases.json"));
             }
         }.start();
     }

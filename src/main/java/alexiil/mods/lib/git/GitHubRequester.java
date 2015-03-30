@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import alexiil.mods.civ.CivLog;
-
 import com.google.gson.GsonBuilder;
 
 public class GitHubRequester {
@@ -29,10 +27,8 @@ public class GitHubRequester {
 
     private static final Map<String, GitHubUser> usersCache = new HashMap<String, GitHubUser>();
 
-    // private static final Map<String, Commit> commitCache = new HashMap<String, Commit>();
-
-    public static List<GitHubUser> getContributors(String user, String repo) {
-        String response = getResponse("repos/" + user + "/" + repo + "/contributors");
+    public static List<GitHubUser> getContributors(String site) {
+        String response = getResponse(site);
         if (response == null)
             return Collections.emptyList();
         List<GitHubUser> users = parseContributors(response);
@@ -47,8 +43,8 @@ public class GitHubRequester {
         return users;
     }
 
-    public static List<Commit> getCommits(String user, String repo, int pageNo) {
-        String response = getResponse("repos/" + user + "/" + repo + "/commits?page=" + pageNo + "&per_page=100");
+    public static List<Commit> getCommits(String site) {
+        String response = getResponse(site);
         if (response == null)
             return Collections.emptyList();
         Commit[] commits = new GsonBuilder().create().fromJson(response, Commit[].class);
@@ -58,18 +54,8 @@ public class GitHubRequester {
         return Arrays.asList(commits);
     }
 
-    public static Commit getCommit(String user, String repo, String hash) {
-        String response = getResponse("repos/" + user + "/" + repo + "/commits/" + hash);
-        if (response == null)
-            return null;
-        Commit c = parseCommit(response.substring(2, response.length() - 2));
-        if (!usersCache.containsKey(c.author.login))
-            return c;
-        return populateUser(c);
-    }
-
-    public static List<Release> getReleases(String user, String repo) {
-        String response = getResponse("repos/" + user + "/" + repo + "/tags");
+    public static List<Release> getReleases(String site) {
+        String response = getResponse(site);
         if (response == null)
             return Collections.emptyList();
         Release[] releases = new GsonBuilder().create().fromJson(response, Release[].class);
@@ -84,10 +70,6 @@ public class GitHubRequester {
         String url = c.url;
         String author = c.author.login;
         return new Commit(url, ci, sha, usersCache.get(author));
-    }
-
-    private static Commit parseCommit(String commit) {
-        return new GsonBuilder().create().fromJson(commit, Commit.class);
     }
 
     private static List<GitHubUser> parseContributors(String s) {
@@ -120,28 +102,20 @@ public class GitHubRequester {
         return lst;
     }
 
-    /** Get a GitHub API response, without using an access token */
     public static String getResponse(String site) {
-        if (site.contains("?") && accessToken != null)
-            return getResponse(site + "&access_token=" + accessToken, null);
-        return getResponse(site, accessToken);
-    }
-
-    /** This appends the site to "https://api.github.com" so you don't need to (also, so you cannot use this method for
-     * non-GitHub sites)<br>
-     * The accessToken parameter is for if you have an access token, and you don't have any parameters in the site (so,
-     * if your site is <code>"repo/AlexIIL/CivCraft/issues"</code> then you can use an access token, but if your site is
-     * <code>"repo/AlexIIL/CivCraft/issues?label:enhancement"</code> you cannot. If any error occurs, then the returned
-     * string is <code>null</code>, and an error is printed out to console */
-    public static String getResponse(String site, String accessToken) {
         try {
-            if (accessToken != null)
-                site = site + "?access_token=" + accessToken;
-            URLConnection url = new URL("https://api.github.com/" + site).openConnection();
+            URLConnection url = new URL(site).openConnection();
             InputStream response = url.getInputStream();
-            CivLog.info(url.getHeaderField("X-RateLimit-Remaining") + " requests left from GitHub in this hour");
             BufferedReader br = new BufferedReader(new InputStreamReader(response, Charset.forName("UTF-8")));
-            return br.readLine();
+            String s = "";
+            String temp;
+            while (true) {
+                temp = br.readLine();
+                if (temp == null)
+                    break;
+                s += temp + "\n";
+            }
+            return s;
         }
         catch (MalformedURLException e) {
             e.printStackTrace();
