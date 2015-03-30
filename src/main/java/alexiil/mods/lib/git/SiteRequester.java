@@ -113,7 +113,7 @@ public class SiteRequester {
                 temp = br.readLine();
                 if (temp == null)
                     break;
-                s += temp + "\n";
+                s += temp;
             }
             return s;
         }

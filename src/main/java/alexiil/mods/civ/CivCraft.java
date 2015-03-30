@@ -29,9 +29,9 @@ import alexiil.mods.civ.net.MessageHandler;
 import alexiil.mods.civ.tech.BeakerEarningListener;
 import alexiil.mods.lib.AlexIILMod;
 import alexiil.mods.lib.git.Commit;
-import alexiil.mods.lib.git.SiteRequester;
 import alexiil.mods.lib.git.GitHubUser;
 import alexiil.mods.lib.git.Release;
+import alexiil.mods.lib.git.SiteRequester;
 
 @Mod(modid = Lib.Mod.ID, version = Lib.Mod.VERSION, guiFactory = "alexiil.mods.civ.gui.ConfigGuiFactory")
 public class CivCraft extends AlexIILMod {
@@ -113,7 +113,7 @@ public class CivCraft extends AlexIILMod {
                     modMeta.authorList.add(c.login);
                 }
 
-                commits = Collections.unmodifiableList(SiteRequester.getCommits(droneSite + "commits.json"));
+                commits = SiteRequester.getCommits(droneSite + "commits.json");
                 Collections.sort(commits, new Comparator<Commit>() {
                     @Override
                     public int compare(Commit c0, Commit c1) {
