@@ -174,6 +174,8 @@ public class BeakerEarningListener {
             return "civcraft.chat.earnBeaker.entity.kill";
         if (in.startsWith("entity.attack"))
             return "civcraft.chat.earnBeaker.entity.attack";
+        if (in.startsWith("explore"))
+            return "civcraft.chat.earnBeaker.explore";
         return in;
     }
 
@@ -182,6 +184,8 @@ public class BeakerEarningListener {
             return in.substring(in.indexOf("tile.")) + ".name";
         if (in.contains("item."))
             return in.substring(in.indexOf("item.")) + ".name";
+        if (in.startsWith("explore"))
+            return "";
         return in;
     }
 
