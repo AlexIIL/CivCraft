@@ -30,6 +30,10 @@ public class OpenComputersCompat {
     private Tech computing, robotics, expansions;
     private Tech upgrades, upgrade2;
 
+    public OpenComputersCompat() {
+        CivLog.info("Loading Open Computers Compat.");
+    }
+
     @SubscribeEvent
     public void addTechs(AddTechs t) {
         TechTree tree = t.tree;

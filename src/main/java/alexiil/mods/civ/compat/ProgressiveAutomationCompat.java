@@ -17,6 +17,10 @@ import alexiil.mods.lib.ErrorHandling;
 public class ProgressiveAutomationCompat {
     private Tech techLogging, techPower, techRF;
 
+    public ProgressiveAutomationCompat() {
+        CivLog.info("Loading Progressive Automation Compat.");
+    }
+
     @SubscribeEvent
     public void addTechs(AddTechs t) {
         TechTree tree = t.tree;
