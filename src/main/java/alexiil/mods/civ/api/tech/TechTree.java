@@ -1,4 +1,4 @@
-package alexiil.mods.civ.tech;
+package alexiil.mods.civ.api.tech;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -19,6 +19,9 @@ import alexiil.mods.civ.CivConfig;
 import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
+import alexiil.mods.civ.api.tech.unlock.IUnlockable;
+import alexiil.mods.civ.api.tech.unlock.IUnlockableConstructor;
+import alexiil.mods.civ.api.tech.unlock.Unlockable;
 import alexiil.mods.lib.item.IChangingItemString;
 
 public final class TechTree {
@@ -47,7 +50,7 @@ public final class TechTree {
         private List<WeakReference<Tech>> children = new ArrayList<WeakReference<Tech>>();
         /** The things that are unlocked automatically after researching both this tech, and any other techs that are
          * required for this. */
-        private List<WeakReference<Unlockable>> unlockables = new ArrayList<WeakReference<Unlockable>>();
+        private List<WeakReference<IUnlockable>> unlockables = new ArrayList<WeakReference<IUnlockable>>();
         /** A leaf tech is just a graphical way of showing the tech. A tech can only be a leaf tech if it has one parent,
          * and no children */
         private boolean leafTech;
@@ -204,19 +207,19 @@ public final class TechTree {
             return arr;
         }
 
-        private void addUnlockable(Unlockable req) {
-            unlockables.add(new WeakReference<Unlockable>(req));
+        private void addUnlockable(IUnlockable req) {
+            unlockables.add(new WeakReference<IUnlockable>(req));
         }
 
-        public Unlockable[] getShownUnlockables() {
-            List<Unlockable> arr = new ArrayList<Unlockable>();
+        public IUnlockable[] getShownUnlockables() {
+            List<IUnlockable> arr = new ArrayList<IUnlockable>();
             for (int i = 0; i < unlockables.size(); i++) {
                 if (unlockables.get(i).get() == null)
                     continue;
                 else if (unlockables.get(i).get().shouldShow())
                     arr.add(unlockables.get(i).get());
             }
-            return arr.toArray(new Unlockable[0]);
+            return arr.toArray(new IUnlockable[0]);
         }
 
         public Tech setLeafTech() {
@@ -333,18 +336,18 @@ public final class TechTree {
     private EState state = EState.CONSTRUCTING;
     private Map<String, Tech> techs = new HashMap<String, Tech>();
     private Map<String, Tech> disabledTechs = new HashMap<String, Tech>();
-    private Map<String, Unlockable> unlockables = new HashMap<String, Unlockable>();
+    private Map<String, IUnlockable> unlockables = new HashMap<String, IUnlockable>();
     private Map<String, IUnlockableConstructor> unlockableTypes = new HashMap<String, IUnlockableConstructor>();
     /** WARNING: This will be null if a save has not been loaded yet, or it will be the old tech tree if a save has been
      * unloaded */
     public static TechTree currentTree = null;
     private final NBTTagCompound treeData;
     /** Used to add a compat-specific prefix to the unlockable name */
-    String currentPrefix = null;
+    private String currentPrefix = null;
 
     public List<String> getItemTooltip(ItemStack stack, EntityPlayer player) {
         List<String> strings = new ArrayList<String>();
-        for (Unlockable u : unlockables.values()) {
+        for (IUnlockable u : unlockables.values()) {
             if (u instanceof IChangingItemString) {
                 String[] toAdd = ((IChangingItemString) u).getString(stack, player);
                 for (String s : toAdd)
@@ -447,7 +450,7 @@ public final class TechTree {
      * @return The unlockable, if it was added
      * @throws Exception
      *             if this was not in the right state */
-    public Unlockable addUnlockable(Unlockable unlock) {
+    public IUnlockable addUnlockable(IUnlockable unlock) {
         if (state != EState.SET_REQUIREMENTS) {
             new Exception("Tried to add an unlockable when in the wrong state! (was " + state + ", when it needs to be in " + EState.SET_REQUIREMENTS
                     + ")").printStackTrace();
@@ -533,13 +536,13 @@ public final class TechTree {
         return Collections.unmodifiableMap(techs);
     }
 
-    public Unlockable getUnlockable(String name) {
+    public IUnlockable getUnlockable(String name) {
         if (unlockables.containsKey(name))
             return unlockables.get(name);
         return null;
     }
 
-    public Map<String, Unlockable> getUnlockables() {
+    public Map<String, IUnlockable> getUnlockables() {
         return Collections.unmodifiableMap(unlockables);
     }
 
@@ -572,6 +575,10 @@ public final class TechTree {
     /** You MUST call this before registering any unlockable's (with {@link #addUnlockable(Unlockable)}) */
     public void setUnlockablePrefix(String modId) {
         currentPrefix = modId;
+    }
+
+    public String getUnlockablePrefix() {
+        return currentPrefix;
     }
 
     /** Register unlockable types here. When java 8 is used in forge, calls to this will look a whole lot nicer. */

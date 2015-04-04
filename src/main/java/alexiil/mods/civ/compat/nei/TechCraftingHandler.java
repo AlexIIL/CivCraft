@@ -5,9 +5,9 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import scala.actors.threadpool.Arrays;
+import alexiil.mods.civ.api.tech.TechTree.Tech;
 import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.item.ItemTechnology.EResearchState;
-import alexiil.mods.civ.tech.TechTree.Tech;
 import codechicken.nei.recipe.ShapelessRecipeHandler;
 
 public class TechCraftingHandler extends ShapelessRecipeHandler {

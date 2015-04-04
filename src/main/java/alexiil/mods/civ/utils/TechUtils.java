@@ -8,10 +8,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import alexiil.mods.civ.api.tech.TechTree;
+import alexiil.mods.civ.api.tech.TechTree.Tech;
 import alexiil.mods.civ.net.MessageHandler;
 import alexiil.mods.civ.net.MessagePlayerTechUpdate;
-import alexiil.mods.civ.tech.TechTree;
-import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.lib.EChatColours;
 
 public class TechUtils {

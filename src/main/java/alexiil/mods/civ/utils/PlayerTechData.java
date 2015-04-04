@@ -11,8 +11,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.server.MinecraftServer;
 import alexiil.mods.civ.Lib;
-import alexiil.mods.civ.tech.TechTree;
-import alexiil.mods.civ.tech.TechTree.Tech;
+import alexiil.mods.civ.api.tech.TechTree;
+import alexiil.mods.civ.api.tech.TechTree.Tech;
 
 public class PlayerTechData {
     private static List<PlayerTechData> list = new ArrayList<PlayerTechData>();

@@ -19,6 +19,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
 import alexiil.mods.civ.Lib;
+import alexiil.mods.civ.api.tech.TechTree;
+import alexiil.mods.civ.api.tech.TechTree.Tech;
 import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.item.ItemTechBag;
 import alexiil.mods.civ.item.ItemTechBag.TechProgress;
@@ -26,8 +28,6 @@ import alexiil.mods.civ.item.ItemTechnology;
 import alexiil.mods.civ.item.ItemTechnology.EResearchState;
 import alexiil.mods.civ.net.MessageHandler;
 import alexiil.mods.civ.net.MessageResearchTech;
-import alexiil.mods.civ.tech.TechTree;
-import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.civ.utils.TechUtils;
 
 public class GuiTechTree extends GuiScreen {

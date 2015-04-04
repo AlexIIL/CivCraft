@@ -4,13 +4,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import alexiil.mods.civ.Lib;
+import alexiil.mods.civ.api.tech.TechTree;
+import alexiil.mods.civ.api.tech.TechTreeEvent;
+import alexiil.mods.civ.api.tech.TechTree.Tech;
+import alexiil.mods.civ.api.tech.TechTreeEvent.AddTechs;
+import alexiil.mods.civ.api.tech.TechTreeEvent.AddUnlockables;
+import alexiil.mods.civ.api.tech.unlock.ItemCraftUnlock;
 import alexiil.mods.civ.item.CivItems;
-import alexiil.mods.civ.tech.TechTree;
-import alexiil.mods.civ.tech.TechTree.Tech;
-import alexiil.mods.civ.tech.TechTreeEvent;
-import alexiil.mods.civ.tech.TechTreeEvent.AddTechs;
-import alexiil.mods.civ.tech.TechTreeEvent.AddUnlockables;
-import alexiil.mods.civ.tech.unlock.ItemCraftUnlock;
 
 /** Okay, technically this isn't a mod compatibility (vanilla minecraft is a hard dependency of this mod, how strange),
  * but it allows for a central place for vanilla tech code, in the same place as other tech code. */

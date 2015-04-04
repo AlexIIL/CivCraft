@@ -1,8 +1,9 @@
-package alexiil.mods.civ.tech;
+package alexiil.mods.civ.api.tech;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import alexiil.mods.civ.api.tech.unlock.IUnlockable;
 
 /** Fired at intervals throughout the tech tree creation process. All of the events have (at least) two fields: the tree
  * that is being created, and the NBTTagCompound that is saved to the world folder that describes the tree.
@@ -40,9 +41,9 @@ public abstract class TechTreeEvent extends Event {
 
     @Cancelable()
     public static class RegisterUnlockable extends TechTreeEvent {
-        public final Unlockable unlockable;
+        public final IUnlockable unlockable;
 
-        public RegisterUnlockable(TechTree tree, Unlockable req, NBTTagCompound nbt) {
+        public RegisterUnlockable(TechTree tree, IUnlockable req, NBTTagCompound nbt) {
             super(tree, nbt);
             unlockable = req;
         }

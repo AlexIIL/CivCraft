@@ -1,4 +1,4 @@
-package alexiil.mods.civ.tech.unlock;
+package alexiil.mods.civ.api.tech.unlock;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,14 +15,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
-import alexiil.mods.civ.tech.TechTree.Tech;
-import alexiil.mods.civ.tech.Unlockable;
+import alexiil.mods.civ.api.tech.TechTree.Tech;
 import alexiil.mods.civ.utils.TechUtils;
 import alexiil.mods.lib.EChatColours;
 import alexiil.mods.lib.LangUtils;
 import alexiil.mods.lib.item.IChangingItemString;
 
-public class ItemCraftUnlock extends TechUnlockable implements IChangingItemString, IItemBlocker {
+public class ItemCraftUnlock extends Unlockable implements IChangingItemString, IItemBlocker {
     private static class ItemStackComparator implements IItemComparator {
         private final ItemStack stack;
 
@@ -50,7 +49,7 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
 
         @Override
         public boolean canSaveAndLoad() {
-            return true;
+            return stack != null;
         }
 
         @Override
@@ -196,6 +195,8 @@ public class ItemCraftUnlock extends TechUnlockable implements IChangingItemStri
         for (IItemComparator c : this.items) {
             if (c == null)
                 CivLog.warn("The item comparator was null! (" + getName() + ")");
+            else if (!c.canSaveAndLoad())
+                CivLog.warn("The item comparator reported that it could not save and load!");
             else
                 items.setTag(Integer.toString(index), c.save());
             index++;

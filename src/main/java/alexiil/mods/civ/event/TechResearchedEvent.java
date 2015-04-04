@@ -5,8 +5,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import alexiil.mods.civ.api.tech.TechTree.Tech;
 import alexiil.mods.civ.item.CivItems;
-import alexiil.mods.civ.tech.TechTree.Tech;
 
 /** This event is fired whenever a player researches a tech, provided that they have not already unlocked that tech. This
  * is fired on the {@link MinecraftForge#EVENT_BUS}

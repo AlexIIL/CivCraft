@@ -6,12 +6,13 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
-import alexiil.mods.civ.tech.TechTree;
-import alexiil.mods.civ.tech.TechTree.Tech;
-import alexiil.mods.civ.tech.TechTreeEvent.AddTechs;
-import alexiil.mods.civ.tech.TechTreeEvent.AddUnlockables;
-import alexiil.mods.civ.tech.TechTreeEvent.RegisterTech;
-import alexiil.mods.civ.tech.Unlockable;
+import alexiil.mods.civ.api.tech.TechTree;
+import alexiil.mods.civ.api.tech.TechTree.Tech;
+import alexiil.mods.civ.api.tech.TechTreeEvent.AddTechs;
+import alexiil.mods.civ.api.tech.TechTreeEvent.AddUnlockables;
+import alexiil.mods.civ.api.tech.TechTreeEvent.RegisterTech;
+import alexiil.mods.civ.api.tech.unlock.IUnlockable;
+import alexiil.mods.civ.api.tech.unlock.Unlockable;
 import alexiil.mods.lib.nbt.NBTUtils;
 
 public class ConfigCompat {
@@ -63,7 +64,7 @@ public class ConfigCompat {
         NBTTagCompound unlocks = n.getCompoundTag("unlockables");
         for (Object key : unlocks.getKeySet()) {
             NBTTagCompound unlock = unlocks.getCompoundTag((String) key);
-            Unlockable u = Unlockable.loadUnlockable(unlock);
+            IUnlockable u = Unlockable.loadUnlockable(unlock);
             if (u == null)
                 CivLog.warn("The config did not generate a valid unlockable! (NBT=" + NBTUtils.toString(unlock));
             else

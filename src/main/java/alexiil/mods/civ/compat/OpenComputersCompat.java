@@ -20,11 +20,11 @@ import li.cil.oc.api.detail.ItemInfo;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import alexiil.mods.civ.CivLog;
-import alexiil.mods.civ.tech.TechTree;
-import alexiil.mods.civ.tech.TechTree.Tech;
-import alexiil.mods.civ.tech.TechTreeEvent.AddTechs;
-import alexiil.mods.civ.tech.TechTreeEvent.AddUnlockables;
-import alexiil.mods.civ.tech.unlock.ItemCraftUnlock;
+import alexiil.mods.civ.api.tech.TechTree;
+import alexiil.mods.civ.api.tech.TechTree.Tech;
+import alexiil.mods.civ.api.tech.TechTreeEvent.AddTechs;
+import alexiil.mods.civ.api.tech.TechTreeEvent.AddUnlockables;
+import alexiil.mods.civ.api.tech.unlock.ItemCraftUnlock;
 
 public class OpenComputersCompat {
     private Tech computing, robotics, expansions;

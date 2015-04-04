@@ -18,11 +18,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alexiil.mods.civ.CivCraft;
+import alexiil.mods.civ.api.tech.TechTree;
+import alexiil.mods.civ.api.tech.TechTree.Tech;
+import alexiil.mods.civ.api.tech.unlock.IUnlockable;
 import alexiil.mods.civ.event.TechResearchedEvent.ItemTechResearchedEvent;
 import alexiil.mods.civ.item.ItemTechBag.TechProgress;
-import alexiil.mods.civ.tech.TechTree;
-import alexiil.mods.civ.tech.TechTree.Tech;
-import alexiil.mods.civ.tech.Unlockable;
 import alexiil.mods.civ.utils.TechUtils;
 import alexiil.mods.lib.EChatColours;
 import alexiil.mods.lib.item.IChangingItemString;
@@ -104,7 +104,7 @@ public class ItemTechnology extends ItemBase {
 
                 Tech[] parents = t.getParentTechs();
                 Tech[] children = t.getChildTechs();
-                Unlockable[] usages = t.getShownUnlockables();
+                IUnlockable[] usages = t.getShownUnlockables();
                 List<String> strings = new ArrayList<String>();
                 int index = 0;
                 strings.add(parents.length == 0 ? "Doesn't require any techs" : "Requires these techs:");
@@ -119,9 +119,8 @@ public class ItemTechnology extends ItemBase {
 
                 strings.add(usages.length == 0 ? "Doesn't unlock anything" : "Unlocks these things:");
 
-                for (Unlockable unlock : usages) {
+                for (IUnlockable unlock : usages)
                     strings.addAll(unlock.getDescription());
-                }
 
                 return strings.toArray(new String[0]);
             }

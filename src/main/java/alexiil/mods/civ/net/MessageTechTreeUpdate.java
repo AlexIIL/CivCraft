@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import alexiil.mods.civ.CivLog;
-import alexiil.mods.civ.tech.TechTree;
+import alexiil.mods.civ.api.tech.TechTree;
 import alexiil.mods.lib.net.MessageBase;
 
 public class MessageTechTreeUpdate extends MessageBase<MessageTechTreeUpdate> {

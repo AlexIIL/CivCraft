@@ -10,12 +10,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import scala.actors.threadpool.Arrays;
+import alexiil.mods.civ.api.tech.TechTree;
+import alexiil.mods.civ.api.tech.TechTree.Tech;
 import alexiil.mods.civ.event.TechResearchedEvent.ItemTechResearchedEvent;
 import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.item.ItemTechnology;
 import alexiil.mods.civ.item.ItemTechnology.EResearchState;
-import alexiil.mods.civ.tech.TechTree;
-import alexiil.mods.civ.tech.TechTree.Tech;
 import alexiil.mods.civ.utils.TechUtils;
 
 public class RecipeTech implements IRecipe {

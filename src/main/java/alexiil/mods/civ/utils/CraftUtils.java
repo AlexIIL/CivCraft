@@ -24,10 +24,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
-import alexiil.mods.civ.tech.TechTree;
-import alexiil.mods.civ.tech.TechTree.Tech;
-import alexiil.mods.civ.tech.Unlockable;
-import alexiil.mods.civ.tech.unlock.IItemBlocker;
+import alexiil.mods.civ.api.tech.TechTree;
+import alexiil.mods.civ.api.tech.TechTree.Tech;
+import alexiil.mods.civ.api.tech.unlock.IItemBlocker;
+import alexiil.mods.civ.api.tech.unlock.IUnlockable;
 
 public class CraftUtils {
     // Ignore different dimensions for some reason... for now
@@ -175,7 +175,7 @@ public class CraftUtils {
     public static boolean canUse(ItemStack item, List<Tech> techs) {
         if (item == null)
             return true;
-        for (Unlockable u : TechTree.currentTree.getUnlockables().values()) {
+        for (IUnlockable u : TechTree.currentTree.getUnlockables().values()) {
             if (u instanceof IItemBlocker) {
                 IItemBlocker ib = (IItemBlocker) u;
                 if ((!u.isUnlocked(techs)) && ib.doesBlockItem(item)) {
