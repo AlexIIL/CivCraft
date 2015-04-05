@@ -74,6 +74,8 @@ public class BeakerEarningListener {
         }
         else
             harvest = stacks.size() != 0;
+        if (name.startsWith("tile."))
+            name = name.substring(5);
         if (!harvest)
             PlayerResearchHelper.progressResearch(player, "block.break." + name, 1, true);
         else
@@ -118,7 +120,7 @@ public class BeakerEarningListener {
             return;
         if (event.entityLiving == null)
             return;
-        String entName = "entity.attack.tile." + EntityList.getEntityString(event.entityLiving);
+        String entName = "entity.attack." + EntityList.getEntityString(event.entityLiving);
         PlayerResearchHelper.progressResearch(player, entName, 1, true);
         if (arrow)
             PlayerResearchHelper.progressResearch(player, "entity.arrowHit", distance, true);
@@ -151,7 +153,7 @@ public class BeakerEarningListener {
             return;
         if (isPlayerFake(player))
             return;
-        String name = "entity.kill.tile." + EntityList.getEntityString(event.entity);
+        String name = "entity.kill." + EntityList.getEntityString(event.entity);
         PlayerResearchHelper.progressResearch(player, name, 1, true);
         if (arrow)
             PlayerResearchHelper.progressResearch(player, "entity.arrowHit", distance, true);

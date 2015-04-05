@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
@@ -69,10 +68,11 @@ public class PlayerResearchHelper {
         if (progress >= progressRequired) {
             progress -= progressRequired;
             IChatComponent cc = new ChatComponentTranslation("civcraft.chat.earnBeaker");
-            cc.appendSibling(new ChatComponentTranslation(ResearchNoteObjectives.getPreTranslation(name)));
-            String post = ResearchNoteObjectives.getPostTranslation(name);
+            String pre = ResearchNoteObjectives.getPreTranslation(name);
+            if (pre != null && pre.length() > 0)
+                cc.appendSibling(new ChatComponentTranslation(pre));
+            String post = ResearchNoteObjectives.getPostTranslation(name).toLowerCase();
             if (post != null && post.length() > 0) {
-                cc.appendSibling(new ChatComponentText(" "));
                 cc.appendSibling(new ChatComponentTranslation(post).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GOLD)));
             }
             player.addChatMessage(cc);

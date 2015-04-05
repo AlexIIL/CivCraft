@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.api.trans.ContainingTranslation;
+import alexiil.mods.civ.api.trans.EqualTranslation;
 import alexiil.mods.civ.api.trans.IMatchingTranslation;
 import alexiil.mods.civ.api.trans.StartingTranslation;
 
@@ -14,8 +16,8 @@ import alexiil.mods.civ.api.trans.StartingTranslation;
  * special blocks that you want to reward the player for */
 public class ResearchNoteObjectives {
     private static Map<String, Double> objectives = new HashMap<String, Double>();
-    private static List<IMatchingTranslation> preTranslations = new ArrayList<IMatchingTranslation>();
-    private static List<IMatchingTranslation> postTranslations = new ArrayList<IMatchingTranslation>();
+    private static PriorityQueue<IMatchingTranslation> preTranslations = new PriorityQueue<IMatchingTranslation>();
+    private static PriorityQueue<IMatchingTranslation> postTranslations = new PriorityQueue<IMatchingTranslation>();
 
     static {
         putObjective("block", 0.001);
@@ -43,19 +45,33 @@ public class ResearchNoteObjectives {
 
         putObjective("explore", 0.01);
 
-        addPreTranslation(new StartingTranslation("craft", "civcraft.chat.earnBeaker.craft"));
+        addPreTranslation(new StartingTranslation("craft", "civcraft.chat.earnBeaker.craft.pre"));
         addPreTranslation(new StartingTranslation("block.break", "civcraft.chat.earnBeaker.block.break"));
         addPreTranslation(new StartingTranslation("block.harvest", "civcraft.chat.earnBeaker.block.harvest"));
-        addPreTranslation(new StartingTranslation("block", "civcraft.chat.earnBeaker.block"));
-        addPreTranslation(new StartingTranslation("entity.kill", "civcraft.chat.earnBeaker.entity.kill"));
-        addPreTranslation(new StartingTranslation("entity.attack", "civcraft.chat.earnBeaker.entity.attack"));
-        addPreTranslation(new StartingTranslation("entity", "civcraft.chat.earnBeaker.entity"));
-        addPreTranslation(new StartingTranslation("explore", "civcraft.chat.earnBeaker.explore"));
+        addPreTranslation(new EqualTranslation("block", "civcraft.chat.earnBeaker.block"));
+        addPreTranslation(new EqualTranslation("entity.kill", ""));
+        addPreTranslation(new EqualTranslation("entity.attack", ""));
+        addPreTranslation(new EqualTranslation("entity", "civcraft.chat.earnBeaker.entity"));
+        addPreTranslation(new StartingTranslation("entity.kill.", "civcraft.chat.earnBeaker.entity.kill"));
+        addPreTranslation(new StartingTranslation("entity.attack.", "civcraft.chat.earnBeaker.entity.attack"));
+        addPreTranslation(new StartingTranslation("explore", ""));
 
-        addPostTranslation(new StartingTranslation("explore", ""));
-        addPostTranslation(new ContainingTranslation("tile.", ".name"));
-        addPostTranslation(new ContainingTranslation("item.", ".name"));
-
+        addPostTranslation(new StartingTranslation("explore", "civcraft.chat.earnBeaker.explore"));
+        addPostTranslation(new EqualTranslation("block", "civcraft.chat.earnBeaker.post.block"));
+        addPostTranslation(new EqualTranslation("block.break", "civcraft.chat.earnBeaker.post.block"));
+        addPostTranslation(new EqualTranslation("block.harvest", "civcraft.chat.earnBeaker.post.block"));
+        addPostTranslation(new ContainingTranslation("block.break.", "tile.", ".name"));
+        addPostTranslation(new ContainingTranslation("block.harvest.", "tile.", ".name"));
+        addPostTranslation(new EqualTranslation("craft", "civcraft.chat.earnBeaker.craft.post"));
+        addPostTranslation(new EqualTranslation("craft.item", "civcraft.chat.earnBeaker.post.item"));
+        addPostTranslation(new EqualTranslation("craft.tile", "civcraft.chat.earnBeaker.post.block"));
+        addPostTranslation(new EqualTranslation("entity", "civcraft.chat.earnBeaker.post.entity"));
+        addPostTranslation(new EqualTranslation("entity.kill", "civcraft.chat.earnBeaker.post.entity"));
+        addPostTranslation(new EqualTranslation("entity.attack", "civcraft.chat.earnBeaker.post.entity"));
+        addPostTranslation(new ContainingTranslation("entity.kill.", "entity.", ".name"));
+        addPostTranslation(new ContainingTranslation("entity.attack.", "entity.", ".name"));
+        addPostTranslation(new ContainingTranslation("craft.tile.", "tile.", ".name"));
+        addPostTranslation(new ContainingTranslation("craft.item.", "item.", ".name"));
     }
 
     /** Add an amount earned (out of PlayerResearchHelper.progressRequired, default is 3) for each time this objective is
@@ -64,12 +80,12 @@ public class ResearchNoteObjectives {
         objectives.put(name, amount);
     }
 
-    /** @param trans */
+    /** Add a translation that will be put at the start of the text, such that */
     public static void addPreTranslation(IMatchingTranslation trans) {
         preTranslations.add(trans);
     }
 
-    /** @param trans */
+    /** Add a translation that will be used */
     public static void addPostTranslation(IMatchingTranslation trans) {
         postTranslations.add(trans);
     }
@@ -104,7 +120,7 @@ public class ResearchNoteObjectives {
         for (IMatchingTranslation trans : preTranslations)
             if (trans.matches(s))
                 return trans.translate(s);
-        CivLog.warn("Could not pre-translate \"" + s + "\"");
+        failTranslation(s, "pre");
         return s;
     }
 
@@ -112,7 +128,16 @@ public class ResearchNoteObjectives {
         for (IMatchingTranslation trans : postTranslations)
             if (trans.matches(s))
                 return trans.translate(s);
-        CivLog.warn("Could not post-translate \"" + s + "\"");
+        failTranslation(s, "post");
         return s;
+    }
+
+    private static List<String> failures = new ArrayList<String>();
+
+    private static void failTranslation(String s, String part) {
+        if (failures.contains(s))
+            return;
+        CivLog.warn("[BUG] Could not " + part + "-translate \"" + s + "\"");
+        failures.add(s);
     }
 }

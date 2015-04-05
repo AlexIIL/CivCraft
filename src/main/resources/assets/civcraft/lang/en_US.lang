@@ -58,27 +58,27 @@ civcraft.tech.redstone_flux=Redstone Flux
 
 civcraft.tech.diamond_working=Diamond Working
 
-#Earning research notes
-#    This is the first part of the sentence, a normal one would translate like this:
-#    civcraft.chat.earnBeaker + civcraft.chat.earnBeaker.block.harvest + craft.item
-civcraft.chat.earnBeaker=You just wrote a research note for 
-civcraft.chat.earnBeaker.craft=crafting
-civcraft.chat.earnBeaker.block.break=breaking
-civcraft.chat.earnBeaker.block.harvest=harvesting
-civcraft.chat.earnBeaker.entity.kill=killing
-civcraft.chat.earnBeaker.entity.attack=attacking
-civcraft.chat.earnBeaker.explore=exploring
-
+# Unlocking a tech
 civcraft.chat.unlocktech=You just researched 
 
-block.harvest=blocks
-block.harvest.tile=blocks
-craft=all the things
-craft.item=items
-craft.block=blocks
-craft.tile=blocks
-entity.kill.tile=mobs
-entity.attack=mobs
+# Earning research notes
+#    These are the first parts of the sentence, a normal one would translate like this:
+#    civcraft.chat.earnBeaker + civcraft.chat.earnBeaker.block.harvest + craft.item
+civcraft.chat.earnBeaker=You just wrote a research note for 
+civcraft.chat.earnBeaker.craft.pre=crafting 
+civcraft.chat.earnBeaker.block=interacting with 
+civcraft.chat.earnBeaker.block.break=breaking 
+civcraft.chat.earnBeaker.block.harvest=harvesting 
+civcraft.chat.earnBeaker.entity=interacting with 
+civcraft.chat.earnBeaker.entity.kill=killing 
+civcraft.chat.earnBeaker.entity.attack=attacking 
+
+#    These are the second parts of the sentence, and are coloured in gold
+civcraft.chat.earnBeaker.post=all the things!
+civcraft.chat.earnBeaker.post.item=all the items!
+civcraft.chat.earnBeaker.post.block=all the blocks!
+civcraft.chat.earnBeaker.explore=exploring
+civcraft.chat.earnBeaker.post.entity=mobs
 
 #Used for unlockables, these are just put into a bullet-pointed list.
 
