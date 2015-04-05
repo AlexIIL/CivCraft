@@ -61,7 +61,7 @@ public class CraftUtils {
     }
 
     public static boolean addPlayerToChunk(World world, BlockPos pos, PlayerTechData techs) {
-        ChunkCoordIntPair ccip = new ChunkCoordIntPair(pos.getX() << 4, pos.getY() << 4);
+        ChunkCoordIntPair ccip = new ChunkCoordIntPair(pos.getX() << 4, pos.getZ() << 4);
         List<PlayerTechData> list = getPlayers(world, ccip);
         boolean found = false;
         for (PlayerTechData ptd : list) {
@@ -78,7 +78,7 @@ public class CraftUtils {
     }
 
     public static List<Tech> getTechs(World world, BlockPos pos) {
-        return getTechs(world, new ChunkCoordIntPair(pos.getX() << 4, pos.getY() << 4));
+        return getTechs(world, new ChunkCoordIntPair(pos.getX() << 4, pos.getZ() << 4));
     }
 
     public static List<Tech> getTechs(World world, ChunkCoordIntPair ccip) {
