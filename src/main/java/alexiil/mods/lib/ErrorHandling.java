@@ -16,18 +16,20 @@ public final class ErrorHandling {
         AlexIILLib.instance.log.info(t.getClass().getName() + " while " + message);
         StackTraceElement[] ste = t.getStackTrace();
         int i = 0;
-        while (isMyClass(ste[i].getClassName()))
+        while (isMyClass(ste[i].getClassName())) {
             AlexIILLib.instance.log.info("at " + ste[i].toString());
-        i++;
+            i++;
+        }
     }
 
     public static void printStackTrace(Throwable t, String message, boolean stopAtMine) {
         AlexIILLib.instance.log.info(t.getClass().getName() + " while " + message);
         StackTraceElement[] ste = t.getStackTrace();
         int i = 0;
-        while (stopAtMine ? isMyClass(ste[i].getClassName()) : !isVanillaClass(ste[i].getClassName()))
+        while (stopAtMine ? isMyClass(ste[i].getClassName()) : !isVanillaClass(ste[i].getClassName())) {
             AlexIILLib.instance.log.info("at " + ste[i].toString());
-        i++;
+            i++;
+        }
     }
 
     public static boolean isMyClass(String clazz) {

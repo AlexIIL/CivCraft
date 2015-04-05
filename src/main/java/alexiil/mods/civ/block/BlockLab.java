@@ -1,7 +1,6 @@
 package alexiil.mods.civ.block;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -39,13 +38,14 @@ public class BlockLab extends BlockContainerBasic {
         return TileLab.class;
     }
 
+    @Override
     public boolean isOpaqueCube() {
         return false;
     }
 
     @Override
     protected BlockState createBlockState() {
-        return new BlockState(this, new IProperty[] { RESEARCHING });
+        return new BlockState(this, RESEARCHING);
     }
 
     @Override

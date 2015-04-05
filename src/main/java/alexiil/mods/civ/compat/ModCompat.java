@@ -6,7 +6,6 @@ import alexiil.mods.civ.compat.vanilla.VanillaCompat;
 
 public class ModCompat {
     public static void loadCompats() {
-        // The first one, unless someone has added their own into it
         MinecraftForge.EVENT_BUS.register(new VanillaCompat());
 
         if (Loader.isModLoaded("progressiveautomation"))

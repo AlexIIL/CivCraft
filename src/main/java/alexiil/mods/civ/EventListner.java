@@ -28,11 +28,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
+import alexiil.mods.civ.api.FindMatchingRecipeEvent;
+import alexiil.mods.civ.api.tech.TechResearchedEvent;
 import alexiil.mods.civ.api.tech.TechTree;
 import alexiil.mods.civ.api.tech.TechTree.Tech;
 import alexiil.mods.civ.crafting.RecipeTech;
-import alexiil.mods.civ.event.FindMatchingRecipeEvent;
-import alexiil.mods.civ.event.TechResearchedEvent;
 import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.net.MessageHandler;
 import alexiil.mods.civ.net.MessagePlayerTechUpdate;
@@ -119,7 +119,6 @@ public class EventListner {
             int colour = 0xFFFFFF;
             int altColour = 0x0000FF;
             DecimalFormat df = new DecimalFormat();
-            // Draw box here, with a colour of -1873784752
             mc.fontRendererObj.drawString("drawing " + names.size() + " stuffs", x, y - mc.fontRendererObj.FONT_HEIGHT, colour);
             for (String n : names) {
                 double cool = nbtCooling.getDouble(n);
@@ -170,13 +169,13 @@ public class EventListner {
     @SubscribeEvent
     public void craftAttempt(FindMatchingRecipeEvent event) {
         for (ItemStack stack : event.input) {
-            if (!canUse(stack, event)) {
+            if (isBlocked(stack, event)) {
                 event.setCanceled(true);
                 return;
             }
         }
         for (ItemStack stack : event.output) {
-            if (!canUse(stack, event)) {
+            if (isBlocked(stack, event)) {
                 event.setCanceled(true);
                 return;
             }
@@ -294,13 +293,13 @@ public class EventListner {
         }
     }
 
-    private boolean canUse(ItemStack stack, FindMatchingRecipeEvent event) {
+    private boolean isBlocked(ItemStack stack, FindMatchingRecipeEvent event) {
         List<Tech> techs = new ArrayList<Tech>();
         if (event instanceof FindMatchingRecipeEvent.Player)
             techs = TechUtils.getTechs(((FindMatchingRecipeEvent.Player) event).player);
         else if (event instanceof FindMatchingRecipeEvent.Block)
             techs = CraftUtils.getTechs(event.world, ((FindMatchingRecipeEvent.Block) event).pos);
-        return CraftUtils.canUse(stack, techs);
+        return !CraftUtils.canUse(stack, techs);
     }
 
     @SubscribeEvent

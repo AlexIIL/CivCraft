@@ -10,9 +10,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import scala.actors.threadpool.Arrays;
+import alexiil.mods.civ.api.tech.TechResearchedEvent.ItemTechResearchedEvent;
 import alexiil.mods.civ.api.tech.TechTree;
 import alexiil.mods.civ.api.tech.TechTree.Tech;
-import alexiil.mods.civ.event.TechResearchedEvent.ItemTechResearchedEvent;
 import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.item.ItemTechnology;
 import alexiil.mods.civ.item.ItemTechnology.EResearchState;
@@ -71,8 +71,8 @@ public class RecipeTech implements IRecipe {
             if (techs.size() == 0)
                 return null;
             else {
-                for (int idx = 0; idx < packs.length; idx++)
-                    if (packs[idx] > 0)
+                for (int pack : packs)
+                    if (pack > 0)
                         return null;
                 ArrayList<Tech> ts = new ArrayList<Tech>();
                 for (ItemStack i : techs)
@@ -86,12 +86,11 @@ public class RecipeTech implements IRecipe {
                         newPacks = tech.getSciencePacksNeeded();
                 if (newPacks == null)
                     newPacks = new int[0];
-                ItemStack output = CivItems.technology.getItemForTech(tech, newPacks);
                 // if (edit) {
                 // for (int i : techPositions)
                 // craft.getStackInSlot(i).stackSize++;
                 // }
-                return output;
+                return CivItems.technology.getItemForTech(tech, newPacks);
             }
         int[] required = CivItems.technology.getSciencePacksRequired(t);
         if (required.length < packs.length)
@@ -133,8 +132,8 @@ public class RecipeTech implements IRecipe {
         ItemTechnology item = (ItemTechnology) stack.getItem();
         int[] packs = item.getScienceCount(stack);
         boolean hasAny = false;
-        for (int idx = 0; idx < packs.length; idx++)
-            hasAny |= packs[idx] > 0;
+        for (int pack : packs)
+            hasAny |= pack > 0;
         if (hasAny) {
             // If it was (tech + beaker(s) -> tech)
             return new ItemStack[craft.getSizeInventory()];

@@ -3,6 +3,7 @@ package alexiil.mods.civ;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class CommonProxy implements IGuiHandler {
     @Override
@@ -18,4 +19,8 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void initRenderers() {}
+
+    public Side getSide() {
+        return Side.SERVER;
+    }
 }

@@ -75,7 +75,7 @@ public class ClassTransformer implements IClassTransformer {
         reader.accept(classNode, 0);
 
         for (MethodNode m : classNode.methods) {
-            if (m.name.equals("drawActivePotionEffects") || m.equals("func_147044_g")) {
+            if (m.name.equals("drawActivePotionEffects") || m.name.equals("func_147044_g")) {
                 int astores = 0;
                 for (int i = 0; i < m.instructions.size(); i++) {
                     AbstractInsnNode node = m.instructions.get(i);

@@ -8,6 +8,7 @@ public class CivItems {
     /** The item that holds all of the technology's */
     public static ItemTechnology technology;
     public static ItemTechBag techBag;
+    public static ItemResearchProgress researchProgress;
 
     public static void init() {
         sciencePacks[0] = new ItemBase("sciencePack0", CivCraft.instance);
@@ -17,5 +18,6 @@ public class CivItems {
         sciencePacks[4] = new ItemBase("sciencePack4", CivCraft.instance);
         technology = new ItemTechnology("technology");
         techBag = new ItemTechBag("techBag");
+        researchProgress = new ItemResearchProgress("researchProgress");
     }
 }

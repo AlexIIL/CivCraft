@@ -9,6 +9,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import alexiil.mods.civ.api.FindMatchingRecipeEvent;
 
 // TODO: remove these IF forge incorporates my events
 public class VanillaEventHooks {

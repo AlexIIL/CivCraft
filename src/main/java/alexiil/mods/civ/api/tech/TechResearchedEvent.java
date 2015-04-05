@@ -1,4 +1,4 @@
-package alexiil.mods.civ.event;
+package alexiil.mods.civ.api.tech;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

@@ -1,4 +1,4 @@
-package alexiil.mods.civ.event;
+package alexiil.mods.civ.api;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -10,7 +10,8 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 /** This event is fired whenever a crafting-type inventory tries to either craft, or show a crafting possibility given a
  * set of items going in and out. If this event is cancelled, then the craft will not be shown as a possibility.
  * 
- * @author AlexIIL */
+ * If you have your own crafting table or furnace, it would be helpful to post one of the subclasses of this event, to
+ * allow for proper support with CivCraft. */
 @Cancelable
 public class FindMatchingRecipeEvent extends Event {
     /** This shows the type of crafting that is ocouring. It is recommended that if you have a category that doesn't fit
@@ -18,8 +19,8 @@ public class FindMatchingRecipeEvent extends Event {
     /* OR maybe that this is just a String with constants expressed here? that would allow for many more possibilities,
      * but I don't know if thats actually helpful, unless an ore-dictionary type naming convention was here, and even
      * then, what would you do with that? */
-    public static enum EType {
-        CRAFT, SMELT, OTHER;
+    public enum EType {
+        CRAFT, SMELT, OTHER
     }
 
     public final World world;

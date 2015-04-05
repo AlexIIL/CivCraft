@@ -56,9 +56,7 @@ public class BlockMeta {
         }
         else if (!block.equals(other.block))
             return false;
-        if (meta != other.meta)
-            return false;
-        return true;
+        return meta == other.meta;
     }
 
     @Override

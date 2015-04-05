@@ -3,6 +3,7 @@ package alexiil.mods.civ.compat;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import alexiil.mods.civ.CivLog;
 import alexiil.mods.civ.Lib;
@@ -16,7 +17,7 @@ import alexiil.mods.civ.api.tech.unlock.Unlockable;
 import alexiil.mods.lib.nbt.NBTUtils;
 
 public class ConfigCompat {
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void addTechs(AddTechs t) {
         TechTree tree = t.tree;
         NBTTagCompound n = t.treeNBTCompound;
@@ -43,7 +44,7 @@ public class ConfigCompat {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void registerTech(RegisterTech event) {
         String name = event.tech.name;
         NBTTagCompound n = event.treeNBTCompound;
@@ -54,7 +55,7 @@ public class ConfigCompat {
             event.setCanceled(true);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void addUnlockables(AddUnlockables t) {
         TechTree tree = t.tree;
 

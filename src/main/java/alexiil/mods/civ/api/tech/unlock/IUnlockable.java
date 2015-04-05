@@ -16,45 +16,45 @@ import alexiil.mods.civ.item.ItemTechnology;
  * unlocked that tech. */
 public interface IUnlockable {
     /** @return A name that uniquely identifies this unlockable */
-    public abstract String getName();
+    String getName();
 
     /** @return The unlocalised name for this requirement. This should just be the name of the requirement most of the
      *         time */
-    public abstract String getUnlocalisedName();
+    String getUnlocalisedName();
 
     /** @return The localised name for this requirement.
      *         <p>
      *         Default is just {@link I18n}.format( {@link #getUnlocalisedName()}) on the client side, server side just
      *         returns the unlocalised name */
-    public abstract String getLocalisedName();
+    String getLocalisedName();
 
     /** @return The description for this unlockable, which is shown to the player. */
-    public abstract List<String> getDescription();
+    List<String> getDescription();
 
     /** Called whenever the player unlocks all the tech's required for this 'thing'.
      * <p>
      * Use this if you need to do anything to the world or player, for example change the players NBT values */
-    public abstract void unlock(EntityPlayer player);
+    void unlock(EntityPlayer player);
 
     /** @return true if this should show up on shift-hover for {@link ItemTechnology} usages (for example).
      *         <p>
      *         The general idea of this method, is that if you want the player to be aware of this object, this should
      *         return true */
-    public abstract boolean shouldShow();
+    boolean shouldShow();
 
     /** @return <code>True</code> if the player is considered to have unlocked this */
-    public abstract boolean isUnlocked(EntityPlayer player);
+    boolean isUnlocked(EntityPlayer player);
 
     /** @return <code>True</code> if the list of technologies is sufficient to have unlocked this unlockable */
-    public abstract boolean isUnlocked(List<Tech> techs);
+    boolean isUnlocked(List<Tech> techs);
 
     /** This should return a string that identifies this type uniquely. It is recommended that you use "modid:name", so
      * ItemCraftUnlock is "CivCraft:ItemCraftUnlock". This needs to be the same as what you have registered in the
      * TechTree */
-    public abstract String getType();
+    String getType();
 
     /** If you need to save any information about this requirement, then this is the NBTTagCompound that you do it in */
-    public abstract void save(NBTTagCompound nbt);
+    void save(NBTTagCompound nbt);
 
     /** @return A list of all the tech's that this 'thing' requires to have been researched, before this itself is
      *         unlocked.
@@ -66,6 +66,6 @@ public interface IUnlockable {
      *         a variable to speed things up.
      *         <p>
      *         Note that if any of these are either invalid tech objects or null, unknown behaviour will occur. */
-    public abstract TechTree.Tech[] requiredTechs();
+    TechTree.Tech[] requiredTechs();
 
 }

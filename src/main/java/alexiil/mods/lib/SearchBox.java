@@ -129,7 +129,6 @@ public class SearchBox {
             posY = true;
         else {
             cur = cur.offset(posY ? EnumFacing.UP : EnumFacing.DOWN);
-            return;
         }
     }
 

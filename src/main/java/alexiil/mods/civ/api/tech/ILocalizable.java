@@ -3,10 +3,10 @@ package alexiil.mods.civ.api.tech;
 public interface ILocalizable {
 
     /** @return The unlocalised version of this object */
-    public abstract String getUnlocalizedName();
+    String getUnlocalizedName();
 
-    /** @return The localised version of this object, such that it can be displayed to the user (this should r called
+    /** @return The localised version of this object, such that it can be displayed to the user (this should call
      *         I18n.format() or similar) */
-    public abstract String getLocalizedName();
+    String getLocalizedName();
 
 }

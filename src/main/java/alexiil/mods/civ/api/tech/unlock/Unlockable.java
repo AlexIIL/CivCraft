@@ -90,7 +90,7 @@ public abstract class Unlockable implements IUnlockable {
             if (t != null)
                 techs.add(t);
         }
-        requiredTechs = techs.toArray(new TechTree.Tech[0]);
+        requiredTechs = techs.toArray(new Tech[techs.size()]);
     }
 
     /* (non-Javadoc)

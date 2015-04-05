@@ -54,6 +54,7 @@ public class CivCraft extends AlexIILMod {
     private static List<Release> releases = Collections.emptyList();
     private static Commit thisCommit;
 
+    @Override
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
@@ -91,6 +92,7 @@ public class CivCraft extends AlexIILMod {
         proxy.initRenderers();
     }
 
+    @Override
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);

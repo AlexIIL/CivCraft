@@ -1,6 +1,6 @@
 package alexiil.mods.lib.coremod;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import net.minecraftforge.fml.common.DummyModContainer;
 import net.minecraftforge.fml.common.ModMetadata;
@@ -13,7 +13,7 @@ public class AlexIILModContainer extends DummyModContainer {
         meta.name = "Basic Utilities core mod";
         meta.version = "";
         meta.credits = "";
-        meta.authorList = Arrays.asList("AlexIIL");
+        meta.authorList = Collections.singletonList("AlexIIL");
         meta.description = "";
         meta.screenshots = new String[0];
         meta.logoFile = "";

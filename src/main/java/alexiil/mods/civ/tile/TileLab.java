@@ -57,13 +57,7 @@ public class TileLab extends TileEntityUpdated<MessageLab> implements ISidedInve
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("TileLab [inventory=");
-        builder.append(inventory);
-        builder.append(", cooldown=");
-        builder.append(cooldown);
-        builder.append("]");
-        return builder.toString();
+        return "TileLab [inventory=" + inventory + ", cooldown=" + cooldown + "]";
     }
 
     @Override

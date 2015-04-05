@@ -25,6 +25,7 @@ public class ItemCraftUnlock extends Unlockable implements IChangingItemString, 
     private static class ItemStackComparator implements IItemComparator {
         private final ItemStack stack;
 
+        @Override
         public ItemStackComparator load(NBTTagCompound nbt) {
             ItemStack stack = ItemStack.loadItemStackFromNBT(nbt);
             if (stack == null) {
@@ -38,6 +39,7 @@ public class ItemCraftUnlock extends Unlockable implements IChangingItemString, 
             this.stack = stack;
         }
 
+        @Override
         public NBTTagCompound save() {
             return stack.writeToNBT(new NBTTagCompound());
         }

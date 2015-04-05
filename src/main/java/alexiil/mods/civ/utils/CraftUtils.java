@@ -37,7 +37,7 @@ public class CraftUtils {
 
     private static Map<ChunkCoordIntPair, List<PlayerTechData>> getMapForWorld(World world) {
         int dimId = world.provider.getDimensionId();
-        Map<ChunkCoordIntPair, List<PlayerTechData>> map = null;
+        Map<ChunkCoordIntPair, List<PlayerTechData>> map;
         if (!levelPlayers.containsKey(dimId) || levelPlayers.get(dimId) == null) {
             map = new HashMap<ChunkCoordIntPair, List<PlayerTechData>>();
             levelPlayers.put(dimId, map);

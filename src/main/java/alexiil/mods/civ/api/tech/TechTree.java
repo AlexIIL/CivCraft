@@ -26,7 +26,7 @@ import alexiil.mods.lib.item.IChangingItemString;
 
 public final class TechTree {
     public enum EState {
-        CONSTRUCTING, PRE, ADD_TECHS, SET_REQUIREMENTS, POST, FINALISED, SAVING;
+        CONSTRUCTING, PRE, ADD_TECHS, SET_REQUIREMENTS, POST, FINALISED, SAVING
     }
 
     public class Tech implements ILocalizable {
@@ -80,12 +80,12 @@ public final class TechTree {
 
         private void save(NBTTagCompound nbt) {
             NBTTagList sciencePacksNBT = new NBTTagList();
-            for (int index = 0; index < sciencePacks.length; index++)
-                sciencePacksNBT.appendTag(new NBTTagInt(sciencePacks[index]));
+            for (int sciencePack : sciencePacks)
+                sciencePacksNBT.appendTag(new NBTTagInt(sciencePack));
             nbt.setTag("sciencePacks", sciencePacksNBT);
             NBTTagList parentsNBT = new NBTTagList();
-            for (int index = 0; index < parents.length; index++)
-                parentsNBT.appendTag(new NBTTagString(parents[index].name));
+            for (Tech parent : parents)
+                parentsNBT.appendTag(new NBTTagString(parent.name));
             nbt.setTag("parents", parentsNBT);
             nbt.setBoolean("leaf", leafTech);
         }
@@ -202,8 +202,7 @@ public final class TechTree {
 
         public Tech[] getParentTechs() {
             Tech[] arr = new Tech[parents.length];
-            for (int idx = 0; idx < parents.length; idx++)
-                arr[idx] = parents[idx];
+            System.arraycopy(parents, 0, arr, 0, parents.length);
             return arr;
         }
 
@@ -213,22 +212,18 @@ public final class TechTree {
 
         public IUnlockable[] getShownUnlockables() {
             List<IUnlockable> arr = new ArrayList<IUnlockable>();
-            for (int i = 0; i < unlockables.size(); i++) {
-                if (unlockables.get(i).get() == null)
-                    continue;
-                else if (unlockables.get(i).get().shouldShow())
-                    arr.add(unlockables.get(i).get());
+            for (WeakReference<IUnlockable> unlockable : unlockables) {
+                if (unlockable.get() == null) {}
+                else if (unlockable.get().shouldShow())
+                    arr.add(unlockable.get());
             }
-            return arr.toArray(new IUnlockable[0]);
+            return arr.toArray(new IUnlockable[arr.size()]);
         }
 
         public Tech setLeafTech() {
             if (state == EState.FINALISED)
                 return this;
-            if (children.size() == 0 && parents.length == 1)
-                leafTech = true;
-            else
-                leafTech = false;
+            leafTech = children.size() == 0 && parents.length == 1;
             return this;
         }
 
@@ -350,8 +345,7 @@ public final class TechTree {
         for (IUnlockable u : unlockables.values()) {
             if (u instanceof IChangingItemString) {
                 String[] toAdd = ((IChangingItemString) u).getString(stack, player);
-                for (String s : toAdd)
-                    strings.add(s);
+                Collections.addAll(strings, toAdd);
             }
         }
         return strings;
@@ -558,7 +552,7 @@ public final class TechTree {
                 continue;
             @SuppressWarnings("unchecked")
             ArrayList<Tech> input2 = (ArrayList<Tech>) input.clone();
-            for (ILocalizable t1 : t.parents) {
+            for (Tech t1 : t.parents) {
                 if (!input2.remove(t1))
                     break;
             }

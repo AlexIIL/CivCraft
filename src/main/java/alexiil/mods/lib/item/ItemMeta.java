@@ -59,9 +59,7 @@ public final class ItemMeta {
         }
         else if (!item.equals(other.block))
             return false;
-        if (meta != other.meta)
-            return false;
-        return true;
+        return meta == other.meta;
     }
 
     @Override

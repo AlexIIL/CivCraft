@@ -242,8 +242,7 @@ public class GuiTechTree extends GuiScreen {
             isDirty = false;
             for (int lstIdx = 0; lstIdx < techList.size(); lstIdx++) {
                 List<Tech> techs = techList.get(lstIdx);
-                for (int techIndex = 0; techIndex < techs.size(); techIndex++) {
-                    Tech t = techs.get(techIndex);
+                for (Tech t : techs) {
                     for (Tech child : t.getChildTechs()) {
                         if (child.isLeafTech())
                             continue;
@@ -313,8 +312,7 @@ public class GuiTechTree extends GuiScreen {
         for (List<Tech> lst : techList) {
             int num = lst.size();
             int yPos = height / 2 - num * techTexSizeY;
-            for (int idx = 0; idx < num; idx++) {
-                Tech tech = lst.get(idx);
+            for (Tech tech : lst) {
                 ItemStack item = techItem.getItemForTech(getProgress(tech));
                 DrawTechInfo dti = new DrawTechInfo(getState(tech), 0, xPos, yPos, tech.getLocalizedName(), item);
                 techInfos.add(dti);

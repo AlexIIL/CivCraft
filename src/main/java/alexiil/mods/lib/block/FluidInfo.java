@@ -10,7 +10,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class FluidInfo {
-    public static enum FluidType {
+    public enum FluidType {
         NONE, WATER_SOURCE, WATER_FLOW, LAVA_FLOW, LAVA_SOURCE, STATIONARY, FLUID_BLOCK
     }
 
@@ -50,8 +50,7 @@ public class FluidInfo {
 
     private static int getLevel(IBlockState state) {
         Comparable<?> c = state.getValue(BlockLiquid.LEVEL);
-        Integer i = (Integer) c;
-        return i;
+        return (Integer) c;
     }
 
     private FluidInfo(FluidInfo.FluidType type, IBlockState b) {

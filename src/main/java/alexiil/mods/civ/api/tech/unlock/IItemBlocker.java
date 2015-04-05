@@ -6,5 +6,5 @@ import net.minecraft.item.ItemStack;
 public interface IItemBlocker {
     /** @return true If this unlockable blocks the usage of this item. Unfortunately its not possible to give any hints as
      *         to where its being blocked */
-    public boolean doesBlockItem(ItemStack item);
+    boolean doesBlockItem(ItemStack item);
 }

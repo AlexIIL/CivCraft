@@ -36,6 +36,7 @@ public class AlexIILLib extends AlexIILMod {
         roamingIP = cfg.get("general", "roamingIP", false);
     }
 
+    @Override
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);

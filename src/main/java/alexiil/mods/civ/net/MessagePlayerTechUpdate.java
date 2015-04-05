@@ -57,10 +57,7 @@ public class MessagePlayerTechUpdate extends MessageBase<MessagePlayerTechUpdate
 
     @Override
     public IMessage onMessage(MessagePlayerTechUpdate message, MessageContext ctx) {
-        String s = "[";
         List<Tech> ts = message.techs;
-        for (Tech t : ts)
-            s += t.name + (t == ts.get(ts.size() - 1) ? "" : ", ");
         if (ctx.side == Side.CLIENT) {
             TechUtils.setClientTechs(ts);
             return null;

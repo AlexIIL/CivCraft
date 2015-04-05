@@ -53,7 +53,7 @@ public class ProgressiveAutomationCompat {
             Field fld = cls.getField(name);
             @SuppressWarnings("unchecked")
             List<Block> blocks = (List<Block>) fld.get(null);
-            return blocks.toArray(new Block[0]);
+            return blocks.toArray(new Block[blocks.size()]);
 
         }
         catch (Throwable e) {

@@ -108,7 +108,6 @@ public class Config extends GuiScreen {
         text = LangUtils.format("civcraft.config.closeHelp");
         length = fontRendererObj.getStringWidth(text) + 20;
         helpClose = new GuiButton(3, totalLength, 1, length, 20, text);
-        totalLength += length;
         helpClose.visible = false;
         buttonList.add(helpClose);
     }

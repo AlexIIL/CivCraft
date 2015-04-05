@@ -31,7 +31,7 @@ public abstract class MessageBase<M extends MessageBase<?>> implements IMessage,
             buf.writeInt(-1);
             return buf;
         }
-        byte[] bytes = null;
+        byte[] bytes;
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             CompressedStreamTools.writeCompressed(nbt, baos);

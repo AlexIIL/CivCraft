@@ -18,10 +18,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alexiil.mods.civ.CivCraft;
+import alexiil.mods.civ.api.tech.TechResearchedEvent.ItemTechResearchedEvent;
 import alexiil.mods.civ.api.tech.TechTree;
 import alexiil.mods.civ.api.tech.TechTree.Tech;
 import alexiil.mods.civ.api.tech.unlock.IUnlockable;
-import alexiil.mods.civ.event.TechResearchedEvent.ItemTechResearchedEvent;
 import alexiil.mods.civ.item.ItemTechBag.TechProgress;
 import alexiil.mods.civ.utils.TechUtils;
 import alexiil.mods.lib.EChatColours;
@@ -36,7 +36,7 @@ import alexiil.mods.lib.nbt.NBTUtils;
  * <li>"packs" -> an integer array of the science packs added to this item</li>
  * </ul> */
 public class ItemTechnology extends ItemBase {
-    public static enum EResearchState {
+    public enum EResearchState {
         PENDING(EChatColours.WHITE), RESEARCHING(EChatColours.AQUA), RESEARCHED(EChatColours.GOLD);
 
         public final EChatColours colour;
@@ -106,7 +106,6 @@ public class ItemTechnology extends ItemBase {
                 Tech[] children = t.getChildTechs();
                 IUnlockable[] usages = t.getShownUnlockables();
                 List<String> strings = new ArrayList<String>();
-                int index = 0;
                 strings.add(parents.length == 0 ? "Doesn't require any techs" : "Requires these techs:");
 
                 for (Tech parent : parents)
@@ -122,7 +121,7 @@ public class ItemTechnology extends ItemBase {
                 for (IUnlockable unlock : usages)
                     strings.addAll(unlock.getDescription());
 
-                return strings.toArray(new String[0]);
+                return strings.toArray(new String[strings.size()]);
             }
         });
     }
@@ -167,8 +166,7 @@ public class ItemTechnology extends ItemBase {
         if (item == null || !item.hasTagCompound())
             return new int[0];
         NBTTagCompound nbt = item.getTagCompound();
-        int[] arr = nbt.getIntArray(Tech.SCIENCE_PACKS);
-        return arr;
+        return nbt.getIntArray(Tech.SCIENCE_PACKS);
     }
 
     /** @param item

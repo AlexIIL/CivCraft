@@ -3,7 +3,6 @@ package alexiil.mods.lib.block;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -42,7 +41,7 @@ public abstract class BlockContainerRotatable extends BlockContainerBasic {
 
     @Override
     protected BlockState createBlockState() {
-        return new BlockState(this, new IProperty[] { DIRECTION });
+        return new BlockState(this, DIRECTION);
     }
 
     @Override

@@ -2,6 +2,7 @@ package alexiil.mods.civ.item;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -152,7 +153,7 @@ public class ItemTechBag extends ItemBase {
                 continue;
             techProg.add(new TechProgress(t, CivItems.technology.getScienceCount(s)));
         }
-        return techProg.toArray(new TechProgress[0]);
+        return techProg.toArray(new TechProgress[techProg.size()]);
     }
 
     private void updateTechs(ItemStack stack) {
@@ -193,9 +194,7 @@ public class ItemTechBag extends ItemBase {
 
     private void updateTechs(ItemStack stack, EntityPlayer player) {
         List<TechProgress> currentProgress = new ArrayList<TechProgress>();
-        for (TechProgress tp : getTechs(stack)) {
-            currentProgress.add(tp);
-        }
+        Collections.addAll(currentProgress, getTechs(stack));
         for (Tech t : TechUtils.getTechs(player)) {
             currentProgress.add(new TechProgress(t, t.getSciencePacksNeeded()));
         }
@@ -246,7 +245,7 @@ public class ItemTechBag extends ItemBase {
             }
         }
 
-        setTechs(stack, list.toArray(new TechProgress[0]));
+        setTechs(stack, list.toArray(new TechProgress[list.size()]));
         List<ItemStack> sciencePacks = new ArrayList<ItemStack>();
         for (int i = 0; i < toAdd1.length; i++) {
             if (toAdd1[i] > 0)
@@ -272,8 +271,7 @@ public class ItemTechBag extends ItemBase {
             return itemStack;
         }// Right click to fill
         List<ItemStack> items = new ArrayList<ItemStack>();
-        for (ItemStack i : getItems(itemStack))
-            items.add(i);
+        Collections.addAll(items, getItems(itemStack));
         int index = 0;
         for (ItemStack i : player.inventory.mainInventory) {
             if (i != null && i.getItem() == CivItems.technology) {

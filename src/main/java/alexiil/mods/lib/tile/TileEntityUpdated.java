@@ -1,7 +1,6 @@
 package alexiil.mods.lib.tile;
 
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import alexiil.mods.lib.AlexIILLib;
 import alexiil.mods.lib.AlexIILMod;
 import alexiil.mods.lib.net.INetworkTile;
 import alexiil.mods.lib.net.MessageUpdate;
@@ -20,7 +19,7 @@ public abstract class TileEntityUpdated<M extends MessageUpdate<?, ?>> extends T
     @Override
     public void onTick() {
         updated++;
-        if (updated >= AlexIILLib.netRate.getInt()) {
+        if (updated >= AlexIILMod.netRate.getInt()) {
             updated = 0;
             if (needsNetworkUpdate())
                 sendUpdatePacket();
@@ -33,7 +32,7 @@ public abstract class TileEntityUpdated<M extends MessageUpdate<?, ?>> extends T
 
     private TargetPoint targetPoint() {
         if (point == null)
-            point = new TargetPoint(worldObj.provider.getDimensionId(), pos.getX(), pos.getY(), pos.getZ(), AlexIILLib.netDistance.getInt());
+            point = new TargetPoint(worldObj.provider.getDimensionId(), pos.getX(), pos.getY(), pos.getZ(), AlexIILMod.netDistance.getInt());
         return point;
     }
 

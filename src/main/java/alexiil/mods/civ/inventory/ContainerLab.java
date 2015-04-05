@@ -15,14 +15,13 @@ public class ContainerLab extends Container {
             super(inventoryIn, index, xPosition, yPosition);
         }
 
+        @Override
         public boolean isItemValid(ItemStack stack) {
             if (stack == null)
                 return false;
             if (slotNumber == 0)
                 return stack.getItem() == CivItems.technology && CivItems.technology.getState(stack) != EResearchState.RESEARCHED;
-            if (stack.getItem() != CivItems.sciencePacks[this.slotNumber - 1])
-                return false;
-            return true;
+            return stack.getItem() == CivItems.sciencePacks[this.slotNumber - 1];
         }
     }
 

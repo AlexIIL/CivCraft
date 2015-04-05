@@ -32,8 +32,8 @@ public class RoamingIPAddress {
         if (indexHyphen == -1)
             return data;
         int indexColon = data.serverIP.indexOf(":");
-        String port = "25565";
-        String name = "";
+        String port;
+        String name;
         if (indexColon == -1) {
             port = "25565";
             name = data.serverIP.substring(indexHyphen + 1);
@@ -42,7 +42,7 @@ public class RoamingIPAddress {
             port = data.serverIP.substring(indexColon + 1);
             name = data.serverIP.substring(indexHyphen + 1, indexColon);
         }
-        String ip = "";
+        String ip;
         if (nameToIP.containsKey(name.intern()))
             ip = nameToIP.get(name.intern());
         else

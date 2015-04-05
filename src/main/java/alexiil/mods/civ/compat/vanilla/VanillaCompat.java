@@ -2,11 +2,12 @@ package alexiil.mods.civ.compat.vanilla;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.api.tech.TechTree;
-import alexiil.mods.civ.api.tech.TechTreeEvent;
 import alexiil.mods.civ.api.tech.TechTree.Tech;
+import alexiil.mods.civ.api.tech.TechTreeEvent;
 import alexiil.mods.civ.api.tech.TechTreeEvent.AddTechs;
 import alexiil.mods.civ.api.tech.TechTreeEvent.AddUnlockables;
 import alexiil.mods.civ.api.tech.unlock.ItemCraftUnlock;
@@ -23,13 +24,13 @@ public class VanillaCompat {
     private Tech techGold, techEngineering;
     private Tech techDiamond;
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public void preInit(TechTreeEvent.Pre t) {
         String start = Lib.Mod.ID + ":";
         t.tree.registerUnlockable(start + "ItemCraftUnlock", ItemCraftUnlock.class);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public void addTechs(AddTechs event) {
         TechTree tree = event.tree;
         // Tier 0
@@ -58,7 +59,7 @@ public class VanillaCompat {
         techDiamond = tree.addTech("diamond_working", new int[] { 4, 9, 4 }, techGold, techEngineering);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public void addUnlockables(AddUnlockables t) {
         // Agriculture
         TechTree tree = t.tree;
