@@ -16,6 +16,7 @@ buildscript {
 }
 
 repositories {
+	mavenLocal()
     maven {
         name = "chickenbones"
         url = "http://chickenbones.net/maven"
@@ -78,10 +79,8 @@ dependencies {
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    compile project('AlexIILLib')
+    compile "alexiil.mods.lib:AlexIILLib:"+config.mc_version+"-"+config.alexiil_lib_version+":developer"
 }
-
-
 
 // --------------------
 // extra jar section
