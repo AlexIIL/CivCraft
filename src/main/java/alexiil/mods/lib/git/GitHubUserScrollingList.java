@@ -1,4 +1,4 @@
-package alexiil.mods.civ.gui;
+package alexiil.mods.lib.git;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,13 +6,12 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import alexiil.mods.lib.LangUtils;
-import alexiil.mods.lib.git.GitHubUser;
 
 public class GitHubUserScrollingList extends TextGuiScrollingList {
     public final List<GitHubUser> userList = new ArrayList<GitHubUser>();
-    public final Config parent;
+    public final BaseConfig parent;
 
-    public GitHubUserScrollingList(Config parent, int width, int height, int top, int bottom, int left) {
+    public GitHubUserScrollingList(BaseConfig parent, int width, int height, int top, int bottom, int left) {
         super(Minecraft.getMinecraft(), width, height, top, bottom, left);
         this.parent = parent;
     }

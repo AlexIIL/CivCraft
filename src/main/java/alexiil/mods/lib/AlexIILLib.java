@@ -8,7 +8,6 @@ import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import alexiil.mods.lib.coremod.ChatTextTime;
 import alexiil.mods.lib.coremod.RoamingIPAddress;
@@ -22,7 +21,7 @@ public class AlexIILLib extends AlexIILMod {
     @Instance(MODID)
     public static AlexIILLib instance;
 
-    public static Property betterPotions, timeText, roamingIP;
+    public static Property betterPotions, timeText, roamingIP, connectExternally;
 
     static {
         loadConfigs();
@@ -34,6 +33,7 @@ public class AlexIILLib extends AlexIILMod {
         betterPotions = cfg.get("general", "betterPotions", false);
         timeText = cfg.get("general", "textTime", false);
         roamingIP = cfg.get("general", "roamingIP", false);
+        connectExternally = cfg.get("general", "connectExternally", true);
     }
 
     @Override
@@ -55,7 +55,4 @@ public class AlexIILLib extends AlexIILMod {
         ChatTextTime.init();
         RoamingIPAddress.init();
     }
-
-    @EventHandler
-    public void init(FMLInitializationEvent event) {}
 }

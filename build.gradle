@@ -99,13 +99,6 @@ task deobfJar(type: Jar) {
 
 build.dependsOn sourceJar, deobfJar
 
-uploadArchives {
-    dependsOn 'deobfJar'
-	repositories {
-		add project.repositories.mavenLocal()
-	}
-}
-
 processResources
 {
     // this will ensure that this task is redone when the versions change.

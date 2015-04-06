@@ -1,4 +1,4 @@
-package alexiil.mods.civ.gui;
+package alexiil.mods.lib.git;
 
 import java.util.ArrayList;
 import java.util.List;

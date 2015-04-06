@@ -3,57 +3,27 @@ package alexiil.mods.civ.gui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import alexiil.mods.civ.CivConfig;
-import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.gui.ConfigGuiFactory.ActualConfig;
 import alexiil.mods.lib.LangUtils;
-import alexiil.mods.lib.git.GitHubUser;
+import alexiil.mods.lib.git.BaseConfig;
 
-public class Config extends GuiScreen {
-    private GitHubUserScrollingList contributors;
-    private CommitScrollingList commits;
+public class Config extends BaseConfig {
     private GuiButton helpClose;
     private boolean help = false;
     private int xPosHelp = 0;
     private List<List<String>> helpText;
 
     public Config(GuiScreen screen) {
-        fontRendererObj = Minecraft.getMinecraft().fontRendererObj;
-        setupGui();
+        super(screen, "AlexIIL", "CivCraft");
     }
 
-    @Override
-    public void setWorldAndResolution(Minecraft mc, int width, int height) {
-        super.setWorldAndResolution(mc, width, height);
-        setupGui();
-    }
-
-    private void setupGui() {
-        int width = 0;
-
-        for (GitHubUser usr : CivCraft.getContributors()) {
-            String text = "civcraft.github." + usr.login;
-            String newText = LangUtils.format(text);
-            if (text.equals(newText))
-                text = usr.login;
-            else
-                text = usr.login + " (" + newText + ")";
-            width = Math.max(width, fontRendererObj.getStringWidth(text));
-        }
-
-        contributors = new GitHubUserScrollingList(this, width + 40, this.height, 40, this.height - 40, 10);
-        for (GitHubUser c : CivCraft.getContributors())
-            contributors.userList.add(c);
-
-        commits = new CommitScrollingList(this, this.width - width - 80, this.height, 40, this.height - 40, width + 60);
-
+    protected void setupGui() {
+        super.setupGui();
         int index = 0;
         int maxXPos = Math.min(this.width - xPosHelp, 400);
 
@@ -114,21 +84,6 @@ public class Config extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawBackground(0);
-
-        if (CivConfig.connectExternally.getBoolean()) {
-            commits.drawScreen(mouseX, mouseY, partialTicks);
-            contributors.drawScreen(mouseX, mouseY, partialTicks);
-            drawString(fontRendererObj, LangUtils.format("civcraft.gui.contributors"), 8, 30, 0xFFFFFF);
-            String text = LangUtils.format("civcraft.gui.commits");
-            drawString(fontRendererObj, text, this.width - fontRendererObj.getStringWidth(text) - 10, 30, 0xFFFFFF);
-        }
-        else {
-            String text = LangUtils.format("civcraft.gui.connectExternallyDisabled");
-            int textWidth = fontRendererObj.getStringWidth(text);
-            drawHoveringText(Collections.singletonList(text), (this.width - textWidth) / 2, this.height / 2);
-        }
-
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         if (help) {
@@ -160,9 +115,5 @@ public class Config extends GuiScreen {
             help = false;
             helpClose.visible = false;
         }
-    }
-
-    public FontRenderer getFontRenderer() {
-        return fontRendererObj;
     }
 }

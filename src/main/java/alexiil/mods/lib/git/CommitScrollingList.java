@@ -1,4 +1,4 @@
-package alexiil.mods.civ.gui;
+package alexiil.mods.lib.git;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,14 +6,12 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import alexiil.mods.civ.CivCraft;
-import alexiil.mods.lib.git.Commit;
-import alexiil.mods.lib.git.Release;
 
 public class CommitScrollingList extends TextGuiScrollingList {
     public final List<Commit> commitList = new ArrayList<Commit>();
-    public final Config parent;
+    public final BaseConfig parent;
 
-    public CommitScrollingList(Config parent, int width, int height, int top, int bottom, int left) {
+    public CommitScrollingList(BaseConfig parent, int width, int height, int top, int bottom, int left) {
         super(Minecraft.getMinecraft(), width, height, top, bottom, left);
         this.parent = parent;
 

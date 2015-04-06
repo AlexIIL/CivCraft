@@ -21,7 +21,7 @@ public class LoadPlugin implements IFMLLoadingPlugin {
 
     @Override
     public String getSetupClass() {
-        return null;// "alexiil.mods.basicutils.coremod.AlexIILSetupClass";
+        return null;// "alexiil.mods.lib.coremod.AlexIILSetupClass";
     }
 
     @Override

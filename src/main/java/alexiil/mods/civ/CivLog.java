@@ -1,10 +1,11 @@
 package alexiil.mods.civ;
 
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class CivLog {
-    public static Logger log = CivCraft.log;
+    private static Logger log;
 
     public static void debugInfo(String toLog) {
         if (CivConfig.debugMode.getBoolean())
@@ -25,7 +26,13 @@ public class CivLog {
     }
 
     public static void log(String text, Level level) {
-        log.log(level, text);
+        log().log(level, text);
+    }
+
+    private static Logger log() {
+        if (log == null)
+            log = LogManager.getLogger("civcraft");
+        return log;
     }
 
     /** Use this for temporary logging, so eclipse helps see where every temporary logging statement is (so cleanup is
