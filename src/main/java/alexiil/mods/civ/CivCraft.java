@@ -137,19 +137,23 @@ public class CivCraft extends AlexIILMod {
         }.start();
     }
 
-    public static List<GitHubUser> getContributors() {
-        return contributors;
+    @Override
+    public String getCommitHash() {
+        return Lib.Mod.COMMIT_HASH;
     }
 
-    public static List<Commit> getCommits() {
-        return commits;
+    @Override
+    public int getBuildType() {
+        return Lib.Mod.buildType();
     }
 
-    public static Commit getCurrentCommit() {
-        return thisCommit;
+    @Override
+    public String getUser() {
+        return "AlexIIL";
     }
 
-    public static List<Release> getReleases() {
-        return releases;
+    @Override
+    public String getRepo() {
+        return "CivCraft";
     }
 }
