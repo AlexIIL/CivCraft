@@ -8,6 +8,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.gui.ConfigGuiFactory.ActualConfig;
 import alexiil.mods.lib.LangUtils;
 import alexiil.mods.lib.git.BaseConfig;
@@ -19,7 +20,7 @@ public class Config extends BaseConfig {
     private List<List<String>> helpText;
 
     public Config(GuiScreen screen) {
-        super(screen, "AlexIIL", "CivCraft");
+        super(screen, CivCraft.instance);
     }
 
     protected void setupGui() {
