@@ -18,10 +18,6 @@ civcraft.config.closeHelp=Close Help
 civcraft.gui.config.help.0=The config can be accessed by the buttons at the top left (don't worry, the configs are still there)
 civcraft.gui.config.help.1=On the left side is a list of all the people who have put some time and effort into this mod
 civcraft.gui.config.help.2=On the right side is a changelog of this mod, where gold represents the current version you are using, blue is the start of a new changelog, and green is when a built jar is available on CurseForge.
-civcraft.gui.connectExternallyDisabled=Connect externally has been disabled, so the contributors list and changelog could not be fetched
-
-civcraft.gui.contributors=Contributors
-civcraft.gui.commits=Changelog history
 
 #Contributor info
 civcraft.github.AlexIIL=Original Author

@@ -1,8 +1,5 @@
 package alexiil.mods.civ;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,10 +25,6 @@ import alexiil.mods.civ.item.CivItems;
 import alexiil.mods.civ.net.MessageHandler;
 import alexiil.mods.civ.tech.BeakerEarningListener;
 import alexiil.mods.lib.AlexIILMod;
-import alexiil.mods.lib.git.Commit;
-import alexiil.mods.lib.git.GitHubUser;
-import alexiil.mods.lib.git.Release;
-import alexiil.mods.lib.git.SiteRequester;
 
 @Mod(modid = Lib.Mod.ID, version = Lib.Mod.VERSION, guiFactory = "alexiil.mods.civ.gui.ConfigGuiFactory")
 public class CivCraft extends AlexIILMod {
@@ -48,11 +41,6 @@ public class CivCraft extends AlexIILMod {
     /** Debug holder of the players NBT compound (so, only works when the server is in the same minecraft instance as the
      * client) */
     public static NBTTagCompound playerNBTData = new NBTTagCompound();
-
-    private static List<GitHubUser> contributors = Collections.emptyList();
-    private static List<Commit> commits = Collections.emptyList();
-    private static List<Release> releases = Collections.emptyList();
-    private static Commit thisCommit;
 
     @Override
     @EventHandler
@@ -82,8 +70,6 @@ public class CivCraft extends AlexIILMod {
         CivBlocks.init();
 
         ModCompat.loadCompats();
-
-        initGithubRemote();
     }
 
     @EventHandler
@@ -97,44 +83,6 @@ public class CivCraft extends AlexIILMod {
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
         cfg.saveAll();
-    }
-
-    private void initGithubRemote() {
-        if (!CivConfig.connectExternally.getBoolean())
-            return;
-        new Thread("CivCraft-github") {
-            @Override
-            public void run() {
-                String droneSite = "https://drone.io/github.com/AlexIIL/CivCraft/files/VersionInfo/build/libs/version/";
-                contributors = Collections.unmodifiableList(SiteRequester.getContributors(droneSite + "contributors.json"));
-                if (contributors.size() == 0)
-                    modMeta.authorList.add("Could not connect to GitHub to fetch the rest...");
-                for (GitHubUser c : contributors) {
-                    if ("AlexIIL".equals(c.login))
-                        continue;
-                    modMeta.authorList.add(c.login);
-                }
-
-                commits = SiteRequester.getCommits(droneSite + "commits.json");
-                Collections.sort(commits, new Comparator<Commit>() {
-                    @Override
-                    public int compare(Commit c0, Commit c1) {
-                        return c1.commit.committer.date.compareTo(c0.commit.committer.date);
-                    }
-                });
-                commits = Collections.unmodifiableList(commits);
-
-                for (Commit c : commits)
-                    if (Lib.Mod.COMMIT_HASH.equals(c.sha))
-                        thisCommit = c;
-                if (thisCommit == null && commits.size() > 0 && Lib.Mod.buildType() == 2) {
-                    CivLog.warn("Didn't find my commit! This is unexpected, consider this a bug!");
-                    CivLog.warn("Commit Hash : \"" + Lib.Mod.COMMIT_HASH + "\"");
-                }
-
-                releases = Collections.unmodifiableList(SiteRequester.getReleases(droneSite + "releases.json"));
-            }
-        }.start();
     }
 
     @Override
