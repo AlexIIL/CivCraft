@@ -6,26 +6,6 @@ item.civcraft_sciencePack4.name=Paquet de science 4
 item.civcraft_technology.name=Technologie
 item.civcraft_techBag.name=Sac de technologie
 
-civcraft.config.title=Fichier principal de configuration
-civcraft.config.button=Modifier la configuration principale
-civcraft.config.tech.title=Arbre des technoligies
-civcraft.config.tech.button=Modifier l'arbre des technologies
-civcraft.config.help=Aide, Pourquoi ceci n'est pas une configuration ? Et que signifie toutes ses couleurs ?
-civcraft.config.closeHelp=Fermer l'aide
-
-#This is a list, so adding "civcraft.gui.config.help3=..." is fine (and etc) 
-civcraft.gui.config.help.0=Vous pouvez accéder à la configuration par le bouton en haut à gauche (N'ayez pas peur, les configurations sont toujours là)
-civcraft.gui.config.help.1=Sur le côté gauche, il y a une liste de toutes les personnes qui ont pris du temps pour ce mod
-civcraft.gui.config.help.2=Sur le côté droit, il y a l'historique des modifications de ce mod : le doré représente la version que vous utilisez actuellement, le bleu est le début d'un nouveau historique et le vert est quand une archive jar est disponible dans CurseForge.
-civcraft.gui.connectExternallyDisabled=Les connections externes ont été désactivé, donc la liste des collaborateurs et l'historique des modifications ne peuvent pas être affichés
-
-civcraft.gui.contributors=Collaborateurs
-civcraft.gui.commits=Historique des modifications
-
-#Contributor info
-civcraft.github.AlexIIL=Auteur original
-civcraft.github.Mazdallier=Traducteur Français
-
 #Technology names
 civcraft.tech.agriculture=Agriculture
 

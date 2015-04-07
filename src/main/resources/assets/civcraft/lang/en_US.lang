@@ -7,21 +7,8 @@ item.civcraft_technology.name=Technology
 item.civcraft_techBag.name=Book of Technology
 tile.civcraft_lab.name=Lab
 
-civcraft.config.title=Main Configuration File
-civcraft.config.button=Edit the main configuration
 civcraft.config.tech.title=Technology tree
 civcraft.config.tech.button=Edit the technology tree
-civcraft.config.help=Help, why is this not a configuration? And what do all the colours mean?
-civcraft.config.closeHelp=Close Help
-
-#This is a list, so adding "civcraft.gui.config.help3=..." is fine (and etc) 
-civcraft.gui.config.help.0=The config can be accessed by the buttons at the top left (don't worry, the configs are still there)
-civcraft.gui.config.help.1=On the left side is a list of all the people who have put some time and effort into this mod
-civcraft.gui.config.help.2=On the right side is a changelog of this mod, where gold represents the current version you are using, blue is the start of a new changelog, and green is when a built jar is available on CurseForge.
-
-#Contributor info
-civcraft.github.AlexIIL=Original Author
-civcraft.github.Mazdallier=French Translation
 
 #Technology names
 civcraft.tech.agriculture=Agriculture
