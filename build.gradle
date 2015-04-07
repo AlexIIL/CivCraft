@@ -100,8 +100,7 @@ task deobfJar(type: Jar) {
 
 build.dependsOn sourceJar, deobfJar
 
-processResources
-{
+processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -118,4 +117,11 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+jar {
+	manifest {
+		attributes 'FMLCorePluginContainsFMLMod': 'true'
+		attributes 'FMLCorePlugin': 'alexiil.mods.civ.coremod.LoadPlugin'
+	}
 }

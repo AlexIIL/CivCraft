@@ -26,7 +26,8 @@ import alexiil.mods.civ.net.MessageHandler;
 import alexiil.mods.civ.tech.BeakerEarningListener;
 import alexiil.mods.lib.AlexIILMod;
 
-@Mod(modid = Lib.Mod.ID, version = Lib.Mod.VERSION, guiFactory = "alexiil.mods.civ.gui.ConfigGuiFactory")
+@Mod(modid = Lib.Mod.ID, version = Lib.Mod.VERSION, guiFactory = "alexiil.mods.civ.gui.ConfigGuiFactory", useMetadata = true,
+        dependencies = "required-after:alexiillib")
 public class CivCraft extends AlexIILMod {
     public static ModMetadata modMeta;
     public static Logger log;
