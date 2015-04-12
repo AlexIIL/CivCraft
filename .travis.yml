@@ -1,0 +1,8 @@
+language: java
+install: 
+ - "cd AlexIILLib"
+ - "./gradlew setupCIWorkspace"
+ - "./gradlew build"
+ - "cd .."
+ - "./gradlew setupCIWorkspace"
+script: ./gradlew build
