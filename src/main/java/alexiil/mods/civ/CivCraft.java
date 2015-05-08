@@ -50,7 +50,7 @@ public class CivCraft extends AlexIILMod {
         modMeta = super.meta;
         log = super.log;
         log.info("This is " + Lib.Mod.NAME + ", version " + modMeta.version + ", build type = " + Lib.Mod.buildType() + ", commit hash = "
-                + Lib.Mod.COMMIT_HASH);
+            + Lib.Mod.COMMIT_HASH);
 
         MinecraftForge.EVENT_BUS.register(EventListner.instance);
         MinecraftForge.EVENT_BUS.register(BeakerEarningListener.instance);
