@@ -4,9 +4,10 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.common.collect.Maps;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,6 +16,7 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.common.MinecraftForge;
+
 import alexiil.mods.civ.CivConfig;
 import alexiil.mods.civ.CivCraft;
 import alexiil.mods.civ.CivLog;
@@ -26,7 +28,13 @@ import alexiil.mods.lib.item.IChangingItemString;
 
 public final class TechTree {
     public enum EState {
-        CONSTRUCTING, PRE, ADD_TECHS, SET_REQUIREMENTS, POST, FINALISED, SAVING
+        CONSTRUCTING,
+        PRE,
+        ADD_TECHS,
+        SET_REQUIREMENTS,
+        POST,
+        FINALISED,
+        SAVING
     }
 
     public class Tech implements ILocalizable {
@@ -43,7 +51,8 @@ public final class TechTree {
          * in civ5 (or civ5: beyond earth) then use that name (so, if you add a metal, say, platinum, call your tech
          * "platinum_working" to fit the "iron_working" that exists in civ 5. (also, dont use spaces) */
         public final String name;
-        /** The parents of this tech: ALL of these techs must be researched in order to even start researching this one */
+        /** The parents of this tech: ALL of these techs must be researched in order to even start researching this
+         * one */
         private Tech[] parents = new Tech[0];
         /** The children of this tech: after this one has been researched (and 0 to 8 other techs have ALSO been
          * researched), the child tech can be researched. this list is created automatically whenever parents are set */
@@ -51,8 +60,8 @@ public final class TechTree {
         /** The things that are unlocked automatically after researching both this tech, and any other techs that are
          * required for this. */
         private List<WeakReference<IUnlockable>> unlockables = new ArrayList<WeakReference<IUnlockable>>();
-        /** A leaf tech is just a graphical way of showing the tech. A tech can only be a leaf tech if it has one parent,
-         * and no children */
+        /** A leaf tech is just a graphical way of showing the tech. A tech can only be a leaf tech if it has one
+         * parent, and no children */
         private boolean leafTech;
 
         private Tech(String techName) {
@@ -323,16 +332,18 @@ public final class TechTree {
             return true;
         }
 
+        // Eclipse generated
         private TechTree getOuterType() {
             return TechTree.this;
         }
     }
 
     private EState state = EState.CONSTRUCTING;
-    private Map<String, Tech> techs = new HashMap<String, Tech>();
-    private Map<String, Tech> disabledTechs = new HashMap<String, Tech>();
-    private Map<String, IUnlockable> unlockables = new HashMap<String, IUnlockable>();
-    private Map<String, IUnlockableConstructor> unlockableTypes = new HashMap<String, IUnlockableConstructor>();
+    private Map<String, Tech> techs = Maps.newHashMap();
+    private Map<String, Tech> disabledTechs = Maps.newHashMap();
+    private Map<String, IUnlockable> unlockables = Maps.newHashMap();
+    private Map<String, IUnlockableConstructor> unlockableTypes = Maps.newHashMap();
+
     /** WARNING: This will be null if a save has not been loaded yet, or it will be the old tech tree if a save has been
      * unloaded */
     public static TechTree currentTree = null;

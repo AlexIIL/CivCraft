@@ -4,6 +4,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.api.tech.TechTree;
 import alexiil.mods.civ.api.tech.TechTree.Tech;
@@ -32,6 +33,21 @@ public class VanillaCompat {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void addTechs(AddTechs event) {
+
+        // ADD_TECH agriculture [1] []
+        // ADD_TECH stupid_name [40] []
+        // ADD_TECH sailing [2] [agriculture]
+        // ADD_TECH animal_husbandry [2] [agriculture]
+        // ADD_TECH smelting [3] [sailing]
+        // ADD_TECH automation [5] [animal_husbandry archery]
+        // ADD_TECH diamond_working [4 9 4] [gold_working engineering iron_working]
+        // REMOVE_TECH stupid_name
+        // ADD_REQUIREMENT automation [mining]
+        // REMOVE_REQUIREMENT diamond_working [iron_working]
+        // SET_REQUIREMENT smelting [mining]
+        // CLEAR_REQUIREMENT agriculture
+        // ADD_UNLOCK agriculture+masonry item_craft_unlock [agriculture masonry] ["minecraft:wooden_hoe"]
+
         TechTree tree = event.tree;
         // Tier 0
         techAgri = tree.addTech("agriculture", new int[] { 1 });

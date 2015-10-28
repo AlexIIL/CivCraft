@@ -131,10 +131,10 @@ public class TileLab extends TileEntityUpdated<MessageLab> implements ISidedInve
     public int getSizeInventory() {
         return inventory.getSizeInventory();
     }
-
+    
     @Override
-    public String getName() {
-        return inventory.getName();
+    public String getCommandSenderName() {
+        return inventory.getCommandSenderName();
     }
 
     @Override
