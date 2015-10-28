@@ -14,7 +14,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath "gradle.plugin.net.minecraftforge.gradle:ForgeGradle:2.0.1"
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
+//        classpath "gradle.plugin.net.minecraftforge.gradle:ForgeGradle:2.0.1"
     }
 }
 
