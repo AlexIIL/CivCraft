@@ -9,14 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Keyboard;
 
 import alexiil.mods.civ.Lib;
 import alexiil.mods.civ.api.tech.TechTree;
@@ -236,13 +236,15 @@ public class GuiTechTree extends GuiScreen {
     }
 
     private void populateTechMap(List<List<Tech>> techList, Map<Tech, Integer> tempMap) {
+        Minecraft.getMinecraft().mouseHelper.ungrabMouseCursor();
         boolean isDirty = true;
         int ttl = 1000;
         while (isDirty && ttl > 0) {
             isDirty = false;
             for (int lstIdx = 0; lstIdx < techList.size(); lstIdx++) {
                 List<Tech> techs = techList.get(lstIdx);
-                for (Tech t : techs) {
+                for (int i = 0; i < techs.size(); i++) {
+                    Tech t = techs.get(i);
                     for (Tech child : t.getChildTechs()) {
                         if (child.isLeafTech())
                             continue;
@@ -250,8 +252,9 @@ public class GuiTechTree extends GuiScreen {
                         int newIndex = tempMap.get(t);
                         if (idx <= newIndex) {
                             tempMap.put(child, newIndex + 1);
-                            while (techList.size() <= newIndex + 1)
+                            while (techList.size() <= newIndex + 1) {
                                 techList.add(new ArrayList<Tech>());
+                            }
                             List<Tech> nextList = techList.get(newIndex + 1);
                             nextList.add(child);
                             List<Tech> prevList = techList.get(idx);

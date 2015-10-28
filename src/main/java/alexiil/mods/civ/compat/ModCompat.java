@@ -13,6 +13,10 @@ public class ModCompat {
 
         if (Loader.isModLoaded("OpenComputers"))
             MinecraftForge.EVENT_BUS.register(new OpenComputersCompat());
+        
+        if (Loader.isModLoaded("BuildCraft|Core")) {
+            
+        }
 
         // ALWAYS the last one
         MinecraftForge.EVENT_BUS.register(new ConfigCompat());

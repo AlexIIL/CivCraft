@@ -10,7 +10,6 @@ public class CivConfig {
             connectExternally, sciencePacksRequired;
 
     public static void init() {
-
         ConfigAccess cfg = CivCraft.instance.cfg;
         cooldownMultiplier = cfg.getProp("cooldownMultiplier", PlayerResearchHelper.cooldownMultiplier);
         cooldownMultiplier.comment = "What multiple of the current cooldown to multiply it by, whenever a beaker is partially earned";
@@ -30,7 +29,7 @@ public class CivConfig {
 
         progressRequired = cfg.getProp("progressRequired", PlayerResearchHelper.progressRequired);
         progressRequired.comment =
-            "How much progress is required to get a new set of research notes. Setting this number lower means quicker progression, higher values mean slower progression";
+                "How much progress is required to get a new set of research notes. Setting this number lower means quicker progression, higher values mean slower progression";
         PlayerResearchHelper.progressRequired = progressRequired.getDouble();
 
         debugMode = cfg.getProp("debug", false);
@@ -41,7 +40,7 @@ public class CivConfig {
 
         sciencePacksRequired = cfg.getProp("sciencePacksRequired", 1);
         sciencePacksRequired.comment =
-            "A multiplier for the number of science packs required for a tech. Note that this only affects the crafted science packs, not the research notes";
+                "A multiplier for the number of science packs required for a tech. Note that this only affects the crafted science packs, not the research notes";
 
         if (debugMode.getBoolean()) {}
     }

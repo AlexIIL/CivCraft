@@ -2,6 +2,8 @@ package alexiil.mods.civ;
 
 import java.util.Random;
 
+import org.apache.logging.log4j.Logger;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,8 +18,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-
-import org.apache.logging.log4j.Logger;
 
 import alexiil.mods.civ.block.CivBlocks;
 import alexiil.mods.civ.compat.ModCompat;
@@ -34,13 +34,14 @@ public class CivCraft extends AlexIILMod {
     // MOD STUFF
     @Instance(Lib.Mod.ID)
     public static CivCraft instance;
+
     @SidedProxy(clientSide = "alexiil.mods.civ.ClientProxy", serverSide = "alexiil.mods.civ.CommonProxy")
     public static CommonProxy proxy;
     public static final String chatString = "\u00A7";
     public static final Random RNG = new Random();
 
-    /** Debug holder of the players NBT compound (so, only works when the server is in the same minecraft instance as the
-     * client) */
+    /** Debug holder of the players NBT compound (so, only works when the server is in the same minecraft instance as
+     * the client) */
     public static NBTTagCompound playerNBTData = new NBTTagCompound();
 
     @Override
@@ -50,7 +51,7 @@ public class CivCraft extends AlexIILMod {
         modMeta = super.meta;
         log = super.log;
         log.info("This is " + Lib.Mod.NAME + ", version " + modMeta.version + ", build type = " + Lib.Mod.buildType() + ", commit hash = "
-            + Lib.Mod.COMMIT_HASH);
+                + Lib.Mod.COMMIT_HASH);
 
         MinecraftForge.EVENT_BUS.register(EventListner.instance);
         MinecraftForge.EVENT_BUS.register(BeakerEarningListener.instance);
@@ -67,6 +68,8 @@ public class CivCraft extends AlexIILMod {
         };
 
         CivConfig.init();
+        super.useTiles();
+
         CivItems.init();
         CivBlocks.init();
 
