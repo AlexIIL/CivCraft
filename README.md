@@ -1,6 +1,4 @@
 # CivCraft
-[![Build Status](https://drone.io/github.com/AlexIIL/CivCraft/status.png)](https://drone.io/github.com/AlexIIL/CivCraft/latest)
-
 A mod for minecraft, based off of Civ V, Civ Beyond Earth and Factorio.
 
 Essentially, a mod that adds a tech tree to minecraft. At the moment (more is planned, check the [issues](https://github.com/AlexIIL/CivCraft/issues?q=is%3Aopen+label%3Aenhancement+author%3AAlexIIL) page for the current plans)
@@ -24,4 +22,4 @@ Essentially, a mod that adds a tech tree to minecraft. At the moment (more is pl
 * Submit a pull request with the changes.
 Please leave info on what you did and why you want it, unless it is a simple bug-fix.
 
-Latest build at [drone.io](https://drone.io/github.com/AlexIIL/CivCraft/files).
+Latest build at [curseforge](https://minecraft.curseforge.com/projects/civcraft).
